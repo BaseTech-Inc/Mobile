@@ -2,7 +2,7 @@
 
 - [ ] Cadastro e login de usuários
 - [ ] Mapa com enchentes em tempo real
-- [ ] Dados meteroelogicos:
+- [ ] Dados meteorologicas:
     - [ ] previsão de 5 dias baseado na localização
     - [ ] previsão de 5 dias de regiões buscadas
     - [ ] previsão de tempo de enchentes
