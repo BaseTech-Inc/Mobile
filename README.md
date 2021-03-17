@@ -7,5 +7,5 @@
     - [ ] previsão de 5 dias de regiões buscadas
     - [ ] previsão de tempo de enchentes
     - [ ] perfil com histórico de trajetos e relatórios semanais dos trajetos
-- [ ] Premium sem anúncios
+- [ ] Premium sem anúncios, com relatórios semanais do tempo (ex: média de temperatura, dias chuvosos, áreas alagadas, etc)
 - [ ] Dark Mode
