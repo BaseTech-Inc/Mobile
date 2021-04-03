@@ -3,62 +3,58 @@ package com.example.tupa_mobile;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ForecastFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.tupa_mobile.ForecastPage.ForecastDay;
+import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
+
+import java.util.ArrayList;
+
 public class ForecastFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView recyclerView;
+    private ForecastDayAdapter adapter;
+    private ArrayList<ForecastDay> forecasts;
 
     public ForecastFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ForecastFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ForecastFragment newInstance(String param1, String param2) {
-        ForecastFragment fragment = new ForecastFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forecast, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_forecast, container, false);
+
+        recyclerView = view.findViewById(R.id.normalRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        forecasts = new ArrayList<>();
+        adapter = new ForecastDayAdapter(view.getContext(), forecasts);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),
+                LinearLayoutManager.VERTICAL));
+
+        for(int i=0; i<7; i++) {
+            createListData(50, 20, 35, 70, "Terminal Santana", "dom., 14 de março 16:28");
+        }
+        return view;
+    }
+
+    public void createListData(int maxTemp, int minTemp, int humidity, int sensation, String location, String date) {
+        // This method adds data to the recyclerView
+        ForecastDay forecastDay = new ForecastDay(maxTemp, minTemp, humidity, sensation, location, date);
+        forecasts.add(forecastDay);
     }
 }
