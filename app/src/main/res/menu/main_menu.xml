@@ -3,17 +3,27 @@
 
     <item
         android:id="@+id/item1"
-        android:title="Mapa"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="Map"
+        android:icon="@drawable/ic_map"/>
 
     <item
         android:id="@+id/item2"
-        android:title="Previsão"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="History"
+        android:icon="@drawable/ic_history"/>
 
     <item
         android:id="@+id/item3"
-        android:title="Configuração"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="Forecast"
+        android:icon="@drawable/ic_bar_chart"/>
+
+    <item
+        android:id="@+id/item4"
+        android:title="Notifications"
+        android:icon="@drawable/ic_notifications"/>
+
+    <item
+        android:id="@+id/item5"
+        android:title="Configurations"
+        android:icon="@drawable/ic_settings"/>
 
 </menu>

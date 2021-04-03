@@ -36,12 +36,20 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
                 case R.id.item2:
-                    selectedFragment = new ForecastFragment();
+                    selectedFragment = new HistoryFragment();
                 break;
 
                 case R.id.item3:
-                    selectedFragment = new ConfigFragment();
+                    selectedFragment = new ForecastFragment();
                 break;
+
+                case R.id.item4:
+                    selectedFragment = new NotificationFragment();
+                    break;
+
+                case R.id.item5:
+                    selectedFragment = new ConfigFragment();
+                    break;
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, selectedFragment).commit();
