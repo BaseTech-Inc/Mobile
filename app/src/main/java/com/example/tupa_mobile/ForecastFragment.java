@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView cardRecyclerView;
     private ForecastDayAdapter adapter;
     private ArrayList<ForecastDay> forecasts;
 
@@ -38,13 +38,11 @@ public class ForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        recyclerView = view.findViewById(R.id.normalRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        cardRecyclerView = view.findViewById(R.id.cardRecycler);
+        cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         forecasts = new ArrayList<>();
         adapter = new ForecastDayAdapter(view.getContext(), forecasts);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),
-                LinearLayoutManager.VERTICAL));
+        cardRecyclerView.setAdapter(adapter);
 
         for(int i=0; i<7; i++) {
             createListData(50, 20, 35, 70, "Terminal Santana", "dom., 14 de março 16:28");

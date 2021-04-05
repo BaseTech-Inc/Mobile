@@ -1,106 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#e9e9e9">
 
-    <ImageView
-        android:id="@+id/imgWeather"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/nibolas"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtTemp1"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginBottom="4dp"
-        android:text="30°"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgWeather" />
+        android:padding="5dp">
 
-    <TextView
-        android:id="@+id/txtTemp2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="/27°"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtTemp1" />
+        <ImageView
+            android:id="@+id/imgWeather"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/nibolas"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtDay"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/txtTemp1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/txtTemp1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="4dp"
+            android:text="30°"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgWeather" />
 
-    <ImageView
-        android:id="@+id/icoLocation"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/txtLocation"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/nibolas" />
+        <TextView
+            android:id="@+id/txtTemp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="/27°"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txtTemp1" />
 
-    <ImageView
-        android:id="@+id/imgHumidity"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/txtHumidity"
-        app:layout_constraintTop_toBottomOf="@+id/icoLocation"
-        tools:src="@drawable/nibolas" />
+        <TextView
+            android:id="@+id/txtDay"
+            android:layout_width="290dp"
+            android:layout_height="19dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="@+id/txtTemp1"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:text="TextView"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/icoLocation"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintStart_toEndOf="@+id/txtTemp2"
+            app:layout_constraintTop_toTopOf="@+id/txtTemp1"
+            tools:src="@drawable/nibolas" />
 
-    <TextView
-        android:id="@+id/txtSensation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:text="TextView"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txtHumidity" />
+        <ImageView
+            android:id="@+id/imgHumidity"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/txtHumidity"
+            app:layout_constraintTop_toTopOf="@+id/txtHumidity"
+            tools:src="@drawable/nibolas" />
 
-    <TextView
-        android:id="@+id/txtHumidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="TextView"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@+id/txtLocation"
-        app:layout_constraintTop_toBottomOf="@+id/txtLocation" />
+        <TextView
+            android:id="@+id/txtLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/icoLocation"
+            app:layout_constraintTop_toTopOf="@+id/icoLocation" />
+
+        <TextView
+            android:id="@+id/txtSensation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/txtHumidity"
+            app:layout_constraintTop_toBottomOf="@+id/txtHumidity" />
+
+        <TextView
+            android:id="@+id/txtHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/txtLocation"
+            app:layout_constraintTop_toBottomOf="@+id/txtLocation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
