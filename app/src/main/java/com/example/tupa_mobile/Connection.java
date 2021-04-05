@@ -1,14 +1,12 @@
 package com.example.tupa_mobile;
 
 import android.content.Context;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.ForecastPage.ForecastDay;
 import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
-import com.example.tupa_mobile.ForecastPage.JsonPlaceHolderApi;
 
 import java.util.ArrayList;
 import java.util.List;

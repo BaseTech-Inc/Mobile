@@ -38,7 +38,7 @@ public class ForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        cardRecyclerView = view.findViewById(R.id.cardRecycler);
+        cardRecyclerView = view.findViewById(R.id.forecastRecycler);
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         forecasts = new ArrayList<>();
         adapter = new ForecastDayAdapter(view.getContext(), forecasts);

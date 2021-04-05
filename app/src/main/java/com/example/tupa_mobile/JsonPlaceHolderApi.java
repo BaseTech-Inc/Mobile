@@ -1,4 +1,6 @@
-package com.example.tupa_mobile.ForecastPage;
+package com.example.tupa_mobile;
+
+import com.example.tupa_mobile.ForecastPage.ForecastDay;
 
 import java.util.List;
 

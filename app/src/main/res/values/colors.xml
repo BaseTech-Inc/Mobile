@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="BrightBlue">#3399ee</color>
-    <color name="DarkGrey">#4e4e4e</color>
-    <color name="LightGrey">#666</color>
-    <color name="White">#fff</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="PrimaryBlue">#2485f3</color>
+    <color name="SecondaryBlue">#EDF6Fe</color>
+    <color name="BackgroundWhite">#f7f7f7</color>
+    <color name="SurfaceWhite">#fff</color>
+    <color name="LightGrey">#ededed</color>
+    <color name="DarkGrey">#a3a3a3</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
