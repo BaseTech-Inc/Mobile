@@ -7,6 +7,11 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.tupa_mobile.Fragments.ConfigFragment;
+import com.example.tupa_mobile.Fragments.ForecastFragment;
+import com.example.tupa_mobile.Fragments.HistoryFragment;
+import com.example.tupa_mobile.Fragments.MapFragment;
+import com.example.tupa_mobile.Fragments.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

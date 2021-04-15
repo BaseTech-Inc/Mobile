@@ -1,4 +1,4 @@
-package com.example.tupa_mobile;
+package com.example.tupa_mobile.Fragments;
 
 import android.os.Bundle;
 
@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.example.tupa_mobile.ForecastPage.ForecastDay;
 import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
+import com.example.tupa_mobile.R;
 
 import java.util.ArrayList;
 
