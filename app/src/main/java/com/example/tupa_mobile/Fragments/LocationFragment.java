@@ -3,64 +3,53 @@ package com.example.tupa_mobile.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tupa_mobile.ForecastPage.ForecastDay;
+import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
 import com.example.tupa_mobile.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LocationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class LocationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView cardRecyclerView;
+    private ForecastDayAdapter adapter;
+    private ArrayList<ForecastDay> forecasts;
 
     public LocationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LocationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LocationFragment newInstance(String param1, String param2) {
-        LocationFragment fragment = new LocationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_location, container, false);
+
+        cardRecyclerView = view.findViewById(R.id.forecastRecycler);
+        cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        forecasts = new ArrayList<>();
+        adapter = new ForecastDayAdapter(view.getContext(), forecasts);
+        cardRecyclerView.setAdapter(adapter);
+
+        for(int i=0; i<7; i++) {
+            createListData(50, 20, 35, 70, "Terminal Santana", "dom., 14 de março 16:28");
+        }
+        return view;
+    }
+
+    public void createListData(int maxTemp, int minTemp, int humidity, int sensation, String location, String date) {
+        // This method adds data to the recyclerView
+        ForecastDay forecastDay = new ForecastDay(maxTemp, minTemp, humidity, sensation, location, date);
+        forecasts.add(forecastDay);
     }
 }
