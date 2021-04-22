@@ -40,7 +40,26 @@ public class HistoryFragment extends Fragment {
 
         viewPager.setAdapter(pagerAdapter);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                TabLayout.Tab tab = tabs.getTabAt(position);
+                tab.select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -56,7 +75,6 @@ public class HistoryFragment extends Fragment {
 
             }
         });
-
         return view;
     }
 }
