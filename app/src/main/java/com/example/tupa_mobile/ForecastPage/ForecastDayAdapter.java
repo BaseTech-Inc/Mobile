@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.CurrentWeather.Weather;
 import com.example.tupa_mobile.R;
 
 import java.util.ArrayList;
@@ -38,13 +39,18 @@ public class ForecastDayAdapter extends RecyclerView.Adapter<ForecastDayAdapter.
 
     @Override
     public int getItemCount() {
-        return forecasts.size();
+        return this.forecasts.size();
+    }
+
+    public  void addAllItems(ArrayList<ForecastDay> items) {
+        forecasts.addAll(items);
+        notifyDataSetChanged();
     }
 
 
     public class ForecastDayHolder extends RecyclerView.ViewHolder{
 
-        private TextView txtHumidity, txtTemp1, txtTemp2, txtLocation, txtDay, txtSensation;
+        private TextView txtHumidity, txtTemp1, txtTemp2, txtLocation, txtDay, txtRain;
 
         public ForecastDayHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,16 +60,19 @@ public class ForecastDayAdapter extends RecyclerView.Adapter<ForecastDayAdapter.
             txtTemp2 = itemView.findViewById(R.id.txtTemp2);
             txtLocation = itemView.findViewById(R.id.txtLocation);
             txtDay = itemView.findViewById(R.id.txtDay);
-            txtSensation = itemView.findViewById(R.id.txtSensation);
+            txtRain = itemView.findViewById(R.id.txtRain);
         }
 
         void setDetails(ForecastDay forecastDay){
-           /* txtHumidity.setText(String.format("%d", forecastDay.getHumidity()));
-            txtTemp1.setText(String.format("%d°", forecastDay.getMaxTemp()));
-            txtTemp2.setText(String.format("/%d°", forecastDay.getMinTemp()));
-            txtSensation.setText(String.format("Sensação térmica: %d°", forecastDay.getSensation()));
-            txtLocation.setText(forecastDay.getLocation());
-            txtDay.setText(forecastDay.getDate()); */
+
+            Day day = forecastDay.getDay();
+
+            txtHumidity.setText(String.valueOf(day.getAvghumidity()));
+            txtTemp1.setText(day.getMaxtemp_c() + "°");
+            txtTemp2.setText(day.getMintemp_c() + "°");
+            txtRain.setText(day.getTotalprecip_mm() + "mm");
+            txtLocation.setText("Sampa");
+            txtDay.setText(String.valueOf(forecastDay.getDate()));
         }
     }
 }

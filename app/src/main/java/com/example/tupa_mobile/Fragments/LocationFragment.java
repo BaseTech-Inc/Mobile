@@ -35,11 +35,13 @@ public class LocationFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location, container, false);
 
+        /*
+
         cardRecyclerView = view.findViewById(R.id.forecastRecycler);
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         forecasts = new ArrayList<>();
-        adapter = new ForecastDayAdapter(view.getContext(), forecasts);
-        cardRecyclerView.setAdapter(adapter);
+        adapter = new ForecastDayAdapter(view.getContext(), forecasts, );
+        cardRecyclerView.setAdapter(adapter); */
 
         return view;
     }

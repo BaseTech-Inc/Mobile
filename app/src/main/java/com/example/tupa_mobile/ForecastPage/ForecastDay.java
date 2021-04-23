@@ -1,12 +1,17 @@
 package com.example.tupa_mobile.ForecastPage;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
 public class ForecastDay {
 
     private String date;
     private int date_epoch;
     private Day day;
     private Astro astro;
-    private ForecastHour forecastHour;
+    @SerializedName("hour")
+    private ArrayList<ForecastHour> hours;
 
     public String getDate() {
         return date;
@@ -24,7 +29,7 @@ public class ForecastDay {
         return astro;
     }
 
-    public ForecastHour getForecastHour() {
-        return forecastHour;
+    public ArrayList<ForecastHour> getHours() {
+        return hours;
     }
 }

@@ -8,6 +8,7 @@ public class Weather {
     @SerializedName("current")
     private CurrentWeather currentWeather;
 
+    @SerializedName("location")
     private WeatherLocation location;
 
     @SerializedName("forecast")

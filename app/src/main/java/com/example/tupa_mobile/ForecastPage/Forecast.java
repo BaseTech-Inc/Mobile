@@ -2,14 +2,15 @@ package com.example.tupa_mobile.ForecastPage;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Forecast {
 
     @SerializedName("forecastday")
-    List<ForecastDay> forecastDays;
+    ArrayList<ForecastDay> forecastDays;
 
-    public List<ForecastDay> getForecastDays() {
+    public ArrayList<ForecastDay> getForecastDays() {
         return forecastDays;
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.ForecastPage.ForecastDay;
 import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
 import com.example.tupa_mobile.R;
@@ -41,9 +42,9 @@ public class ForecastFragment extends Fragment {
 
         cardRecyclerView = view.findViewById(R.id.forecastRecycler);
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        forecasts = new ArrayList<>();
-        adapter = new ForecastDayAdapter(view.getContext(), forecasts);
-        cardRecyclerView.setAdapter(adapter);
+
+        Connection con = new Connection();
+        con.requestForecast(cardRecyclerView, view.getContext());
 
         return view;
     }
