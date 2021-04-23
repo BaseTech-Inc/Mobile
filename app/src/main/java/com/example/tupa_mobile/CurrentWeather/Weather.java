@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.CurrentWeather;
 
+import com.example.tupa_mobile.ForecastPage.Forecast;
 import com.google.gson.annotations.SerializedName;
 
 public class Weather {
@@ -9,9 +10,12 @@ public class Weather {
 
     private WeatherLocation location;
 
-    public CurrentWeather getCurrentWeather() {
-        return currentWeather;
-    }
+    @SerializedName("forecast")
+    private Forecast forecast;
+
+    public Forecast getForecast() {return forecast;}
+
+    public CurrentWeather getCurrentWeather() {return currentWeather;}
 
     public WeatherLocation getLocation() {return location;}
 }

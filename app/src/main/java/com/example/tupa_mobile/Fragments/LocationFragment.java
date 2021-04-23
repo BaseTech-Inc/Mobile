@@ -41,15 +41,12 @@ public class LocationFragment extends Fragment {
         adapter = new ForecastDayAdapter(view.getContext(), forecasts);
         cardRecyclerView.setAdapter(adapter);
 
-        for(int i=0; i<7; i++) {
-            createListData(50, 20, 35, 70, "Terminal Santana", "dom., 14 de março 16:28");
-        }
         return view;
     }
 
-    public void createListData(int maxTemp, int minTemp, int humidity, int sensation, String location, String date) {
+    /*public void createListData(int maxTemp, int minTemp, int humidity, int sensation, String location, String date) {
         // This method adds data to the recyclerView
         ForecastDay forecastDay = new ForecastDay(maxTemp, minTemp, humidity, sensation, location, date);
         forecasts.add(forecastDay);
-    }
+    }*/
 }

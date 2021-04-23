@@ -17,4 +17,13 @@ public interface JsonPlaceHolderApi {
             @Query("q") String position,
             @Query("aqi") String aqi
     );
+
+    @GET("forecast.json")
+    Call<Weather> getForecast(
+            @Query("key") String key,
+            @Query("q") String position,
+            @Query("days") int days,
+            @Query("aqi") String aqi,
+            @Query("alerts") String alerts
+    );
 }

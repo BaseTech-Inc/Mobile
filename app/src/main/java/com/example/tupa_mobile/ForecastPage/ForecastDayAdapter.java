@@ -58,12 +58,12 @@ public class ForecastDayAdapter extends RecyclerView.Adapter<ForecastDayAdapter.
         }
 
         void setDetails(ForecastDay forecastDay){
-            txtHumidity.setText(String.format("%d", forecastDay.getHumidity()));
+           /* txtHumidity.setText(String.format("%d", forecastDay.getHumidity()));
             txtTemp1.setText(String.format("%d°", forecastDay.getMaxTemp()));
             txtTemp2.setText(String.format("/%d°", forecastDay.getMinTemp()));
             txtSensation.setText(String.format("Sensação térmica: %d°", forecastDay.getSensation()));
             txtLocation.setText(forecastDay.getLocation());
-            txtDay.setText(forecastDay.getDate());
+            txtDay.setText(forecastDay.getDate()); */
         }
     }
 }
