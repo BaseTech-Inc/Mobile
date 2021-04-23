@@ -42,12 +42,6 @@ public class ForecastDayAdapter extends RecyclerView.Adapter<ForecastDayAdapter.
         return this.forecasts.size();
     }
 
-    public  void addAllItems(ArrayList<ForecastDay> items) {
-        forecasts.addAll(items);
-        notifyDataSetChanged();
-    }
-
-
     public class ForecastDayHolder extends RecyclerView.ViewHolder{
 
         private TextView txtHumidity, txtTemp1, txtTemp2, txtLocation, txtDay, txtRain;

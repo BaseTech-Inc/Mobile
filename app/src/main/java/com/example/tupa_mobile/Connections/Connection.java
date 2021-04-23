@@ -87,7 +87,7 @@ public class Connection {
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-        Call<Weather> call = jsonPlaceHolderApi.getForecast(apiKey, position, 8, "no", "no");
+        Call<Weather> call = jsonPlaceHolderApi.getForecast(apiKey, position, 3, "no", "no");
 
         call.enqueue(new Callback<Weather>() {
 
@@ -101,7 +101,6 @@ public class Connection {
                     forecastDays = new ArrayList<>(forecast.getForecastDays());
                     adapter = new ForecastDayAdapter(context, forecastDays);
                     recyclerView.setAdapter(adapter);
-                    adapter.addAllItems(forecastDays);
 
                 }
             }
