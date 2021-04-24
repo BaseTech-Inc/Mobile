@@ -9,6 +9,15 @@ public class OpenDaily {
     private Temperature temp;
     private FeelsLike feels_like;
     private ArrayList<OpenWeatherCondition> weather;
+    private boolean expandable;
+
+    public void setExpandable(boolean expandable) {
+        this.expandable = expandable;
+    }
+
+    public boolean isExpandable() {
+        return expandable;
+    }
 
     public int getDt() {
         return dt;
