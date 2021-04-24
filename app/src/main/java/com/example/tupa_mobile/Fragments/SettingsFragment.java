@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment {
         settingsRecycler.setAdapter(adapter);
 
         for(int i=0; i<7; i++) {
-            createListData("Sábado, na balada", "Ela começou a dançaaaaaar");
+            createListData("Configuração exemplo", "");
         }
 
         return view;
