@@ -28,7 +28,6 @@
             android:id="@+id/txtUpdateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
@@ -36,36 +35,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtTempDay"
+            android:id="@+id/txtMaxTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
+            android:layout_marginHorizontal="4dp"
             app:layout_constraintStart_toEndOf="@id/txtUpdateTime"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtRain"
+            android:id="@+id/txtMinTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toEndOf="@id/txtTempDay"
+            android:layout_marginHorizontal="4dp"
+            app:layout_constraintStart_toEndOf="@id/txtMaxTemp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtPop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toEndOf="@id/txtRain"
+            android:layout_marginHorizontal="4dp"
+            app:layout_constraintStart_toEndOf="@id/txtMinTemp"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -73,12 +66,72 @@
     <RelativeLayout
         android:id="@+id/expandableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/nibolas"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtConditionDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtCondition"
+                app:layout_constraintTop_toBottomOf="@id/txtCondition" />
+
+            <TextView
+                android:id="@+id/txtFeelsLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtConditionDesc"
+                app:layout_constraintTop_toBottomOf="@id/txtConditionDesc" />
+
+            <TextView
+                android:id="@+id/txtSunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtConditionDesc"
+                app:layout_constraintTop_toBottomOf="@id/txtFeelsLike" />
+
+            <TextView
+                android:id="@+id/txtSunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtSunrise"
+                app:layout_constraintTop_toBottomOf="@id/txtSunrise"/>
+
+            <TextView
+                android:id="@+id/txtPressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtSunset"
+                app:layout_constraintTop_toBottomOf="@id/txtSunset"/>
+
+            <TextView
+                android:id="@+id/txtHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtPressure"
+                app:layout_constraintTop_toBottomOf="@id/txtPressure"/>
+
+            <TextView
+                android:id="@+id/txtRain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/txtHumidity"
+                app:layout_constraintTop_toBottomOf="@id/txtHumidity"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
 

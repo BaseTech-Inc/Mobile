@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.R;
+import com.example.tupa_mobile.WeatherAPI.WeatherCondition;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
 
     public class OpenDailyHolder extends RecyclerView.ViewHolder {
 
-        TextView txtUpdateTime, txtTempDay, txtTempNight, txtFeelsLikeDay, txtFeelsLikeNight, txtHumidity, txtRain, txtPop, txtCondition, txtDescCondition;
+        TextView txtUpdateTime, txtMaxTemp, txtMinTemp, txtFeelsLike, txtSunrise, txtSunset, txtPressure, txtHumidity, txtRain, txtPop, txtCondition, txtDescCondition;
         LinearLayout clickableLayout;
         RelativeLayout expandableLayout;
 
@@ -57,9 +58,17 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
 
             //initialize the textViews
             txtUpdateTime = itemView.findViewById(R.id.txtUpdateTime);
-            txtTempDay = itemView.findViewById(R.id.txtTempDay);
+            txtMaxTemp = itemView.findViewById(R.id.txtMaxTemp);
+            txtMinTemp = itemView.findViewById(R.id.txtMinTemp);
+            txtFeelsLike = itemView.findViewById(R.id.txtFeelsLike);
+            txtSunrise = itemView.findViewById(R.id.txtSunrise);
+            txtSunset = itemView.findViewById(R.id.txtSunset);
+            txtPressure = itemView.findViewById(R.id.txtPressure);
+            txtHumidity = itemView.findViewById(R.id.txtHumidity);
             txtRain = itemView.findViewById(R.id.txtRain);
             txtPop = itemView.findViewById(R.id.txtPop);
+            txtCondition = itemView.findViewById(R.id.txtCondition);
+            txtDescCondition = itemView.findViewById(R.id.txtConditionDesc);
 
             clickableLayout = itemView.findViewById(R.id.clickableLayout);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
@@ -67,11 +76,9 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
             clickableLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     OpenDaily daily =  dailies.get(getAdapterPosition());
                     daily.setExpandable(!daily.isExpandable());
                     notifyItemChanged(getAdapterPosition());
-
                 }
             });
 
@@ -80,12 +87,23 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
         void setDetails(OpenDaily openDaily){
 
             //assign textViews' values
+            Temperature temp = openDaily.getTemp();
+            ArrayList<OpenWeatherCondition> conditionList = openDaily.getWeather();
+            OpenWeatherCondition condition = conditionList.get(0);
+            FeelsLike feelsLike = openDaily.getFeels_like();
 
-            txtUpdateTime.setText("Update: " + openDaily.getDt());
-            txtTempDay.setText("Day UVI: " + openDaily.getUvi());
-            txtRain.setText("Rain (mm): " + openDaily.getRain());
-            txtPop.setText("Rain Probability:" + openDaily.getPop());
-
+            txtUpdateTime.setText(String.format("%d", openDaily.getDt()));
+            txtMaxTemp.setText(String.format("%s°", temp.getMax()));
+            txtMinTemp.setText(String.format("%s°", temp.getMin()));
+            txtFeelsLike.setText(String.format("Feels like: %s°", feelsLike.getDay()));
+            txtSunrise.setText(String.format("Sunrise: %d", openDaily.getSunrise()));
+            txtSunset.setText(String.format("Sunset: %d", openDaily.getSunset()));
+            txtPressure.setText(String.format("Pressure: %datm", openDaily.getPressure()));
+            txtHumidity.setText(String.format("Humidity:%s", openDaily.getHumidity()));
+            txtRain.setText(String.format("Rain: %s", openDaily.getRain()));
+            txtPop.setText(String.format("%s", openDaily.getPop()));
+            txtCondition.setText(String.format("Condition: %s", condition.getMain()));
+            txtDescCondition.setText(String.format("Description: %s", condition.getDescription()));
         }
     }
 }

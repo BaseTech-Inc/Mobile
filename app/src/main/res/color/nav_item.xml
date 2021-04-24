@@ -6,7 +6,7 @@
         android:state_selected="true"/>
 
     <item
-        android:color="?attr/colorSecondary"
+        android:color="?attr/colorSecondaryVariant"
         android:state_selected="false"/>
 
 </selector>
