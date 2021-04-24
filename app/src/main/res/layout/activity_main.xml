@@ -7,10 +7,10 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/BackgroundWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,6 +38,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         app:itemIconTint="@color/nav_item"
         app:itemTextColor="@color/nav_item"
         app:labelVisibilityMode="unlabeled"

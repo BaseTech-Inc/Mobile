@@ -5,7 +5,7 @@
     <color name="BackgroundWhite">#f7f7f7</color>
     <color name="SurfaceWhite">#fff</color>
     <color name="LightGrey">#ededed</color>
-    <color name="DarkGrey">#a3a3a3</color>
+    <color name="DarkGrey">#343334</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
