@@ -1,4 +1,4 @@
-package com.example.tupa_mobile.CurrentWeather;
+package com.example.tupa_mobile.WeatherAPI;
 
 public class WeatherCondition {
     private String text, icon;

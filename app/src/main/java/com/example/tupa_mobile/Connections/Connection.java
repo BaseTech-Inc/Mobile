@@ -6,12 +6,12 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tupa_mobile.CurrentWeather.CurrentWeather;
-import com.example.tupa_mobile.CurrentWeather.Weather;
-import com.example.tupa_mobile.ForecastPage.Day;
-import com.example.tupa_mobile.ForecastPage.Forecast;
-import com.example.tupa_mobile.ForecastPage.ForecastDay;
-import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
+import com.example.tupa_mobile.WeatherAPI.CurrentWeather;
+import com.example.tupa_mobile.WeatherAPI.Weather;
+import com.example.tupa_mobile.WeatherAPI.Day;
+import com.example.tupa_mobile.WeatherAPI.Forecast;
+import com.example.tupa_mobile.WeatherAPI.ForecastDay;
+import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ public class Connection {
     private String apiKey = "0253a3a9322d4be2a5b174410211404";
     private String position = "-23.6182683,-46.639479";
     private ArrayList<ForecastDay> forecastDays;
+    private CurrentWeather currentWeather;
     private Weather weather;
     private Forecast forecast;
     private Day day;
@@ -49,31 +50,22 @@ public class Connection {
 
                 if (response.isSuccessful() && response.body()!=null) {
 
-                    Weather weather = response.body();
-                    CurrentWeather currentWeather = weather.getCurrentWeather();
+                    weather = response.body();
+                    currentWeather = weather.getCurrentWeather();
 
                     String content = "";
-                    content += "last update: " + currentWeather.getLast_updated() + "\n";
-                    content += "temperature: " + currentWeather.getTemp_c() + "\n";
+                    content += "last update: " + currentWeather.getTemp_c();
+                    content += "temperature: " + currentWeather.getFeelslike_c();
                     content += "humidity: " + currentWeather.getHumidity();
 
                     txtResult.append(content);
-
-                    /*for(CurrentWeather currentWeather : listWeathers) {
-                        String content = "";
-                        content += currentWeather.getLast_updated();
-                        content += currentWeather.getTemp_c();
-                        content += currentWeather.getHumidity();
-
-                        txtResult.append(content);
-                    }*/
                 }
 
             }
 
             @Override
             public void onFailure(Call<Weather> call, Throwable t) {
-                txtResult.setText(t.getMessage());
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
             }
         });
     }

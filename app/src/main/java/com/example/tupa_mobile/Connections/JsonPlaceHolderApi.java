@@ -1,9 +1,6 @@
 package com.example.tupa_mobile.Connections;
 
-import com.example.tupa_mobile.CurrentWeather.Weather;
-import com.example.tupa_mobile.ForecastPage.ForecastDay;
-
-import java.util.List;
+import com.example.tupa_mobile.WeatherAPI.Weather;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

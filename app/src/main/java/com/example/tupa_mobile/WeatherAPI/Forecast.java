@@ -1,9 +1,8 @@
-package com.example.tupa_mobile.ForecastPage;
+package com.example.tupa_mobile.WeatherAPI;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Forecast {
 

@@ -3,23 +3,31 @@ package com.example.tupa_mobile.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.R;
+import com.example.tupa_mobile.SettingsPage.Settings;
+import com.example.tupa_mobile.SettingsPage.SettingsAdapter;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ConfigFragment#newInstance} factory method to
+ * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConfigFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
     private TextView txtResult;
+    private RecyclerView settingsRecycler;
+    private ArrayList<Settings> settingsList;
+    private SettingsAdapter adapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +39,7 @@ public class ConfigFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ConfigFragment() {
+    public SettingsFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +49,11 @@ public class ConfigFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ConfigFragment.
+     * @return A new instance of fragment SettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ConfigFragment newInstance(String param1, String param2) {
-        ConfigFragment fragment = new ConfigFragment();
+    public static SettingsFragment newInstance(String param1, String param2) {
+        SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,8 +74,24 @@ public class ConfigFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_config, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        settingsRecycler = view.findViewById(R.id.settingsRecycler);
+        settingsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        settingsList = new ArrayList<>();
+        adapter = new SettingsAdapter(view.getContext(), settingsList);
+        settingsRecycler.setAdapter(adapter);
+
+        for(int i=0; i<7; i++) {
+            createListData("Sábado, na balada", "Ela começou a dançaaaaaar");
+        }
 
         return view;
+    }
+
+    public void createListData(String title, String imgSource) {
+        // This method adds data to the recyclerView
+        Settings settings = new Settings(title, imgSource);
+        settingsList.add(settings);
     }
 }

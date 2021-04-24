@@ -1,6 +1,4 @@
-package com.example.tupa_mobile.ForecastPage;
-
-import com.example.tupa_mobile.CurrentWeather.WeatherCondition;
+package com.example.tupa_mobile.WeatherAPI;
 
 public class ForecastHour {
 

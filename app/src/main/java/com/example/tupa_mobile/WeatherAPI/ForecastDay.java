@@ -1,4 +1,4 @@
-package com.example.tupa_mobile.ForecastPage;
+package com.example.tupa_mobile.WeatherAPI;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.example.tupa_mobile.CurrentWeather;
+package com.example.tupa_mobile.WeatherAPI;
 
 public class CurrentWeather {
     private int last_updated_epoch, is_day;

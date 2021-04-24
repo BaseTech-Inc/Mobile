@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.tupa_mobile.Fragments.ConfigFragment;
+import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
 import com.example.tupa_mobile.Fragments.HistoryFragment;
 import com.example.tupa_mobile.Fragments.MapFragment;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.item5:
-                    selectedFragment = new ConfigFragment();
+                    selectedFragment = new SettingsFragment();
                     break;
             }
 

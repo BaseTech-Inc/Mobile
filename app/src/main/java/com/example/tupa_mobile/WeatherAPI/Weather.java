@@ -1,6 +1,5 @@
-package com.example.tupa_mobile.CurrentWeather;
+package com.example.tupa_mobile.WeatherAPI;
 
-import com.example.tupa_mobile.ForecastPage.Forecast;
 import com.google.gson.annotations.SerializedName;
 
 public class Weather {

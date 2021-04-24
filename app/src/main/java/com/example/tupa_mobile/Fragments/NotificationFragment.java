@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tupa_mobile.ForecastPage.ForecastDay;
-import com.example.tupa_mobile.ForecastPage.ForecastDayAdapter;
 import com.example.tupa_mobile.NotificationPage.Notification;
 import com.example.tupa_mobile.NotificationPage.NotificationAdapter;
 import com.example.tupa_mobile.R;
