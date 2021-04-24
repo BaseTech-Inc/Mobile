@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.tupa_mobile.Connections.Connection;
+import com.example.tupa_mobile.OpenWeather.OpenDaily;
+import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.R;
 import com.example.tupa_mobile.SettingsPage.Settings;
 import com.example.tupa_mobile.SettingsPage.SettingsAdapter;
@@ -28,6 +31,8 @@ public class SettingsFragment extends Fragment {
     private RecyclerView settingsRecycler;
     private ArrayList<Settings> settingsList;
     private SettingsAdapter adapter;
+    private ArrayList<OpenDaily> dailies;
+    private OpenDailyAdapter openAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match

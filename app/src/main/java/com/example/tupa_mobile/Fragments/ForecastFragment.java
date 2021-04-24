@@ -42,7 +42,7 @@ public class ForecastFragment extends Fragment {
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection con = new Connection();
-        con.requestForecast(cardRecyclerView, view.getContext());
+        con.requestOpenForecast(cardRecyclerView, view.getContext());
 
         return view;
     }

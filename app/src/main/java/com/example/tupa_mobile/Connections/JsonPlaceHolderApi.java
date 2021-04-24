@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Connections;
 
+import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 
 import retrofit2.Call;
@@ -22,5 +23,23 @@ public interface JsonPlaceHolderApi {
             @Query("days") int days,
             @Query("aqi") String aqi,
             @Query("alerts") String alerts
+    );
+
+    @GET("data/2.5/onecall")
+    Call<OpenWeather> getOpenForecastDaily(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("appid") String key,
+            @Query("exclude") String exclude,
+            @Query("units") String units,
+            @Query("lang") String lang
+    );
+
+    @GET("data/2.5/onecall")
+    Call<OpenWeather> getOpenForecastDaily(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("appid") String key,
+            @Query("units") String units
     );
 }
