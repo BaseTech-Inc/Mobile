@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.WeatherAPI.ForecastDay;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
-    private RecyclerView cardRecyclerView;
+    private RecyclerView cardRecyclerView, hourRecyclerView;
     private ForecastDayAdapter adapter;
     private ArrayList<ForecastDay> forecasts;
 
@@ -38,10 +39,14 @@ public class ForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
+        hourRecyclerView = view.findViewById(R.id.hourRecycler);
+        hourRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
         cardRecyclerView = view.findViewById(R.id.forecastRecycler);
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection con = new Connection();
+        con.requestHourForecast(hourRecyclerView, view.getContext());
         con.requestOpenForecast(cardRecyclerView, view.getContext());
 
         return view;

@@ -11,6 +11,8 @@ import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.WeatherAPI.CurrentWeather;
+import com.example.tupa_mobile.WeatherAPI.ForecastHour;
+import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.Day;
 import com.example.tupa_mobile.WeatherAPI.Forecast;
@@ -28,13 +30,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Connection {
 
     private ForecastDayAdapter adapter;
-    private ArrayList<ForecastDay> forecastsList;
     private String weatherApiKey = "0253a3a9322d4be2a5b174410211404";
     private String openApiKey = "601d15071f30c2f71f3e59a0df95e8a1";
     private String position = "-23.6182683,-46.639479";
     private String lat = "-23.6182683";
     private String lon = "-46.639479";
     private ArrayList<ForecastDay> forecastDays;
+    private ForecastDay forecastDay;
+    private ArrayList<ForecastHour> forecastHours;
+    private ForecastHourAdapter hourAdapter;
     private CurrentWeather currentWeather;
     private Weather weather;
     private Forecast forecast;
@@ -143,6 +147,42 @@ public class Connection {
 
             @Override
             public void onFailure(Call<OpenWeather> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    public void requestHourForecast(RecyclerView recyclerView, Context context){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.weatherapi.com/v1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        Call<Weather> call = jsonPlaceHolderApi.getForecast(weatherApiKey, position, 1,"no", "no");
+
+        call.enqueue(new Callback<Weather>() {
+            @Override
+            public void onResponse(Call<Weather> call, Response<Weather> response) {
+
+                if (response.isSuccessful() && response.body()!=null) {
+
+                    weather = response.body();
+                    forecast = weather.getForecast();
+                    forecastDays = new ArrayList<>(forecast.getForecastDays());
+                    forecastDay = forecastDays.get(0);
+                    forecastHours = new ArrayList<>(forecastDay.getHours());
+
+                    hourAdapter = new ForecastHourAdapter(context, forecastHours);
+                    recyclerView.setAdapter(hourAdapter);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Weather> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
             }
         });

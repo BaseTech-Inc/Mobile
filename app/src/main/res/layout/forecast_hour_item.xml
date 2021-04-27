@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/txtHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_regular"
+            android:textColor="@color/MediumGrey"
+            android:textSize="17sp"
+            android:text="10:00"/>
+
+        <TextView
+            android:id="@+id/txtTempHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/black"
+            android:text="20°" />
+
+        <ImageView
+            android:id="@+id/imgHour"
+            android:layout_marginTop="4dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/nibolas"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
