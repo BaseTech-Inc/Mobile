@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class SettingsFragment extends Fragment {
 
     private TextView txtResult;
-    private RecyclerView settingsRecycler;
+    private RecyclerView userSettingsRecycler, appSettingsRecycler, infoSettingsRecycler;
     private ArrayList<Settings> settingsList;
     private SettingsAdapter adapter;
     private ArrayList<OpenDaily> dailies;
@@ -81,13 +81,23 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        settingsRecycler = view.findViewById(R.id.settingsRecycler);
-        settingsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        userSettingsRecycler = view.findViewById(R.id.userSettingsRecycler);
+        userSettingsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        appSettingsRecycler = view.findViewById(R.id.appSettingsRecycler);
+        appSettingsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        infoSettingsRecycler = view.findViewById(R.id.infoSettingsRecycler);
+        infoSettingsRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
         settingsList = new ArrayList<>();
         adapter = new SettingsAdapter(view.getContext(), settingsList);
-        settingsRecycler.setAdapter(adapter);
 
-        for(int i=0; i<7; i++) {
+        userSettingsRecycler.setAdapter(adapter);
+        appSettingsRecycler.setAdapter(adapter);
+        infoSettingsRecycler.setAdapter(adapter);
+
+        for(int i=0; i<4; i++) {
             createListData("Configuração exemplo", "");
         }
 

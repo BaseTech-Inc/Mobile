@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="17dp">
+    android:background="?attr/colorSecondaryVariant"
+    android:paddingTop="100dp"
+    android:paddingBottom="70dp"
+    android:paddingHorizontal="17dp">
 
     <TextView
         android:id="@+id/weatherPlace"
@@ -11,7 +14,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_semibold"
         android:text="São Paulo"
-        android:textColor="@color/black"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
@@ -22,7 +24,6 @@
         android:id="@+id/weatherCondition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
         android:fontFamily="@font/open_sans_regular"
         android:text="Nublado"
         android:textSize="19sp"
@@ -31,7 +32,6 @@
 
     <TextView
         android:id="@+id/weatherTemp"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_semibold"

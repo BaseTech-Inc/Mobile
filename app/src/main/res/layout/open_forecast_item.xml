@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="17dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
     android:orientation="vertical"
     android:id="@+id/clickableLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="?attr/colorSecondary"
+        android:elevation="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgMiniForecast"
@@ -20,7 +22,7 @@
             android:src="@drawable/nibolas"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,7 +69,8 @@
         android:id="@+id/expandableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:background="?attr/colorSecondaryVariant">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

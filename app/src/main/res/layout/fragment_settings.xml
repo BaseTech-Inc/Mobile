@@ -8,14 +8,87 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/settingsRecycler"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/mainProfileItem"
+                layout="@layout/profile_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="72dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lblUserSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="Configurações de usuário"
+                android:textSize="17sp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="@id/mainProfileItem"
+                app:layout_constraintTop_toBottomOf="@+id/mainProfileItem" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userSettingsRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@id/lblUserSettings"
+                app:layout_constraintTop_toBottomOf="@+id/lblUserSettings" />
+
+            <TextView
+                android:id="@+id/lblAppSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="Configurações do aplicativo"
+                android:textSize="17sp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="@id/mainProfileItem"
+                app:layout_constraintTop_toBottomOf="@+id/userSettingsRecycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/appSettingsRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@id/lblUserSettings"
+                app:layout_constraintTop_toBottomOf="@+id/lblAppSettings" />
+
+            <TextView
+                android:id="@+id/lblAppInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="Configurações do aplicativo"
+                android:textSize="17sp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="@id/mainProfileItem"
+                app:layout_constraintTop_toBottomOf="@+id/appSettingsRecycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/infoSettingsRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="@id/lblUserSettings"
+                app:layout_constraintTop_toBottomOf="@+id/lblAppInfo" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
