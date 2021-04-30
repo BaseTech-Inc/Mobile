@@ -7,22 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:backgroundTint="?attr/colorSecondary"
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mainToolBar"
-            android:theme="@style/ToolbarTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/map_toolbar" android:id="@+id/mapBarLayout"/>
 
     <FrameLayout
         android:id="@+id/fragmentLayout"
@@ -31,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/mapBarLayout">
 
     </FrameLayout>
 

@@ -16,8 +16,13 @@
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textSize">24dp</item>
-        <item name="backgroundColor">?attr/colorSecondary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:background">#00000000</item>
         <item name="actionMenuTextColor">?attr/colorOnSecondary</item>
     </style>
+
+    <style name="MyTextApperance" parent="@android:style/TextAppearance.DialogWindowTitle">
+        <item name="android:background"> @color/DarkGrey </item>
+    </style>
+
 </resources>
