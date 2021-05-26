@@ -20,7 +20,7 @@ public class NotificationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.arrow_right_icon_black_white_theme_small);
+        toolbar.setNavigationIcon(R.drawable.arrow_right_icon_white_black_theme_small);
     }
 
     @Override

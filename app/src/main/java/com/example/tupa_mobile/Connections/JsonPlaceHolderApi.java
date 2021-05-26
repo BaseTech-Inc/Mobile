@@ -1,10 +1,23 @@
 package com.example.tupa_mobile.Connections;
 
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
+import com.example.tupa_mobile.Route.Route;
+import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
+import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface JsonPlaceHolderApi {
@@ -41,5 +54,20 @@ public interface JsonPlaceHolderApi {
             @Query("lon") String lon,
             @Query("appid") String key,
             @Query("units") String units
+    );
+
+/*
+
+    @POST("directions/driving-car/json")
+    Call<RouteResponse> postRoute(
+            @Body String route
+    );
+
+ */
+
+
+    @POST("directions/driving-car/json")
+    Call<RouteResponse> postRoute(
+            @Body RequestBody route
     );
 }
