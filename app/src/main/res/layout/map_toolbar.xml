@@ -20,7 +20,8 @@
             android:id="@+id/mapToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/map_menu"
+            android:paddingRight="5dp"
+            app:menu="@menu/upper_menu"
             app:title="Mapa" />
 
     </com.google.android.material.appbar.AppBarLayout>

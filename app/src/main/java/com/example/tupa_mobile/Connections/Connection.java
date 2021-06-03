@@ -217,6 +217,8 @@ public class Connection {
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
+        /*
+
         ArrayList<Double> doubles1 = new ArrayList<>();
         doubles1.add(8.681495);
         doubles1.add(49.41461);
@@ -231,6 +233,8 @@ public class Connection {
         coordinatesArrayList.add(doubles2);
 
         Route route = new Route(coordinatesArrayList);
+
+         */
 
         String finalRoute = "{\"coordinates\":[[8.681495,49.41461],[8.686507,49.41943],[8.687872,49.420318]]}";
 

@@ -30,7 +30,10 @@ public class LocationFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +43,8 @@ public class LocationFragment extends Fragment {
 
         txtResult = view.findViewById(R.id.txtResult);
 
-        Connection con = new Connection();
-        con.requestCurrentWeather(txtResult, view.getContext());
+        //Connection con = new Connection();
+        //con.requestCurrentWeather(txtResult, view.getContext());
 
         return view;
     }

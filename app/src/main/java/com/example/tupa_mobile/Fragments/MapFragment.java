@@ -31,8 +31,8 @@ public class MapFragment extends Fragment {
 
         TextView txtResult = view.findViewById(R.id.txtResponse);
 
-        Connection con = new Connection();
-        con.postRoute(txtResult, view.getContext());
+        //Connection con = new Connection();
+        //con.postRoute(txtResult, view.getContext());
 
         return view;
     }

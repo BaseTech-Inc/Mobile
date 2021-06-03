@@ -2,4 +2,11 @@
     <string name="app_name">Tupa-Mobile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Mapa">Mapa</string>
+    <string name="Historico">Histórico</string>
+    <string name="Previsao">Previsão</string>
+    <string name="Configuracoes">Configurações</string>
+    <string name="marcador">Marcador</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="notificacao">Notificação</string>
 </resources>
