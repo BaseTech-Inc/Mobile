@@ -21,7 +21,7 @@
             app:title="Notificação"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/upper_menu" />
+            app:menu="@menu/notification_menu" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

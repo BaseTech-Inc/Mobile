@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.tupa_mobile.Fragments.LocationFragment;
+import com.example.tupa_mobile.Fragments.AlertFragment;
+import com.example.tupa_mobile.Fragments.PastForecastsFragment;
 import com.example.tupa_mobile.Fragments.RidesFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
@@ -23,8 +24,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                return new LocationFragment();
+                return new AlertFragment();
             case 1:
+                return new PastForecastsFragment();
+            case 2:
                 return new RidesFragment();
             default: return null;
         }
