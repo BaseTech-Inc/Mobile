@@ -57,7 +57,7 @@ public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapte
 
         public void setDetails(ForecastHour forecastHour) {
 
-            txtHour.setText("10:00");
+            txtHour.setText(forecastHour.getTimeFormatted());
             txtTempHour.setText(String.valueOf(forecastHour.getTemp_c()) + "°");
             imgHour.setImageResource(R.drawable.nibolas);
         }

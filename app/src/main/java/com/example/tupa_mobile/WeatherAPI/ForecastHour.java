@@ -47,6 +47,11 @@ public class ForecastHour {
         return time;
     }
 
+    public String getTimeFormatted(){
+        String time = getTime().split(" ")[1];
+        return time;
+    }
+
     public String getWind_dir() {
         return wind_dir;
     }

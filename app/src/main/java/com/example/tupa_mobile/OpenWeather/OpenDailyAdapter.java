@@ -92,7 +92,7 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
             OpenWeatherCondition condition = conditionList.get(0);
             FeelsLike feelsLike = openDaily.getFeels_like();
 
-            txtUpdateTime.setText(String.format("%d", openDaily.getDt()));
+            txtUpdateTime.setText(openDaily.getDtFormatted());
             txtMaxTemp.setText(String.format("%s°", temp.getMax()));
             txtMinTemp.setText(String.format("%s°", temp.getMin()));
             txtFeelsLike.setText(String.format("Feels like: %s°", feelsLike.getDay()));

@@ -1,10 +1,19 @@
 package com.example.tupa_mobile.OpenWeather;
 
+import android.text.format.DateUtils;
+import android.util.Log;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class OpenDaily {
 
-    private int dt, sunrise, sunset, moonrise, moonset, pressure, wind_deg;
+    private int sunrise, sunset, moonrise, moonset, pressure, wind_deg;
+    private long dt;
     private double moon_phase, humidity, dew_point, wind_speed, clouds, pop, rain, uvi;
     private Temperature temp;
     private FeelsLike feels_like;
@@ -19,8 +28,23 @@ public class OpenDaily {
         return expandable;
     }
 
-    public int getDt() {
+    public long getDt() {
         return dt;
+    }
+
+    public String getDtFormatted(){
+
+        long dt = getDt()*1000;
+        Timestamp timestamp = new Timestamp(dt);
+        Date date = new Date(timestamp.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EE");
+        String strDate = dateFormat.format(date);
+
+        if (DateUtils.isToday(dt)){
+            return "Today";
+        }
+
+        return strDate;
     }
 
     public int getSunrise() {
