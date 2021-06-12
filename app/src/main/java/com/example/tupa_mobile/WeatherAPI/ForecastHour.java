@@ -2,13 +2,14 @@ package com.example.tupa_mobile.WeatherAPI;
 
 public class ForecastHour {
 
-    private int time_epoch, is_day, wind_degree, humidity, cloud, will_it_rain, chance_of_rain, will_it_snow, chance_of_snow;
+    private int is_day, wind_degree, humidity, cloud, will_it_rain, chance_of_rain, will_it_snow, chance_of_snow;
+    private long time_epoch;
     private String time, wind_dir;
     private double temp_c, temp_f, wind_mph, wind_kph, pressure_mb, pressure_in, precip_mm, precip_in, feelslike_c, feelslike_f, windchill_c, windchill_f, heatindex_c, heatindex_f, dewpoint_c, dewpoint_f, vis_km, vis_miles, gust_mph, gust_kph, uv;
     private WeatherCondition weatherCondition;
 
-    public int getTime_epoch() {
-        return time_epoch;
+    public long getTime_epoch() {
+        return time_epoch*1000;
     }
 
     public int getIs_day() {

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:orientation="vertical"
-    android:id="@+id/clickableLayout">
+    android:layout_marginTop="16dp"
+    android:id="@+id/clickableLayout"
+    app:cardElevation="0.5dp"
+    app:cardCornerRadius="17dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="?attr/colorSecondary"
-        android:elevation="16dp">
+        android:background="@color/SurfaceWhite">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgMiniForecast"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/nibolas"
+            android:src="@drawable/day_cloudy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/txtUpdateTime"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtMaxTemp"
+            android:id="@+id/txtTemperatures"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,96 +46,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtMinTemp"
+            android:id="@+id/txtHumidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="4dp"
-            app:layout_constraintStart_toEndOf="@id/txtMaxTemp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtPop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="4dp"
-            app:layout_constraintStart_toEndOf="@id/txtMinTemp"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintStart_toEndOf="@id/txtTemperatures"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
-        android:id="@+id/expandableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:background="?attr/colorSecondaryVariant">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/txtCondition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txtConditionDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtCondition"
-                app:layout_constraintTop_toBottomOf="@id/txtCondition" />
-
-            <TextView
-                android:id="@+id/txtFeelsLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtConditionDesc"
-                app:layout_constraintTop_toBottomOf="@id/txtConditionDesc" />
-
-            <TextView
-                android:id="@+id/txtSunrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtConditionDesc"
-                app:layout_constraintTop_toBottomOf="@id/txtFeelsLike" />
-
-            <TextView
-                android:id="@+id/txtSunset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtSunrise"
-                app:layout_constraintTop_toBottomOf="@id/txtSunrise"/>
-
-            <TextView
-                android:id="@+id/txtPressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtSunset"
-                app:layout_constraintTop_toBottomOf="@id/txtSunset"/>
-
-            <TextView
-                android:id="@+id/txtHumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtPressure"
-                app:layout_constraintTop_toBottomOf="@id/txtPressure"/>
-
-            <TextView
-                android:id="@+id/txtRain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/txtHumidity"
-                app:layout_constraintTop_toBottomOf="@id/txtHumidity"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

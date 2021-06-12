@@ -23,6 +23,7 @@ import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
+import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
 import com.google.android.gms.common.api.Api;
 
 import org.json.JSONObject;
@@ -56,6 +57,7 @@ public class Connection {
     private ForecastDay forecastDay;
     private ArrayList<ForecastHour> forecastHours;
     private ForecastHourAdapter hourAdapter;
+    private WeatherLocation location;
     private CurrentWeather currentWeather;
     private Weather weather;
     private Forecast forecast;
@@ -65,7 +67,7 @@ public class Connection {
     private OpenDailyAdapter openAdapter;
 
 
-    public void requestCurrentWeather(TextView txtResult, Context context){
+    public void requestCurrentWeather(TextView weatherPlace, TextView weatherCondition, TextView weatherTemp, Context context){
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -83,14 +85,14 @@ public class Connection {
                 if (response.isSuccessful() && response.body()!=null) {
 
                     weather = response.body();
+                    location = weather.getLocation();
                     currentWeather = weather.getCurrentWeather();
+                    String temp = Math.round(currentWeather.getTemp_c()) + "°";
 
-                    String content = "";
-                    content += "last update: " + currentWeather.getTemp_c();
-                    content += "temperature: " + currentWeather.getFeelslike_c();
-                    content += "humidity: " + currentWeather.getHumidity();
+                    weatherPlace.setText(location.getName());
+                    weatherCondition.setText(currentWeather.getCondition().getText());
+                    weatherTemp.setText(temp);
 
-                    txtResult.append(content);
                 }
 
             }
@@ -194,6 +196,8 @@ public class Connection {
 
                     hourAdapter = new ForecastHourAdapter(context, forecastHours);
                     recyclerView.setAdapter(hourAdapter);
+
+                    hourAdapter.getFilter().filter(null);
                 }
 
             }

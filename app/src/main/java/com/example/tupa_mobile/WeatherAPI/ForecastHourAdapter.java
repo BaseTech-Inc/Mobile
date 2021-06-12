@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,17 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapter.ForecastHourHolder>{
+public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapter.ForecastHourHolder> implements Filterable {
 
     private Context context;
     private ArrayList<ForecastHour> hours;
+    private ArrayList<ForecastHour> allHours;
 
     public ForecastHourAdapter(Context context, ArrayList<ForecastHour> hours) {
         this.context = context;
         this.hours = hours;
+        allHours = new ArrayList<>(hours);
     }
 
     @NonNull
@@ -42,6 +48,35 @@ public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapte
         return this.hours.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return hourFilter;
+    }
+
+    private Filter hourFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<ForecastHour> filteredHours = new ArrayList<>();
+
+            for(ForecastHour forecastHour : allHours){
+                if(forecastHour.getTime_epoch() >= System.currentTimeMillis()){
+                    filteredHours.add(forecastHour);
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredHours;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            hours.clear();
+            hours.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public class ForecastHourHolder extends RecyclerView.ViewHolder{
 
         private TextView txtHour, txtTempHour;
@@ -59,7 +94,7 @@ public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapte
 
             txtHour.setText(forecastHour.getTimeFormatted());
             txtTempHour.setText(String.valueOf(forecastHour.getTemp_c()) + "°");
-            imgHour.setImageResource(R.drawable.nibolas);
+            imgHour.setImageResource(R.drawable.night_clear);
         }
     }
 }

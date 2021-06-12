@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,9 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.tupa_mobile.Connections.Connection;
+import com.example.tupa_mobile.GraphActivity;
 import com.example.tupa_mobile.WeatherAPI.ForecastDay;
 import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 import com.example.tupa_mobile.R;
@@ -21,8 +25,8 @@ import java.util.ArrayList;
 public class ForecastFragment extends Fragment {
 
     private RecyclerView cardRecyclerView, hourRecyclerView;
-    private ForecastDayAdapter adapter;
-    private ArrayList<ForecastDay> forecasts;
+    private TextView weatherPlace, weatherCondition, weatherTemp;
+    private Button buttonGraph;
 
     public ForecastFragment() {
         // Required empty public constructor
@@ -39,6 +43,18 @@ public class ForecastFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
+        weatherPlace = view.findViewById(R.id.weatherPlace);
+        weatherCondition = view.findViewById(R.id.weatherCondition);
+        weatherTemp = view.findViewById(R.id.weatherTemp);
+
+        buttonGraph = view.findViewById(R.id.buttonGraph);
+        buttonGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGraphActivity();
+            }
+        });
+
         hourRecyclerView = view.findViewById(R.id.hourRecycler);
         hourRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -46,9 +62,15 @@ public class ForecastFragment extends Fragment {
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection con = new Connection();
+        con.requestCurrentWeather(weatherPlace, weatherCondition, weatherTemp, view.getContext());
         con.requestHourForecast(hourRecyclerView, view.getContext());
         con.requestOpenForecast(cardRecyclerView, view.getContext());
 
         return view;
+    }
+
+    private void startGraphActivity(){
+        Intent intent = new Intent(getContext(), GraphActivity.class);
+        startActivity(intent);
     }
 }

@@ -26,6 +26,8 @@
                 layout="@layout/main_forecast_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -34,21 +36,35 @@
                 android:id="@+id/hourRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
                 android:paddingHorizontal="24dp"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/currentForecast" />
+
+            <Button
+                android:id="@+id/buttonGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="20dp"
+                android:padding="15dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Previsão Semanal"
+                android:textColor="?attr/colorPrimaryVariant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hourRecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/forecastRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:paddingHorizontal="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hourRecycler" />
+                app:layout_constraintTop_toBottomOf="@id/buttonGraph" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
