@@ -30,7 +30,7 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
     @NonNull
     @Override
     public OpenDailyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.open_forecast_item,parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.open_forecast_item, parent,false);
         return new OpenDailyAdapter.OpenDailyHolder(view);
     }
 

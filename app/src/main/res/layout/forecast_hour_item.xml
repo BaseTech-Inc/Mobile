@@ -19,18 +19,18 @@
             android:id="@+id/txtHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_regular"
+            android:fontFamily="@font/montserrat_semibold"
             android:text="10:00"
-            android:textColor="@color/MediumGrey"
-            android:textSize="17sp" />
+            android:textColor="@color/MediumGrey"/>
 
         <TextView
             android:id="@+id/txtTempHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/open_sans_regular"
             android:text="20°"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
 
         <ImageView
             android:id="@+id/imgHour"
