@@ -2,16 +2,22 @@
     <!-- Base application theme. -->
     <style name="Theme.TupaMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/PrimaryBlue</item>
-        <item name="colorPrimaryVariant">@color/SecondaryBlue</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/Primary900</item>
+        <item name="colorPrimaryVariant">@color/Primary700</item>
+        <item name="colorOnPrimary">@color/LightOnSurfaceHighEmphasis</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/BackgroundWhite</item>
-        <item name="colorSecondaryVariant">@color/MediumGrey</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/LightBackground</item>
+        <item name="colorSecondaryVariant">@color/LightSurface</item>
+        <item name="colorOnSecondary">@color/LightOnSurfaceHighEmphasis</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
+        <item name="OnSurfaceHighEmphasis">@color/LightOnSurfaceHighEmphasis</item>
+        <item name="OnSurfaceMediumEmphasis">@color/LightOnSurfaceMediumEmphasis</item>
+        <item name="OnSurfaceDisabled">@color/LightOnSurfaceDisabled</item>
+        <item name="SurfaceOutline">@color/LightOutline</item>
+        <item name="Surface">@color/LightSurface</item>
+        <item name="Error">@color/Error</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
@@ -22,7 +28,7 @@
     </style>
 
     <style name="MyTextApperance" parent="@android:style/TextAppearance.DialogWindowTitle">
-        <item name="android:background"> @color/DarkGrey </item>
+        <item name="android:background"> @color/LightOnSurfaceHighEmphasis </item>
     </style>
 
 </resources>

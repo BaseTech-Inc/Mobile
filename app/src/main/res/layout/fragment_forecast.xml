@@ -50,8 +50,8 @@
                 android:layout_marginVertical="20dp"
                 android:padding="15dp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Previsão Semanal"
-                android:textColor="?attr/colorPrimaryVariant"
+                android:text="Gráfico Semanal"
+                android:textColor="?attr/OnSurfaceHighEmphasis"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/hourRecycler" />

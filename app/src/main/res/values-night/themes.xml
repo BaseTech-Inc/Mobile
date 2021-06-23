@@ -2,22 +2,28 @@
     <!-- Base application theme. -->
     <style name="Theme.TupaMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/PrimaryBlue</item>
-        <item name="colorPrimaryVariant">@color/SecondaryBlue</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/Primary900</item>
+        <item name="colorPrimaryVariant">@color/Primary500</item>
+        <item name="colorOnPrimary">@color/DarkOnSurfaceHighEmphasis</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/DarkGrey</item>
-        <item name="colorSecondaryVariant">@color/MediumGrey</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/DarkBackground</item>
+        <item name="colorSecondaryVariant">@color/DarkSurface</item>
+        <item name="colorOnSecondary">@color/DarkOnSurfaceHighEmphasis</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
+        <item name="OnSurfaceHighEmphasis">@color/DarkOnSurfaceHighEmphasis</item>
+        <item name="OnSurfaceMediumEmphasis">@color/DarkOnSurfaceMediumEmphasis</item>
+        <item name="OnSurfaceDisabled">@color/DarkOnSurfaceDisabled</item>
+        <item name="SurfaceOutline">@color/DarkOutline</item>
+        <item name="Surface">@color/DarkSurface</item>
+        <item name="Error">@color/Error</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="ToolbarTheme" parent="">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="android:textSize">24dp</item>
-        <item name="backgroundColor">?attr/colorSecondary</item>
-        <item name="actionMenuTextColor">?attr/colorOnSecondary</item>
+        <item name="android:background">@color/DarkSurface</item>
+        <item name="android:textColorSecondary">?attr/OnSurfaceMediumEmphasis</item>
     </style>
 </resources>

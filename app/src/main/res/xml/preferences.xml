@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Categoria"
+        android:icon="@drawable/night_cloudy">
+
+        <Preference
+            android:icon="@drawable/night_cloudy"
+            android:key="account"
+            android:title="Conta"
+            android:summary="Report technical issues or suggest new features"/>
+
+        <Preference
+            android:icon="@drawable/night_cloudy"
+            android:key="privacy"
+            android:title="Privacidade"
+            android:summary="Report technical issues or suggest new features"/>
+
+        <Preference
+            android:icon="@drawable/night_cloudy"
+            android:key="connections"
+            android:title="Conexões"
+            android:summary="Report technical issues or suggest new features"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

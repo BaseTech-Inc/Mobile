@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="OnSurfaceHighEmphasis" format="reference"/>
+    <attr name="OnSurfaceMediumEmphasis" format="reference"/>
+    <attr name="OnSurfaceDisabled" format="reference"/>
+    <attr name="SurfaceOutline" format="reference"/>
+    <attr name="Background" format="reference"/>
+    <attr name="Surface" format="reference"/>
+    <attr name="Error" format="reference"/>
+</resources>

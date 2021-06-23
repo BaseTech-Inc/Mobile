@@ -6,7 +6,7 @@
         android:state_selected="true"/>
 
     <item
-        android:color="?attr/colorSecondaryVariant"
+        android:color="?attr/OnSurfaceMediumEmphasis"
         android:state_selected="false"/>
 
 </selector>

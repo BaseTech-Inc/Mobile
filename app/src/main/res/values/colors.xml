@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="PrimaryBlue">#2485f3</color>
-    <color name="SecondaryBlue">#EDF6Fe</color>
-    <color name="BackgroundWhite">#f7f7f7</color>
-    <color name="SurfaceWhite">#fff</color>
-    <color name="LightGrey">#ededed</color>
-    <color name="MediumGrey">#a4a4a4</color>
-    <color name="DarkGrey">#343334</color>
+    <color name="Primary900">#2485F3</color>
+    <color name="Primary800">#4798F5</color>
+    <color name="Primary700">#65A9F6</color>
+    <color name="Primary600">#82B9F8</color>
+    <color name="Primary500">#B8D4F5</color>
+    
+    <color name="LightOnSurfaceHighEmphasis">#1C1C1C</color>
+    <color name="LightOnSurfaceMediumEmphasis">#666666</color>
+    <color name="LightOnSurfaceDisabled">#9E9E9E</color>
+    <color name="LightOutline">#D9DBDD</color>
+    <color name="LightBackground">#F7F9FB</color>
+    <color name="LightSurface">#FFF</color>
+
+    <color name="DarkOnSurfaceHighEmphasis">#E0E0E0</color>
+    <color name="DarkOnSurfaceMediumEmphasis">#A0A0A0</color>
+    <color name="DarkOnSurfaceDisabled">#6C6C6C</color>
+    <color name="DarkOutline">#2F2F2F</color>
+    <color name="DarkBackground">#010101</color>
+    <color name="DarkSurface">#292929</color>
+
+    <color name="DimmedOnSurfaceHighEmphasis">#E1E3E5</color>
+    <color name="DimmedOnSurfaceMediumEmphasis">#A4A9AF</color>
+    <color name="DimmedOnSurfaceDisabled">#727A83</color>
+    <color name="DimmedOutline">#727A83</color>
+    <color name="DimmedBackground">#1B2936</color>
+    <color name="DimmedSurface">#233446</color>
+
+    <color name="Error">#B00020</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
 </resources>

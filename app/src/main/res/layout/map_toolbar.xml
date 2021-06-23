@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:backgroundTint="?attr/Surface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/mapBarLayout"
@@ -21,8 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingRight="5dp"
+            android:theme="@style/ToolbarTheme"
             app:menu="@menu/upper_menu"
-            app:title="Mapa" />
+            app:title="Mapa"
+            app:titleTextColor="?attr/OnSurfaceHighEmphasis" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
