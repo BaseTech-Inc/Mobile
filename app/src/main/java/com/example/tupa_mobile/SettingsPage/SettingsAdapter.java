@@ -47,20 +47,22 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
 
         public class SettingsHolder extends RecyclerView.ViewHolder{
 
-            private TextView txtSetting;
+            private TextView txtSetting, txtDesc;
             private ImageView imgSetting;
 
             public SettingsHolder(@NonNull View itemView) {
                 super(itemView);
 
                 txtSetting = itemView.findViewById(R.id.txtSetting);
+                txtDesc = itemView.findViewById(R.id.txtDesc);
                 imgSetting = itemView.findViewById(R.id.imgSetting);
             }
 
             void setDetails(Settings settings){
 
                 txtSetting.setText(settings.getTitle());
-                imgSetting.setImageResource(R.drawable.nibolas);
+                txtDesc.setText(settings.getDescription());
+                imgSetting.setImageResource(settings.getImgSource());
             }
         }
 

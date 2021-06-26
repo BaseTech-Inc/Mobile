@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:text="São Paulo"
         android:textColor="?attr/OnSurfaceMediumEmphasis"
+        android:fontFamily="@font/open_sans_regular"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 

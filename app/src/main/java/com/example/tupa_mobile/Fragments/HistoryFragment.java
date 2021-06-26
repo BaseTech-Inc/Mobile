@@ -25,8 +25,6 @@ import com.google.android.material.tabs.TabLayout;
 
 public class HistoryFragment extends Fragment {
 
-    MenuItem markerItem, addItem, notificationItem;
-
     public HistoryFragment() {
         // Required empty public constructor
     }
