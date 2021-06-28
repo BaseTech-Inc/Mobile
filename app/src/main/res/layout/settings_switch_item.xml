@@ -15,16 +15,6 @@
         android:background="@drawable/cardview_borders"
         android:padding="8dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgSetting"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/night_cloudy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtSetting"
             android:layout_width="wrap_content"
@@ -34,29 +24,15 @@
             android:fontFamily="@font/open_sans_regular"
             android:text="Configuração"
             android:textColor="?attr/OnSurfaceHighEmphasis"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgSetting"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtDesc"
+        <Switch
+            android:id="@+id/switchSettings"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
-            android:text="opção"
-            android:textColor="?attr/OnSurfaceMediumEmphasis"
-            android:textSize="13dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/stormy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

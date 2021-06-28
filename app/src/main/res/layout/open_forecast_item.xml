@@ -8,6 +8,7 @@
     android:id="@+id/clickableLayout"
     app:cardElevation="0dp"
     app:cardCornerRadius="17dp"
+    android:foreground="@drawable/cardview_borders"
     android:backgroundTint="?attr/Surface">
 
     <androidx.constraintlayout.widget.ConstraintLayout

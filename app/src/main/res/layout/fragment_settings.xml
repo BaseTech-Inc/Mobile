@@ -19,14 +19,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingVertical="24dp">
+            android:paddingVertical="24dp"
+            android:background="?attr/colorSecondary">
 
             <include
                 android:id="@+id/mainProfileItem"
                 layout="@layout/profile_item"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
+                android:layout_marginHorizontal="36dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +42,7 @@
                 android:fontFamily="@font/open_sans_regular"
                 android:text="Configurações de usuário"
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mainProfileItem" />
 
@@ -63,7 +65,7 @@
                 android:fontFamily="@font/open_sans_regular"
                 android:text="Configurações do aplicativo"
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userSettingsRecycler" />
 
@@ -86,7 +88,7 @@
                 android:fontFamily="@font/open_sans_regular"
                 android:text="Informação do aplicativo - 1.0.0"
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appSettingsRecycler" />
 

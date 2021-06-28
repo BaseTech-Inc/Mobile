@@ -6,7 +6,7 @@
     android:backgroundTint="?attr/Surface">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/mapBarLayout"
+        android:id="@+id/mainToolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@null"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mapToolbar"
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingRight="5dp"

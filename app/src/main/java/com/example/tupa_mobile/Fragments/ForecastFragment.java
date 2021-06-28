@@ -11,16 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tupa_mobile.Connections.Connection;
-import com.example.tupa_mobile.GraphActivity;
-import com.example.tupa_mobile.WeatherAPI.ForecastDay;
-import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
+import com.example.tupa_mobile.Activities.GraphActivity;
 import com.example.tupa_mobile.R;
-
-import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 

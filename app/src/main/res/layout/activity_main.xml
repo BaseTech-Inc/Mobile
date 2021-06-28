@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.MainActivity">
 
-    <include layout="@layout/map_toolbar" android:id="@+id/mapBarLayout"/>
+    <include layout="@layout/main_toolbar" android:id="@+id/mainToolbarLayout"/>
 
     <FrameLayout
         android:id="@+id/fragmentLayout"
@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/mainToolbarLayout">
 
     </FrameLayout>
 

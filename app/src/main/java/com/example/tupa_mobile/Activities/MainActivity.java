@@ -1,4 +1,4 @@
-package com.example.tupa_mobile;
+package com.example.tupa_mobile.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +15,7 @@ import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
 import com.example.tupa_mobile.Fragments.HistoryFragment;
 import com.example.tupa_mobile.Fragments.MapFragment;
+import com.example.tupa_mobile.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        toolbar = findViewById(R.id.mapToolbar);
+        toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, new MapFragment()).commit();

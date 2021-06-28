@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="17dp"
+    app:cardElevation="0dp"
+    android:foreground="@drawable/cardview_borders"
     android:backgroundTint="?attr/Surface">
 
     <androidx.constraintlayout.widget.ConstraintLayout

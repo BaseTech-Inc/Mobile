@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.NotificationActivity">
+    tools:context=".Activities.ConnectionsActivity">
 
-    <include layout="@layout/notification_toolbar"/>
+    <include layout="@layout/main_toolbar" android:id="@+id/mainToolbarLayout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

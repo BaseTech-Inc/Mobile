@@ -1,4 +1,4 @@
-package com.example.tupa_mobile;
+package com.example.tupa_mobile.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.tupa_mobile.R;
 
 public class NotificationActivity extends AppCompatActivity {
 

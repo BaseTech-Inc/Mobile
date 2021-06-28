@@ -2,18 +2,16 @@ package com.example.tupa_mobile.Notifications;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.tupa_mobile.MainActivity;
+import com.example.tupa_mobile.Activities.MainActivity;
 import com.example.tupa_mobile.R;
 
 import static com.example.tupa_mobile.Notifications.App.CHANNEL_1_ID;

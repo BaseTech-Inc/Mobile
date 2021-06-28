@@ -1,4 +1,4 @@
-package com.example.tupa_mobile;
+package com.example.tupa_mobile.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.HorizontalScrollView;
 
-import com.example.tupa_mobile.Graph.CustomGraphMarker;
 import com.example.tupa_mobile.Graph.ForecastGraph;
 import com.example.tupa_mobile.Graph.GraphDayItem;
 import com.example.tupa_mobile.Graph.GraphDayItemAdapter;
+import com.example.tupa_mobile.R;
 import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class GraphActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private LineChart forecastChart;
+    private MenuItem markerItem, addItem, notificationItem;
     private HorizontalScrollView horizontalScrollView;
 
     @Override
@@ -34,7 +35,8 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
-        toolbar = findViewById(R.id.mapToolbar);
+        toolbar = findViewById(R.id.mainToolbar);
+        toolbar.setTitle("Gráfico");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_right_icon_white_black_theme_small);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,6 +58,22 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.upper_menu, menu);
+
+        markerItem = menu.findItem(R.id.markerItem);
+        notificationItem = menu.findItem(R.id.notificationItem);
+        addItem = menu.findItem(R.id.addItem);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        markerItem.setVisible(false);
+        notificationItem.setVisible(false);
+        addItem.setVisible(false);
+
         return true;
     }
 

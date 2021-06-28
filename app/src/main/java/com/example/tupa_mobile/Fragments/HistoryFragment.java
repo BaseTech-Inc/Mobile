@@ -1,24 +1,14 @@
 package com.example.tupa_mobile.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.example.tupa_mobile.Connections.Connection;
-import com.example.tupa_mobile.MainActivity;
-import com.example.tupa_mobile.NotificationActivity;
 import com.example.tupa_mobile.PagerAdapter.PagerAdapter;
 import com.example.tupa_mobile.R;
 import com.google.android.material.tabs.TabLayout;
