@@ -31,11 +31,16 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history,container, false);
 
         ViewPager viewPager = view.findViewById(R.id.viewPager);
-
         TabLayout tabs = view.findViewById(R.id.tabLayout);
 
-        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager(), tabs.getTabCount());
+        for(int i=0; i < tabs.getTabCount(); i++) {
+            View tab = ((ViewGroup) tabs.getChildAt(0)).getChildAt(i);
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
+            p.setMargins(50, 0, 50, 0);
+            tab.requestLayout();
+        }
 
+        PagerAdapter pagerAdapter = new PagerAdapter(getChildFragmentManager(), tabs.getTabCount());
         viewPager.setAdapter(pagerAdapter);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

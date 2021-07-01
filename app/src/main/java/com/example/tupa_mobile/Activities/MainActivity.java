@@ -2,14 +2,21 @@ package com.example.tupa_mobile.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
@@ -18,13 +25,15 @@ import com.example.tupa_mobile.Fragments.MapFragment;
 import com.example.tupa_mobile.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
     private Toolbar toolbar;
     private MenuItem markerItem, addItem, notificationItem;
     private int ItemsList = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, new MapFragment()).commit();
 
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
@@ -106,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.addItem:
-
+                startForecastPopup();
                 return true;
 
             default:
@@ -147,6 +162,31 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationActivity.class);
         intent.putExtra("currentFragment", selectedFragment);
         startActivityForResult(intent, 1);
+    }
+
+    private void startForecastPopup() {
+
+        BlurView blur = findViewById(R.id.blur);
+        View decorView = getWindow().getDecorView();
+        Drawable windowBackground = decorView.getBackground();
+        ViewGroup viewGroup = decorView.findViewById(R.id.blurred);
+
+        blur.setupWith(viewGroup)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurEnabled(true)
+                .setBlurAutoUpdate(true)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(10);
+
+        Intent intent = new Intent(this, ForecastPopupActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BlurView blur = findViewById(R.id.blur);
+        blur.setBlurEnabled(false);
     }
 
     @Override

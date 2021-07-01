@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="17dp"
     app:cardElevation="0dp"
+    android:theme="@style/Theme.TupaMobile"
     android:foreground="@drawable/cardview_borders"
     android:backgroundTint="?attr/Surface">
 

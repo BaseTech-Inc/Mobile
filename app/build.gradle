@@ -8,12 +8,15 @@ android {
 
     defaultConfig {
         applicationId "com.example.tupa_mobile"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 30 //must match target sdk and build tools
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes {
@@ -62,5 +65,9 @@ dependencies {
 
     //Graph implementation
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //Blur background
+    implementation 'com.eightbitlab:supportrenderscriptblur:1.0.2'
+    implementation 'com.eightbitlab:blurview:1.6.6'
 
 }
