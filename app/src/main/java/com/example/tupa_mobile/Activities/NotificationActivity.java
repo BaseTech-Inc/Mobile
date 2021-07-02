@@ -3,6 +3,8 @@ package com.example.tupa_mobile.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +12,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.tupa_mobile.Markers.Marker;
+import com.example.tupa_mobile.Markers.MarkerAdapter;
+import com.example.tupa_mobile.Notifications.Notification;
+import com.example.tupa_mobile.Notifications.NotificationAdapter;
 import com.example.tupa_mobile.R;
+
+import java.util.ArrayList;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
+    private RecyclerView notificationRecycler;
+    private ArrayList<Notification> notifications;
+    private NotificationAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +36,21 @@ public class NotificationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_right_icon_white_black_theme_small);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        notificationRecycler = findViewById(R.id.notificationRecycler);
+        notificationRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        notifications = new ArrayList<>();
+        adapter = new NotificationAdapter(getApplicationContext(), notifications);
+        notificationRecycler.setAdapter(adapter);
+
+        createViews();
+    }
+
+    private void createViews(){
+        notifications.add(new Notification(R.drawable.day_cloudy, "Título 1", "Hoje às 22:00", "asdaasd asdasdas asdasdasd asdasdasd asdasdasd asdasdasd asdasdasda", true));
+        notifications.add(new Notification(R.drawable.night_windy, "Título 2", "Hoje às 22:10", "asdaasd asdasdas asdasdasd asdasdasd asdasdasd asdasdasd asdasdasda", false));
+        notifications.add(new Notification(R.drawable.night_clear, "Título 3", "Hoje às 22:20", "asdaasd asdasdas asdasdasd asdasdasd asdasdasd asdasdasd asdasdasda", false));
+        notifications.add(new Notification(R.drawable.night_cloudy, "Título 4", "Hoje às 22:30", "asdaasd asdasdas asdasdasd asdasdasd asdasdasd asdasdasd asdasdasda", true));
     }
 
     @Override

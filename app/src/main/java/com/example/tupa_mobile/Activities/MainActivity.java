@@ -24,6 +24,7 @@ import com.example.tupa_mobile.Fragments.HistoryFragment;
 import com.example.tupa_mobile.Fragments.MapFragment;
 import com.example.tupa_mobile.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -198,6 +199,23 @@ public class MainActivity extends AppCompatActivity {
                 int currentFragment = data.getIntExtra("result", 0);
                 bottomNav.setSelectedItemId(currentFragment);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomNavigationContainer));
+
+        if (count == 0) {
+            super.onBackPressed();
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                return;
+            }
+        } else {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
