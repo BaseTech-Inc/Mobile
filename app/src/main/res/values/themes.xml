@@ -20,6 +20,26 @@
         <item name="Error">@color/Error</item>
     </style>
 
+    <style name="Theme.DimmedTupaMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/Primary900</item>
+        <item name="colorPrimaryVariant">@color/Primary500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/DimmedBackground</item>
+        <item name="colorSecondaryVariant">@color/DimmedSurface</item>
+        <item name="colorOnSecondary">@color/DimmedOnSurfaceHighEmphasis</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondary</item>
+        <!-- Customize your theme here. -->
+        <item name="OnSurfaceHighEmphasis">@color/DimmedOnSurfaceHighEmphasis</item>
+        <item name="OnSurfaceMediumEmphasis">@color/DimmedOnSurfaceMediumEmphasis</item>
+        <item name="OnSurfaceDisabled">@color/DimmedOnSurfaceDisabled</item>
+        <item name="SurfaceOutline">@color/DimmedOutline</item>
+        <item name="Surface">@color/DimmedSurface</item>
+        <item name="Error">@color/Error</item>
+    </style>
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="android:textSize">24sp</item>

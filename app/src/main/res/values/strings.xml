@@ -9,4 +9,22 @@
     <string name="marcador">Marcador</string>
     <string name="adicionar">Adicionar</string>
     <string name="notificacao">Notificação</string>
+
+    <string-array name="listArray">
+        <item>red</item>
+        <item>orange</item>
+        <item>yellow</item>
+        <item>green</item>
+        <item>blue</item>
+        <item>violet</item>
+    </string-array>
+
+    <string-array name="listValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
 </resources>

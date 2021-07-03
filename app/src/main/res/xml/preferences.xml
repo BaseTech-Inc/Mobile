@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:title="Categoria"
-        android:icon="@drawable/night_cloudy">
+        android:icon="@drawable/night_cloudy"
+        android:title="Categoria">
 
         <Preference
             android:icon="@drawable/night_cloudy"
             android:key="account"
-            android:title="Conta"
-            android:summary="Report technical issues or suggest new features"/>
+            android:layout="@layout/settings_selector"
+            android:summary="Report technical issues or suggest new features"
+            android:title="Conta" />
 
         <Preference
             android:icon="@drawable/night_cloudy"
             android:key="privacy"
-            android:title="Privacidade"
-            android:summary="Report technical issues or suggest new features"/>
+            android:layout="@layout/settings_selector"
+            android:summary="Report technical issues or suggest new features"
+            android:title="Privacidade" />
 
         <Preference
             android:icon="@drawable/night_cloudy"
             android:key="connections"
-            android:title="Conexões"
-            android:summary="Report technical issues or suggest new features"/>
+            android:layout="@layout/settings_selector"
+            android:summary="Report technical issues or suggest new features"
+            android:title="Conexões" />
+
+        <ListPreference
+            android:title="Pick your favourite color"
+            android:key="listPref"
+            android:defaultValue="4"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues" />
 
     </PreferenceCategory>
 

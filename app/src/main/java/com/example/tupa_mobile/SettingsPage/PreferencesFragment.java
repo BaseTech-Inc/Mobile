@@ -2,6 +2,7 @@ package com.example.tupa_mobile.SettingsPage;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;

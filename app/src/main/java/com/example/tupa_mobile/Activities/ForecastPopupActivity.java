@@ -50,7 +50,7 @@ public class ForecastPopupActivity extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*0.8), (int) (height*0.6));
+        getWindow().setLayout((int) (width*0.85), (int) (height*0.8));
 
         Drawable background = ContextCompat.getDrawable(this, R.drawable.cardview_borders);
         getWindow().setBackgroundDrawable(background);
