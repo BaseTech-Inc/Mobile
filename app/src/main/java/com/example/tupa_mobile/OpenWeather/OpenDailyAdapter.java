@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,18 +14,22 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.R;
+import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.WeatherCondition;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.OpenDailyHolder> {
 
     private Context context;
     private ArrayList<OpenDaily> dailies;
+    private ArrayList<OpenDaily> allDailies;
 
     public OpenDailyAdapter(Context context, ArrayList<OpenDaily> dailies) {
         this.context = context;
         this.dailies = dailies;
+        allDailies = new ArrayList<>(dailies);
     }
 
     @NonNull
@@ -44,6 +49,32 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
     public int getItemCount() {
         return this.dailies.size();
     }
+
+    public Filter getFilter() {
+        return daysFilter;
+    }
+
+    private Filter daysFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<OpenDaily> filteredDays = new ArrayList<>();
+
+            for(int i = 0; i < 5; i++){
+                filteredDays.add(allDailies.get(i));
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredDays;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            dailies.clear();
+            dailies.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class OpenDailyHolder extends RecyclerView.ViewHolder {
 

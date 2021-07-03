@@ -161,6 +161,8 @@ public class Connection {
                     openAdapter = new OpenDailyAdapter(context, openDaily);
                     recyclerView.setAdapter(openAdapter);
 
+                    openAdapter.getFilter().filter(null);
+
                 }
             }
 

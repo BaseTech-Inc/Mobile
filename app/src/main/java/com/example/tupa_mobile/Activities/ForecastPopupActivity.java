@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.tupa_mobile.Location.Location;
+import com.example.tupa_mobile.Location.LocationAdapter;
 import com.example.tupa_mobile.R;
+
+import java.util.ArrayList;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -28,7 +34,10 @@ import static com.example.tupa_mobile.R.id.blur;
 
 public class ForecastPopupActivity extends AppCompatActivity {
 
-    EditText editText;
+    private EditText editText;
+    private RecyclerView locationsRecycler;
+    private LocationAdapter adapter;
+    private ArrayList<Location> locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,5 +57,18 @@ public class ForecastPopupActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.etFindCities);
 
+        locationsRecycler = findViewById(R.id.findCitiesRecycler);
+        locationsRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        locations = new ArrayList<>();
+        adapter = new LocationAdapter(getApplicationContext(), locations);
+        locationsRecycler.setAdapter(adapter);
+
+        createLocations();
+    }
+
+    private void createLocations(){
+        locations.add(new Location("São Paulo", "Nublado", 20.0));
+        locations.add(new Location("Rio de Janeiro", "Ensolarado", 32.0));
+        locations.add(new Location("São josé do Rio Pardo", "Nevando", -2.0));
     }
 }
