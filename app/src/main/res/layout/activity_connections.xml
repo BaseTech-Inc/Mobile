@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activities.ConnectionsActivity">
 
-    <include layout="@layout/main_toolbar" android:id="@+id/mainToolbarLayout"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/notification_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

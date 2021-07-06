@@ -67,7 +67,7 @@ public class Connection {
     private OpenDailyAdapter openAdapter;
 
 
-    public void requestCurrentWeather(TextView weatherPlace, TextView weatherCondition, TextView weatherTemp, Context context){
+    public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -89,9 +89,12 @@ public class Connection {
                     currentWeather = weather.getCurrentWeather();
                     String temp = Math.round(currentWeather.getTemp_c()) + "°";
 
-                    weatherPlace.setText(location.getName());
-                    weatherCondition.setText(currentWeather.getCondition().getText());
-                    weatherTemp.setText(temp);
+                    currentLocation.setText(location.getName());
+                    condition.setText(currentWeather.getCondition().getText());
+                    temperature.setText(temp);
+                    humidity.setText(Math.round(currentWeather.getHumidity()) + "%");
+                    pressure.setText(Math.round(currentWeather.getPressure_mb()) + " mBar");
+                    wind.setText(Math.round(currentWeather.getWind_kph()) + "Km/h");
 
                 }
 

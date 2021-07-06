@@ -44,6 +44,19 @@ public class ForecastPopupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast_popup);
 
+        editText = findViewById(R.id.etFindCities);
+
+        locationsRecycler = findViewById(R.id.findCitiesRecycler);
+        locationsRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        locations = new ArrayList<>();
+        adapter = new LocationAdapter(getApplicationContext(), locations);
+        locationsRecycler.setAdapter(adapter);
+
+        setWindowLayout();
+        createLocations();
+    }
+
+    private void setWindowLayout(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -54,16 +67,6 @@ public class ForecastPopupActivity extends AppCompatActivity {
 
         Drawable background = ContextCompat.getDrawable(this, R.drawable.cardview_borders);
         getWindow().setBackgroundDrawable(background);
-
-        editText = findViewById(R.id.etFindCities);
-
-        locationsRecycler = findViewById(R.id.findCitiesRecycler);
-        locationsRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        locations = new ArrayList<>();
-        adapter = new LocationAdapter(getApplicationContext(), locations);
-        locationsRecycler.setAdapter(adapter);
-
-        createLocations();
     }
 
     private void createLocations(){

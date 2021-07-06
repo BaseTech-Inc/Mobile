@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,44 +8,81 @@
     android:background="?attr/Surface"
     tools:context=".Fragments.HistoryFragment">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mainToolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/Surface"
+        android:elevation="0dp"
+        android:theme="@style/ToolbarTheme"
+        android:background="@drawable/bottom_borders"
+        app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabSelectedTextColor="?attr/colorPrimary"
-        app:tabTextColor="?attr/OnSurfaceMediumEmphasis">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabFirst"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapse"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Alertas" />
+            android:fitsSystemWindows="true"
+            app:contentScrim="@drawable/bottom_borders"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabSecond"
-            android:layout_width="wrap_content"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/mainToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:layout_collapseMode="pin"
+                app:menu="@menu/map_menu"
+                app:title="Mapa"
+                app:titleTextColor="?attr/OnSurfaceHighEmphasis">
+
+                <include layout="@layout/search_layout" android:id="@+id/searchLayout" android:visibility="gone"/>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Locais" />
+            android:backgroundTint="?attr/Surface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabSelectedTextColor="?attr/colorPrimary"
+            app:tabTextColor="?attr/OnSurfaceMediumEmphasis">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Viagens" />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alertas" />
 
-    </com.google.android.material.tabs.TabLayout>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Locais" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Viagens" />
+
+        </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout >

@@ -1,7 +1,6 @@
 package com.example.tupa_mobile.SettingsPage;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tupa_mobile.Activities.AccountActivity;
-import com.example.tupa_mobile.Activities.ConnectionsActivity;
-import com.example.tupa_mobile.Activities.PrivacyActivity;
 import com.example.tupa_mobile.R;
-import com.example.tupa_mobile.WeatherAPI.Day;
-import com.example.tupa_mobile.WeatherAPI.ForecastDay;
-import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 
 import java.util.ArrayList;
 
@@ -36,17 +29,21 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         Settings settings = settingsList.get(position);
 
-        if(settings.hasSwitch()){
-            return R.layout.settings_switch_item;
-        }
-        else if(settings.hasIcon() != true){
-            return R.layout.settings_item_noimage;
-        }
-        else if (settings.showArrow() != true){
-            return R.layout.settings_item_noarrow;
+        switch (settings.getType()){
+            case 0:
+                return R.layout.settings_item;
+            case 1:
+                return R.layout.settings_switch_item;
+            case 2:
+                return R.layout.settings_item_noimage;
+            case 3:
+                return R.layout.settings_dangerous;
+            case 4:
+                return R.layout.settings_no_arrow_or_icon;
+            default:
+                return R.layout.settings_item;
         }
 
-        return R.layout.settings_item;
     }
 
         @Override
@@ -58,8 +55,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return new SettingsAdapter.SettingsSwitchHolder(view);
                 case R.layout.settings_item_noimage:
                     return new SettingsAdapter.SettingsNoImageHolder(view);
-                case R.layout.settings_item_noarrow:
-                    return new SettingsAdapter.SettingsNoArrowHolder(view);
+                case R.layout.settings_dangerous:
+                    return new SettingsAdapter.SettingsDangerousHolder(view);
+                case R.layout.settings_no_arrow_or_icon:
+                    return new SettingsAdapter.SettingsBasicHolder(view);
                 default:
                     return new SettingsAdapter.SettingsHolder(view);
             }
@@ -81,9 +80,14 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     settingsNoImageHolder.setDetails(settings);
                 break;
 
-                 case R.layout.settings_item_noarrow:
-                     SettingsNoArrowHolder settingsNoArrowHolder = (SettingsNoArrowHolder)holder;
-                     settingsNoArrowHolder.setDetails(settings);
+                 case R.layout.settings_dangerous:
+                     SettingsDangerousHolder settingsDangerousHolder = (SettingsDangerousHolder)holder;
+                     settingsDangerousHolder.setDetails(settings);
+                     break;
+
+                 case R.layout.settings_no_arrow_or_icon:
+                     SettingsBasicHolder settingsBasicHolder = (SettingsBasicHolder) holder;
+                     settingsBasicHolder.setDetails(settings);
                      break;
 
                  case R.layout.settings_switch_item:
@@ -175,13 +179,34 @@ public class SettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public class SettingsNoArrowHolder extends RecyclerView.ViewHolder{
+    public class SettingsDangerousHolder extends RecyclerView.ViewHolder{
 
-        private TextView txtSetting, txtDesc;
-        private ImageView imgSetting;
-        private Switch switchSettings;
+        private TextView txtSetting;
 
-        public SettingsNoArrowHolder(@NonNull View itemView) {
+        public SettingsDangerousHolder(@NonNull View itemView) {
+            super(itemView);
+
+            txtSetting = itemView.findViewById(R.id.txtSetting);
+
+        }
+
+        void setDetails(Settings settings){
+
+            txtSetting.setText(settings.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(settings.getIntent());
+                }
+            });
+        }
+    }
+
+    public class SettingsBasicHolder extends RecyclerView.ViewHolder{
+
+        private TextView txtSetting;
+
+        public SettingsBasicHolder(@NonNull View itemView) {
             super(itemView);
 
             txtSetting = itemView.findViewById(R.id.txtSetting);

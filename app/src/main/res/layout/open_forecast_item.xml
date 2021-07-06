@@ -2,60 +2,86 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clickableLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:id="@+id/clickableLayout"
-    app:cardElevation="0dp"
+    android:backgroundTint="?attr/colorSecondary"
     app:cardCornerRadius="17dp"
-    android:foreground="@drawable/cardview_borders"
-    android:backgroundTint="?attr/Surface">
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgMiniForecast"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/day_cloudy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp">
 
         <TextView
             android:id="@+id/txtUpdateTime"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="aaaaaa"
             android:textColor="?attr/OnSurfaceMediumEmphasis"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toEndOf="@id/imgMiniForecast"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtTemperatures"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgMiniForecast"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="88dp"
+            android:src="@drawable/day_cloudy"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="?attr/OnSurfaceHighEmphasis"
-            android:layout_marginHorizontal="4dp"
-            app:layout_constraintStart_toEndOf="@id/txtUpdateTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icoHumidity"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="40dp"
+            android:src="@drawable/rainy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgMiniForecast"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtHumidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:text="aaaaaa"
             android:textColor="?attr/colorPrimaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintStart_toEndOf="@id/txtTemperatures"
+            app:layout_constraintStart_toEndOf="@id/icoHumidity"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtMaxTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="aaaaaa"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtMinTemperature"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtMinTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="aaaaaa"
+            android:textColor="?attr/OnSurfaceMediumEmphasis"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,18 +4,15 @@ import android.content.Intent;
 
 public class Settings {
     private String title, description;
-    private int imgSource;
+    private int imgSource, type;
     private Intent intent;
-    private boolean hasSwitch, hasIcon, showArrow;
 
-    public Settings(String title, int imgSource, String description, Intent intent, boolean hasSwitch, boolean hasIcon, boolean showArrow) {
+    public Settings(String title, int imgSource, String description, Intent intent, int type) {
         this.title = title;
         this.description = description;
         this.imgSource = imgSource;
+        this.type = type;
         this.intent = intent;
-        this.hasSwitch = hasSwitch;
-        this.hasIcon = hasIcon;
-        this.showArrow = showArrow;
     }
 
     public String getTitle() {
@@ -34,15 +31,7 @@ public class Settings {
         return intent;
     }
 
-    public boolean hasSwitch() {
-        return hasSwitch;
-    }
-
-    public boolean showArrow() {
-        return showArrow;
-    }
-
-    public boolean hasIcon() {
-        return hasIcon;
+    public int getType() {
+        return type;
     }
 }

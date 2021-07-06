@@ -10,8 +10,8 @@
     android:background="?attr/colorSecondary">
 
     <include
-        android:id="@+id/mainToolbarLayout"
-        layout="@layout/main_toolbar" />
+        android:id="@+id/include"
+        layout="@layout/notification_toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:backgroundTint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainToolbarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/include">
 
         <TextView
             android:id="@+id/lblAccountInfo"

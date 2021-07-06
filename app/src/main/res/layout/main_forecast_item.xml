@@ -3,63 +3,137 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="17dp"
-    app:cardElevation="0dp"
+    android:backgroundTint="?attr/colorSecondary"
     android:theme="@style/Theme.TupaMobile"
-    android:foreground="@drawable/cardview_borders"
-    android:backgroundTint="?attr/Surface">
+    app:cardCornerRadius="17dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:paddingBottom="70dp"
-        android:paddingHorizontal="26dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/weatherPlace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="32dp"
             android:fontFamily="@font/montserrat_semibold"
             android:text="São Paulo"
             android:textColor="?attr/OnSurfaceMediumEmphasis"
-            android:textSize="21sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/weatherCondition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_regular"
-            android:textColor="?attr/OnSurfaceMediumEmphasis"
-            android:text="Nublado"
-            android:textSize="19sp"
-            app:layout_constraintLeft_toLeftOf="@id/weatherPlace"
-            app:layout_constraintTop_toBottomOf="@+id/weatherPlace" />
-
-        <TextView
             android:id="@+id/weatherTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_semibold"
-            android:textColor="?attr/OnSurfaceHighEmphasis"
-            android:textSize="80sp"
             android:text="19°"
-            app:layout_constraintLeft_toLeftOf="@id/weatherCondition"
-            app:layout_constraintTop_toBottomOf="@+id/weatherCondition"/>
+            android:textColor="?attr/OnSurfaceHighEmphasis"
+            android:textSize="60sp"
+            app:layout_constraintLeft_toLeftOf="@id/weatherPlace"
+            app:layout_constraintTop_toBottomOf="@+id/weatherPlace" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hourRecycler"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            app:cardCornerRadius="26dp"
+            app:layout_constraintEnd_toEndOf="@+id/weatherTemp"
+            app:layout_constraintLeft_toLeftOf="@id/weatherTemp"
+            app:layout_constraintStart_toStartOf="@id/weatherTemp"
+            app:layout_constraintTop_toBottomOf="@+id/weatherTemp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:id="@+id/weatherCondition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:text="Nublado"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/icoMainForecast"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/stormy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:layout_marginVertical="36dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/weatherTemp" />
+            app:layout_constraintTop_toBottomOf="@+id/icoMainForecast">
+
+            <ImageView
+                android:id="@+id/icoHumidity"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/stormy" />
+
+            <TextView
+                android:id="@+id/txtHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:textSize="13sp"
+                android:text="Humidade" />
+
+            <ImageView
+                android:id="@+id/icoPressure"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/stormy" />
+
+            <TextView
+                android:id="@+id/txtPressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:textSize="13sp"
+                android:text="Pressão" />
+
+            <ImageView
+                android:id="@+id/icoWind"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/stormy" />
+
+            <TextView
+                android:id="@+id/txtWind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:textSize="13sp"
+                android:text="Vento" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

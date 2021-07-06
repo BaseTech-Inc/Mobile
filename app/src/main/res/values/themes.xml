@@ -40,11 +40,14 @@
         <item name="Error">@color/Error</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+    <style name="ToolbarTheme">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:background">#00000000</item>
+        <item name="android:textSize">16sp</item>
         <item name="actionMenuTextColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="MyTextApperance" parent="@android:style/TextAppearance.DialogWindowTitle">

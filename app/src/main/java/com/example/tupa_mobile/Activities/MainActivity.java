@@ -9,14 +9,18 @@ import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
@@ -32,8 +36,7 @@ import eightbitlab.com.blurview.RenderScriptBlur;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
-    private Toolbar toolbar;
-    private MenuItem markerItem, addItem, notificationItem;
+    private EditText etSearch;
     private int ItemsList = 1;
 
     @Override
@@ -43,118 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        toolbar = findViewById(R.id.mainToolbar);
-        setSupportActionBar(toolbar);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, new MapFragment()).commit();
-
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.upper_menu, menu);
-
-        markerItem = menu.findItem(R.id.markerItem);
-        notificationItem = menu.findItem(R.id.notificationItem);
-        addItem = menu.findItem(R.id.addItem);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        super.onPrepareOptionsMenu(menu);
-
-        switch (ItemsList) {
-
-            case 1:
-                toolbar.setTitle(R.string.Mapa);
-                markerItem.setVisible(true);
-                notificationItem.setVisible(true);
-                addItem.setVisible(false);
-                return true;
-
-            case 2:
-                toolbar.setTitle(R.string.Historico);
-                markerItem.setVisible(false);
-                notificationItem.setVisible(true);
-                addItem.setVisible(false);
-                return true;
-
-            case 3:
-                toolbar.setTitle(R.string.Previsao);
-                markerItem.setVisible(false);
-                notificationItem.setVisible(true);
-                addItem.setVisible(true);
-                return true;
-
-            case 4:
-                toolbar.setTitle(R.string.Configuracoes);
-                markerItem.setVisible(false);
-                notificationItem.setVisible(false);
-                addItem.setVisible(false);
-                return true;
-
-            default:
-                return true;
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-
-            case R.id.notificationItem:
-                startNotificationActivity();
-
-                return true;
-
-            case R.id.markerItem:
-
-                return true;
-
-            case R.id.addItem:
-                startForecastPopup();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void setMapToolbar(){
-
-        ItemsList = 1;
-        invalidateOptionsMenu();
-
-    }
-
-    public void setHistoryToolbar(){
-
-        ItemsList = 2;
-        invalidateOptionsMenu();
-
-    }
-
-    public void setForecastToolbar(){
-
-        ItemsList = 3;
-        invalidateOptionsMenu();
-    }
-
-    public void setSettingsToolbar(){
-
-        ItemsList = 4;
-        invalidateOptionsMenu();
-
     }
 
     private void startNotificationActivity() {
@@ -165,23 +58,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-    private void startForecastPopup() {
 
-        BlurView blur = findViewById(R.id.blur);
-        View decorView = getWindow().getDecorView();
-        Drawable windowBackground = decorView.getBackground();
-        ViewGroup viewGroup = decorView.findViewById(R.id.blurred);
-
-        blur.setupWith(viewGroup)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurEnabled(true)
-                .setBlurAutoUpdate(true)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(10);
-
-        Intent intent = new Intent(this, ForecastPopupActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onResume() {
@@ -227,22 +104,18 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.item1:
                     selectedFragment = new MapFragment();
-                    setMapToolbar();
                 break;
 
                 case R.id.item2:
                     selectedFragment = new HistoryFragment();
-                    setHistoryToolbar();
                 break;
 
                 case R.id.item3:
                     selectedFragment = new ForecastFragment();
-                    setForecastToolbar();
                 break;
 
                 case R.id.item4:
                     selectedFragment = new SettingsFragment();
-                    setSettingsToolbar();
                     break;
             }
 

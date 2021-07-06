@@ -28,9 +28,9 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Conta", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AccountActivity.class), false, true, true));
-        settingsList.add( new Settings("Privacidade", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, PrivacyActivity.class), false, true, true));
-        settingsList.add( new Settings("Conexões", R.drawable.night_clear, "Outras intera...", new Intent(context, ConnectionsActivity.class), false, true, true));
+        settingsList.add( new Settings("Conta", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AccountActivity.class), 0));
+        settingsList.add( new Settings("Privacidade", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, PrivacyActivity.class), 0));
+        settingsList.add( new Settings("Conexões", R.drawable.night_clear, "Outras intera...", new Intent(context, ConnectionsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -43,8 +43,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Notificações", R.drawable.day_sunny, "Todas", new Intent(context, NotificationSettingsActivity.class), false, true, true));
-        settingsList.add( new Settings("Tema", R.drawable.clock_ilustraion_white_theme, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), false, true, true));
+        settingsList.add( new Settings("Notificações", R.drawable.day_sunny, "Todas", new Intent(context, NotificationSettingsActivity.class), 0));
+        settingsList.add( new Settings("Tema", R.drawable.clock_ilustraion_white_theme, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -58,8 +58,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(context, AboutUsActivity.class), false, true, true));
-        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), false, true, true));
+        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(context, AboutUsActivity.class), 0));
+        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -73,10 +73,10 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Nome de usuário", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AboutUsActivity.class), false, false, true));
-        settingsList.add( new Settings("Email", R.drawable.clock_ilustraion_white_theme, "edson@example.com", new Intent(context, HelpActivity.class), false, false, true));
-        settingsList.add( new Settings("Telefone", R.drawable.clock_ilustraion_white_theme, "9****-1234", new Intent(context, HelpActivity.class), false, false, true));
-        settingsList.add( new Settings("Mudar Senha", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), false, false, true));
+        settingsList.add( new Settings("Nome de usuário", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AboutUsActivity.class), 2));
+        settingsList.add( new Settings("Email", R.drawable.clock_ilustraion_white_theme, "edson@example.com", new Intent(context, HelpActivity.class), 2));
+        settingsList.add( new Settings("Telefone", R.drawable.clock_ilustraion_white_theme, "9****-1234", new Intent(context, HelpActivity.class), 2));
+        settingsList.add( new Settings("Mudar Senha", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), 2));
 
         adapter = new SettingsAdapter(context, settingsList);
         recyclerView.setAdapter(adapter);
@@ -88,12 +88,75 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Sair da sessão", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AboutUsActivity.class), false, true, false));
-        settingsList.add( new Settings("Excluir conta", R.drawable.clock_ilustraion_white_theme, "edson@example.com", new Intent(context, HelpActivity.class), false, true, false));
+        settingsList.add( new Settings("Sair da sessão", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AboutUsActivity.class), 3));
+        settingsList.add( new Settings("Excluir conta", R.drawable.clock_ilustraion_white_theme, "edson@example.com", new Intent(context, HelpActivity.class), 3));
 
         adapter = new SettingsAdapter(context, settingsList);
         recyclerView.setAdapter(adapter);
     }
 
+    public void createPrivacySettings(Context context, RecyclerView recyclerView){
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        settingsList = new ArrayList<>();
+
+        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+
+        adapter = new SettingsAdapter(context, settingsList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void createProtectionSettings(Context context, RecyclerView recyclerView){
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        settingsList = new ArrayList<>();
+
+        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+
+        adapter = new SettingsAdapter(context, settingsList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void createAdsSettings(Context context, RecyclerView recyclerView){
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        settingsList = new ArrayList<>();
+
+        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+
+        adapter = new SettingsAdapter(context, settingsList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void createPersonalInfoSettings(Context context, RecyclerView recyclerView){
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        settingsList = new ArrayList<>();
+
+        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+
+        adapter = new SettingsAdapter(context, settingsList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void createLegalSettings(Context context, RecyclerView recyclerView){
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        settingsList = new ArrayList<>();
+
+        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+
+        adapter = new SettingsAdapter(context, settingsList);
+        recyclerView.setAdapter(adapter);
+    }
 }

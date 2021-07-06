@@ -78,7 +78,7 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
 
     public class OpenDailyHolder extends RecyclerView.ViewHolder {
 
-        TextView txtUpdateTime, txtTemperatures, txtHumidity;
+        TextView txtUpdateTime, txtMaxTemperature, txtMinTemperature, txtHumidity;
         CardView clickableLayout;
 
         public OpenDailyHolder(@NonNull View itemView) {
@@ -86,7 +86,8 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
 
             //initialize the textViews
             txtUpdateTime = itemView.findViewById(R.id.txtUpdateTime);
-            txtTemperatures = itemView.findViewById(R.id.txtTemperatures);
+            txtMaxTemperature = itemView.findViewById(R.id.txtMaxTemperature);
+            txtMinTemperature = itemView.findViewById(R.id.txtMinTemperature);
             txtHumidity = itemView.findViewById(R.id.txtHumidity);
 
             clickableLayout = itemView.findViewById(R.id.clickableLayout);
@@ -101,7 +102,8 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
             FeelsLike feelsLike = openDaily.getFeels_like();
 
             txtUpdateTime.setText(openDaily.getDtFormatted());
-            txtTemperatures.setText(Math.round(temp.getMax()) + "°/" + Math.round(temp.getMin()) + "°");
+            txtMaxTemperature.setText(Math.round(temp.getMax()) + "°");
+            txtMinTemperature.setText(Math.round(temp.getMin()) + "°");
             txtHumidity.setText(Math.round(openDaily.getHumidity()) + "%");
         }
     }

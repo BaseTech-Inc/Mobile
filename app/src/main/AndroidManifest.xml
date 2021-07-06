@@ -27,7 +27,9 @@
         <activity
             android:name=".Activities.NotificationActivity"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.MainActivity">
+        <activity
+            android:name=".Activities.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

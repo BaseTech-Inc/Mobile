@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/markerItem"
-        android:icon="@drawable/ic_marker"
+        android:id="@+id/searchItem"
+        android:icon="@drawable/ic_search_black"
         android:iconTint="?attr/OnSurfaceMediumEmphasis"
-        android:title="@string/marcador"
+        android:title="Pesquisar"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/addItem"
-        android:icon="@drawable/ic_add"
-        android:iconTint="?attr/OnSurfaceMediumEmphasis"
-        android:title="@string/adicionar"
-        app:showAsAction="always" />
     <item
         android:id="@+id/notificationItem"
         android:icon="@drawable/ic_notifications"

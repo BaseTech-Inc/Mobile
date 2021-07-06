@@ -5,14 +5,16 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:backgroundTint="?attr/Surface"
-    android:foreground="@drawable/cardview_borders"
-    app:cardCornerRadius="17dp"
-    app:cardElevation="0dp">
+    android:foreground="@drawable/forecast_hour_borders"
+    android:minWidth="30dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="64dp"
+    app:cardElevation="1dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -21,8 +23,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_regular"
+            android:textSize="11sp"
             android:text="10:00"
             android:textColor="?attr/OnSurfaceMediumEmphasis" />
+
+        <ImageView
+            android:id="@+id/imgHour"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/nibolas" />
 
         <TextView
             android:id="@+id/txtTempHour"
@@ -31,14 +41,7 @@
             android:fontFamily="@font/montserrat_semibold"
             android:text="20°"
             android:textColor="?attr/OnSurfaceHighEmphasis"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:id="@+id/imgHour"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/nibolas" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 

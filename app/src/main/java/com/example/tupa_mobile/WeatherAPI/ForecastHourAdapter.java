@@ -93,7 +93,7 @@ public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapte
         public void setDetails(ForecastHour forecastHour) {
 
             txtHour.setText(forecastHour.getTimeFormatted());
-            txtTempHour.setText(String.valueOf(forecastHour.getTemp_c()) + "°");
+            txtTempHour.setText(String.valueOf(Math.round(forecastHour.getTemp_c())) + "°");
             imgHour.setImageResource(R.drawable.night_clear);
         }
     }
