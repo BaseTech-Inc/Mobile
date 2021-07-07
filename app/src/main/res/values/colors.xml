@@ -32,5 +32,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-
+    <color name="WhiteMapBackground">#88ffffff</color>
+    <color name="DarkMapBackground">#88000000</color>
 </resources>

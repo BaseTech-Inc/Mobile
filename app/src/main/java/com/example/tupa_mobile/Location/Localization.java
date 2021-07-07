@@ -5,45 +5,50 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import static android.content.Context.LOCATION_SERVICE;
 import static androidx.core.app.ActivityCompat.requestPermissions;
 
 public class Localization {
 
-    public void getLocation(Context context, TextView txtLocation, FusedLocationProviderClient fusedLocationProviderClient, Activity activity, int requestCode){
+    private int LOCATION_REQUEST_CODE = 1;
+    private LocationManager locationManager;
+    private LatLng latLng;
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+    public void refreshLocation(Context context, GoogleMap map){
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        locationManager = (LocationManager) ((Activity)context).getSystemService(LOCATION_SERVICE);
 
-            if(activity.getApplicationContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
-                //get Location
-                fusedLocationProviderClient.getLastLocation()
-                        .addOnSuccessListener(new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if(location != null){
-
-                                    Double lat = location.getLatitude();
-                                    Double longitude = location.getLongitude();
-
-                                    txtLocation.setText(lat + ", " + longitude);
-                                }
-                                else {
-                                    txtLocation.setText("couldn't find your location");
-                                }
-                            }
-                        });
-            } else {
-                requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
-            }
+            ActivityCompat.requestPermissions(((Activity)context), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
         }
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0.1f, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+            }
+        });
+
     }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,22 +20,28 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tupa_mobile.Activities.NotificationActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
-import com.example.tupa_mobile.Connections.Connection;
-import com.example.tupa_mobile.Location.LocationAdapter;
+import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.Markers.Marker;
 import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener{
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -50,6 +57,8 @@ public class MapFragment extends Fragment {
     private MarkerAdapter markerAdapter;
     private AddressAdapter addressAdapter;
     private RecyclerView bottomDrawerRecycler, searchRecycler;
+    private GoogleMap map;
+    private com.google.android.gms.maps.model.Marker marker;
 
     public MapFragment() {
         // Required empty public constructor
@@ -67,7 +76,9 @@ public class MapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         mapFrame = view.findViewById(R.id.mapFrame);
         mapFrame.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +97,51 @@ public class MapFragment extends Fragment {
         setSearchETs(view);
 
         return view;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        LatLng lugar = new LatLng(-100, 100);
+        LatLng lugar2 = new LatLng(-4, 4);
+
+        marker = map.addMarker(new MarkerOptions()
+                .position(lugar)
+                .title("Marcador")
+        );
+
+        map.addMarker(new MarkerOptions()
+                .position(lugar2)
+                .visible(true)
+                .zIndex(1)
+                .rotation(0)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.googleg_disabled_color_18))
+                .alpha(1)
+                .draggable(true)
+                .title("Título")
+                .snippet("Subtítulo"));
+
+        map.setOnMapClickListener(this);
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(lugar));
+
+        adjustMap();
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull com.google.android.gms.maps.model.Marker marker) {
+        Toast.makeText(getContext(), "Parabéns, você clickou em: " + String.format("Latitude",marker.getPosition().latitude) + String.format("Longitude",marker.getPosition().longitude), Toast.LENGTH_LONG).show();
+    }
+
+    private void adjustMap(){
+        Localization localization = new Localization();
+        localization.refreshLocation(getContext(), map);
     }
 
     private void setSearchETs(View view) {
@@ -246,5 +302,4 @@ public class MapFragment extends Fragment {
         markers.add(new Marker(R.drawable.stormy, "Work", "Av. Tiradentes"));
         markers.add(new Marker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão"));
     }
-
 }

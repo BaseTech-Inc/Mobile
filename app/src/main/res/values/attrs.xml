@@ -7,4 +7,5 @@
     <attr name="Background" format="reference"/>
     <attr name="Surface" format="reference"/>
     <attr name="Error" format="reference"/>
+    <attr name="ToolbarBackground" format="reference"/>
 </resources>

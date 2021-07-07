@@ -18,6 +18,7 @@
         <item name="SurfaceOutline">@color/DarkOutline</item>
         <item name="Surface">@color/DarkSurface</item>
         <item name="Error">@color/Error</item>
+        <item name="ToolbarBackground">@color/DarkMapBackground</item>
     </style>
 
     <style name="ToolbarTheme">
