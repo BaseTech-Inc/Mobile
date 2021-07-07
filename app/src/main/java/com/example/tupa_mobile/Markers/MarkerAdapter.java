@@ -46,17 +46,19 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
     public class MarkerHolder extends RecyclerView.ViewHolder {
 
         private ImageView icoMarker;
-        private TextView markerName;
+        private TextView markerName, markerRegion;
 
         public MarkerHolder(@NonNull View view) {
             super(view);
             icoMarker = view.findViewById(R.id.icoLocation);
-            markerName = view.findViewById(R.id.txtLocation);
+            markerName = view.findViewById(R.id.txtLocationAddress);
+            markerRegion = view.findViewById(R.id.txtLocationRegion);
         }
 
         public void setDetails(Marker marker) {
             icoMarker.setImageResource(marker.getType());
             markerName.setText(marker.getName());
+            markerRegion.setText(marker.getRegion());
         }
     }
 }

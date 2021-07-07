@@ -16,12 +16,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.tupa_mobile.Activities.NotificationActivity;
+import com.example.tupa_mobile.Address.Address;
+import com.example.tupa_mobile.Address.AddressAdapter;
 import com.example.tupa_mobile.Connections.Connection;
+import com.example.tupa_mobile.Location.LocationAdapter;
 import com.example.tupa_mobile.Markers.Marker;
 import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
@@ -34,15 +38,18 @@ public class MapFragment extends Fragment {
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
+    private EditText etFrom, etTo;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ImageButton searchBack;
-    private ViewGroup searchLayout;
+    private ViewGroup searchLayout, resultsLayout;
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
     private ViewGroup mapFrame;
     private ArrayList<Marker> markers;
+    private ArrayList<Address> addresses;
     private MarkerAdapter markerAdapter;
-    private RecyclerView bottomDrawerRecycler;
+    private AddressAdapter addressAdapter;
+    private RecyclerView bottomDrawerRecycler, searchRecycler;
 
     public MapFragment() {
         // Required empty public constructor
@@ -60,18 +67,78 @@ public class MapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse);
-        mCollapsingToolbarLayout.setTitleEnabled(false);
 
-        toolbar = view.findViewById(R.id.mainToolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mapa");
 
+        mapFrame = view.findViewById(R.id.mapFrame);
+        mapFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        searchLayout = view.findViewById(R.id.searchLayout);
+        searchBack = view.findViewById(R.id.searchBack);
+
+        adjustToolbar(view);
+        adjustBottomDrawer(view);
+        setCloseSearchButton(view);
+        setSearchETs(view);
+
+        return view;
+    }
+
+    private void setSearchETs(View view) {
+        resultsLayout = view.findViewById(R.id.resultsLayout);
+        etFrom = view.findViewById(R.id.etFrom);
+        etFrom.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    resultsLayout.setVisibility(View.VISIBLE);
+                    setSearchRecycler(view);
+                }
+                else
+                    resultsLayout.setVisibility(View.GONE);
+            }
+        });
+
+        etTo = view.findViewById(R.id.etTo);
+        etTo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    resultsLayout.setVisibility(View.VISIBLE);
+                    setSearchRecycler(view);
+                }
+                else
+                    resultsLayout.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
+    private void setSearchRecycler(View view) {
+        searchRecycler = view.findViewById(R.id.searchRecycler);
+        searchRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        addresses = new ArrayList<>();
+        addressAdapter = new AddressAdapter(getContext(), addresses);
+        searchRecycler.setAdapter(addressAdapter);
+        fillAddresses();
+    }
+
+    private void fillAddresses(){
+        addresses.add(new Address("Alameda dos Guainumbis", "Planalto Paulista - SP", R.drawable.stormy));
+        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
+        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
+        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
+        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
+    }
+
+    private void adjustBottomDrawer(View view) {
         bottomNavigationContainer = view.findViewById(R.id.bottomNavigationContainer);
-
         bottomSheetBehavior = BottomSheetBehavior.from(bottomNavigationContainer);
         bottomSheetBehavior.setPeekHeight(100);
-
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -105,28 +172,12 @@ public class MapFragment extends Fragment {
                  */
             }
         });
-
-        mapFrame = view.findViewById(R.id.mapFrame);
-        mapFrame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        });
-
         bottomDrawerRecycler = view.findViewById(R.id.savedLocationsRecycler);
-        bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         markers = new ArrayList<>();
         markerAdapter = new MarkerAdapter(view.getContext(), markers);
         bottomDrawerRecycler.setAdapter(markerAdapter);
-
-        searchLayout = view.findViewById(R.id.searchLayout);
-        searchBack = view.findViewById(R.id.searchBack);
-
         createViews();
-        setCloseSearchButton(view);
-
-        return view;
     }
 
     @Override
@@ -150,6 +201,14 @@ public class MapFragment extends Fragment {
                 break;
         }
         return true;
+    }
+
+    private void adjustToolbar(View view){
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse);
+        mCollapsingToolbarLayout.setTitleEnabled(false);
+        toolbar = view.findViewById(R.id.mainToolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mapa");
     }
 
 
@@ -183,9 +242,9 @@ public class MapFragment extends Fragment {
     }
 
     private void createViews(){
-        markers.add(new Marker(R.drawable.clock_ilustraion_white_theme, "Home"));
-        markers.add(new Marker(R.drawable.stormy, "Work"));
-        markers.add(new Marker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School"));
+        markers.add(new Marker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano"));
+        markers.add(new Marker(R.drawable.stormy, "Work", "Av. Tiradentes"));
+        markers.add(new Marker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão"));
     }
 
 }

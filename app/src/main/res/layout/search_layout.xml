@@ -1,84 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="0dp"
     app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/searchBack"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/rainy"/>
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_search_black"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-            <EditText
-                android:id="@+id/etFrom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
-                android:background="@drawable/cardview_borders"
-                android:drawableStart="@drawable/ic_search_black"
-                android:drawableLeft="@drawable/ic_search_black"
-                android:drawablePadding="5dp"
-                android:hint="Partida"
-                android:padding="5dp"
-                android:paddingStart="10dp"
-                android:textSize="16sp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etTo"
-                android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/searchBack"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/arrow_left_icon_white_dark_theme" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:background="?attr/SurfaceOutline" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
-                android:background="@drawable/cardview_borders"
-                android:drawableStart="@drawable/ic_search_black"
-                android:drawableLeft="@drawable/ic_search_black"
-                android:drawablePadding="5dp"
-                android:hint="Chegada"
-                android:padding="5dp"
-                android:paddingStart="10dp"
-                android:textSize="16sp"/>
+                android:layout_marginTop="30dp"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/etFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:background="@drawable/cardview_borders"
+                    android:drawableStart="@drawable/ic_search_black"
+                    android:drawableLeft="@drawable/ic_search_black"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:hint="Partida"
+                    android:padding="5dp"
+                    android:paddingStart="10dp"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/etTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:background="@drawable/cardview_borders"
+                    android:drawableStart="@drawable/ic_search_black"
+                    android:drawableLeft="@drawable/ic_search_black"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:hint="Chegada"
+                    android:padding="5dp"
+                    android:paddingStart="10dp"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="30dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/ic_add"
+                    app:civ_border_color="?attr/SurfaceOutline"
+                    app:civ_border_width="1dp" />
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="30dp">
+        <RelativeLayout
+            android:id="@+id/resultsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:elevation="2dp"
-                android:background="@drawable/ic_add"/>
-        </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

@@ -23,6 +23,7 @@
     <style name="ToolbarTheme">
         <item name="android:fontFamily">@font/montserrat_semibold</item>
         <item name="android:textSize">16dp</item>
+        <item name="background">?attr/Surface</item>
         <item name="android:textColorSecondary">?attr/OnSurfaceMediumEmphasis</item>
     </style>
 

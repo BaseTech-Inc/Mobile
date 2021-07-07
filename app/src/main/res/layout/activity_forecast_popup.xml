@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foreground="@drawable/cardview_borders"
     android:backgroundTint="?attr/colorSecondaryVariant"
-    app:cardCornerRadius="17dp"
+    android:foreground="@drawable/cardview_borders"
     android:theme="@style/Theme.TupaMobile"
+    app:cardCornerRadius="17dp"
     tools:context=".Activities.ForecastPopupActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,6 +35,7 @@
             android:drawableStart="@drawable/ic_search_black"
             android:drawableLeft="@drawable/ic_search_black"
             android:drawablePadding="5dp"
+            android:fontFamily="@font/open_sans_regular"
             android:hint="Buscar..."
             android:padding="5dp"
             android:paddingStart="10dp"
