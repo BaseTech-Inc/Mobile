@@ -46,6 +46,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -132,7 +133,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
 
         searchLayout = view.findViewById(R.id.searchLayout);
-        searchBack = view.findViewById(R.id.searchBack);
 
         adjustToolbar(view);
         adjustBottomDrawer(view);
@@ -141,7 +141,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Places.initialize(getContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(getContext());
 
-        // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         return view;
@@ -150,6 +149,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        /*
 
         LatLng lugar = new LatLng(-100, 100);
         LatLng lugar2 = new LatLng(-4, 4);
@@ -169,6 +172,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .draggable(true)
                 .title("Título")
                 .snippet("Subtítulo"));
+
+         */
 
         map.setOnMapClickListener(this);
 
@@ -258,10 +263,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         try {
             if (locationPermissionGranted) {
                 map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
+                //map.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
                 map.setMyLocationEnabled(false);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
+                //map.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
                 getLocationPermission();
             }
@@ -272,7 +277,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
+        com.google.android.gms.maps.model.Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
     }
 
     @Override
@@ -374,7 +379,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.map_menu, menu);
         searchItem = menu.findItem(R.id.searchItem);

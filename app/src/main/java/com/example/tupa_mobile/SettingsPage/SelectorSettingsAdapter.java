@@ -107,19 +107,9 @@ public class SelectorSettingsAdapter extends RecyclerView.Adapter<SelectorSettin
 
                     saveSelectedTheme(settingsArray.get(clickedPos).getName(), settingsArray.get(clickedPos).isChecked());
 
-                    if(settingsArray.indexOf(radioButton) == 0) {
-                        ((Activity)context).setTheme(R.style.Theme_TupaMobile);
-                        ((Activity)context).getApplication().setTheme(R.style.Theme_TupaMobile);
-                    }
-                    else if(settingsArray.indexOf(radioButton) == 1){
-                        ((Activity)context).setTheme(R.style.Theme_DimmedTupaMobile);
-                        ((Activity)context).getApplication().setTheme(R.style.Theme_DimmedTupaMobile);
-                    }
-                    else if(settingsArray.indexOf(radioButton) == 2){
-                        ((Activity)context).setTheme(R.style.Theme_DimmedTupaMobile);
-                        ((Activity)context).getApplication().setTheme(R.style.Theme_DimmedTupaMobile);
-                    }
-                    //((Activity)context).recreate();// This is important. It allows the theme change to take effect.
+                    ((Activity)context).setTheme(R.style.Theme_DimmedTupaMobile);
+                    ((Activity)context).getApplication().setTheme(R.style.Theme_DimmedTupaMobile);
+                    ((Activity)context).recreate();// This is important. It allows the theme change to take effect.
                 }
             });
         }
@@ -127,6 +117,7 @@ public class SelectorSettingsAdapter extends RecyclerView.Adapter<SelectorSettin
         public void saveSelectedTheme(String key, boolean value){
 
             SharedPreferences sp = context.getSharedPreferences("SELECTED_THEME", Context.MODE_PRIVATE);
+
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean(key, value).apply();
 
