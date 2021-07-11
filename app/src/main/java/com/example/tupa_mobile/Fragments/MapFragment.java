@@ -51,6 +51,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
@@ -314,8 +315,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         Calendar currentCall = Calendar.getInstance();
 
-        /*
-
         if(marker.isVisible()){
 
             if(getLastCall("LAST_API_CALL") == 0){
@@ -330,7 +329,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
 
         }
-        */
 
 
     }
@@ -370,7 +368,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         resultsLayout = view.findViewById(R.id.resultsLayout);
         etFrom = view.findViewById(R.id.etFrom);
 
-        //getCurrentAddress(etFrom);
+        getCurrentAddress(etFrom);
 
         etFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,7 +386,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                /*
                 String text = s.toString();
                 text.replaceAll("[|?*<\">+ \\[\\]/']", "");
                 if(text.length() != 0){
@@ -397,8 +394,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 }
                 else
                     resultsLayout.setVisibility(View.GONE);
-
-                 */
             }
 
             @Override
