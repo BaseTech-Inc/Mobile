@@ -1,7 +1,9 @@
 package com.example.tupa_mobile.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -58,6 +60,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener {
 
@@ -78,6 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private GoogleMap map;
     private com.google.android.gms.maps.model.Marker marker;
     private LatLng currentLocation;
+    private Calendar lastCall = Calendar.getInstance();
 
     private static final String TAG = Localization.class.getSimpleName();
 
@@ -307,17 +312,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (marker!=null) marker.setPosition(midLatLng);
         else Log.d("TAG","Marker is null");
 
-        Calendar lastCall = Calendar.getInstance();
-        lastCall.setTimeInMillis(lastCall.getTimeInMillis()-1000);
         Calendar currentCall = Calendar.getInstance();
 
+        /*
+
         if(marker.isVisible()){
-            if(currentCall.getTimeInMillis() > lastCall.getTimeInMillis() + 1000) {
+
+            if(getLastCall("LAST_API_CALL") == 0){
                 Connection con = new Connection();
                 con.requestCurrentAddress(getContext(), etFrom, marker.getPosition().latitude, marker.getPosition().longitude);
-                lastCall = currentCall;
+                saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
             }
+            else if(getLastCall("LAST_API_CALL") + 2000 < currentCall.getTimeInMillis()){
+                Connection con = new Connection();
+                con.requestCurrentAddress(getContext(), etFrom, marker.getPosition().latitude, marker.getPosition().longitude);
+                saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
+            }
+
         }
+        */
+
+
     }
 
     @Override
@@ -355,7 +370,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         resultsLayout = view.findViewById(R.id.resultsLayout);
         etFrom = view.findViewById(R.id.etFrom);
 
-        getCurrentAddress(etFrom);
+        //getCurrentAddress(etFrom);
 
         etFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -573,4 +588,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         markers.add(new Marker(R.drawable.stormy, "Work", "Av. Tiradentes"));
         markers.add(new Marker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão"));
     }
+
+    private void saveLastCall(String key, long value){
+        SharedPreferences sp = getContext().getSharedPreferences("LAST_API_CALL", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(key, value).apply();
+    }
+
+    public long getLastCall(String key){
+
+        SharedPreferences sp = getContext().getSharedPreferences("LAST_API_CALL", Context.MODE_PRIVATE);
+        return sp.getLong(key, 0);
+
+    }
+
 }
