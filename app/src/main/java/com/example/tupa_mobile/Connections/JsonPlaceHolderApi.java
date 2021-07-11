@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Connections;
 
+import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Route.Route;
 import com.example.tupa_mobile.Route.RouteResponse;
@@ -69,5 +70,13 @@ public interface JsonPlaceHolderApi {
     @POST("directions/driving-car/json")
     Call<RouteResponse> postRoute(
             @Body RequestBody route
+    );
+
+    @GET("reverse")
+    Call<GeoCodingResponse> getCurrentAddress(
+            @Query("api_key") String apiKey,
+            @Query("point.lon") double longitude,
+            @Query("point.lat") double latitude,
+            @Query("boundary.circle.radius") double radius
     );
 }

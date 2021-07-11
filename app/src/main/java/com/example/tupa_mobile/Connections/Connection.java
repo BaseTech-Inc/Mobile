@@ -3,11 +3,15 @@ package com.example.tupa_mobile.Connections;
 import android.content.Context;
 import android.content.Entity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
+import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
+import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
@@ -65,6 +69,10 @@ public class Connection {
     private OpenWeather openWeather;
     private ArrayList<OpenDaily> openDaily;
     private OpenDailyAdapter openAdapter;
+    private GeoCodingResponse geoCodingResponse;
+    private ArrayList<GeoCodingFeatures> geoCodingFeaturesArrayList;
+    private GeoCodingFeatures geoCodingFeatures;
+    private GeoCodingProperties geoCodingProperties;
 
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
@@ -269,6 +277,39 @@ public class Connection {
 
                 Log.d("failure", String.valueOf(t));
 
+            }
+        });
+    }
+
+    public void requestCurrentAddress(Context context, EditText editText, double latitude, double longitude){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openrouteservice.org/geocode/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        Call<GeoCodingResponse> call = jsonPlaceHolderApi.getCurrentAddress(routeApiKey, longitude, latitude, 1);
+
+        call.enqueue(new Callback<GeoCodingResponse>() {
+            @Override
+            public void onResponse(Call<GeoCodingResponse> call, Response<GeoCodingResponse> response) {
+
+                if (response.isSuccessful() && response.body()!=null) {
+
+                    geoCodingResponse = response.body();
+                    geoCodingFeaturesArrayList = geoCodingResponse.getFeatures();
+                    geoCodingFeatures = geoCodingFeaturesArrayList.get(0);
+                    geoCodingProperties = geoCodingFeatures.getProperties();
+                    editText.setText(geoCodingProperties.getStreet());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<GeoCodingResponse> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
             }
         });
     }

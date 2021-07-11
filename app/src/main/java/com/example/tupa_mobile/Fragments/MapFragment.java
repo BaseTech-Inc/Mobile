@@ -5,17 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,15 +20,24 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.tupa_mobile.Activities.NotificationActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
-import com.example.tupa_mobile.BuildConfig;
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.Markers.Marker;
 import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,7 +45,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -51,22 +52,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.Calendar;
 
-import static android.provider.SettingsSlicesContract.KEY_LOCATION;
-
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener{
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener {
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -84,6 +77,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private RecyclerView bottomDrawerRecycler, searchRecycler;
     private GoogleMap map;
     private com.google.android.gms.maps.model.Marker marker;
+    private LatLng currentLocation;
 
     private static final String TAG = Localization.class.getSimpleName();
 
@@ -99,6 +93,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
+
+    private double latitude, longitude;
 
     public MapFragment() {
         // Required empty public constructor
@@ -134,14 +130,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         searchLayout = view.findViewById(R.id.searchLayout);
 
-        adjustToolbar(view);
-        adjustBottomDrawer(view);
-        setCloseSearchButton(view);
-
         Places.initialize(getContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(getContext());
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+        adjustToolbar(view);
+        adjustBottomDrawer(view);
+        setCloseSearchButton(view);
+        setSearchETs(view);
 
         return view;
     }
@@ -152,6 +149,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setCompassEnabled(false);
+
+        marker = map.addMarker(new MarkerOptions().position(defaultLocation));
+        marker.setVisible(false);
+
         /*
 
         LatLng lugar = new LatLng(-100, 100);
@@ -176,7 +178,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
          */
 
         map.setOnMapClickListener(this);
-
+        map.setOnCameraIdleListener(this);
+        map.setOnCameraMoveStartedListener(this);
+        map.setOnCameraMoveListener(this);
+        map.setOnCameraMoveCanceledListener(this);
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -197,6 +202,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener( getActivity(), new OnCompleteListener<Location>() {
+
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
@@ -285,31 +291,155 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Toast.makeText(getContext(), "Parabéns, você clickou em: " + String.format("Latitude",marker.getPosition().latitude) + String.format("Longitude",marker.getPosition().longitude), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onCameraIdle() {
+
+    }
+
+    @Override
+    public void onCameraMoveStarted(int i) {
+
+    }
+
+    @Override
+    public void onCameraMove() {
+        LatLng midLatLng = map.getCameraPosition().target;
+        if (marker!=null) marker.setPosition(midLatLng);
+        else Log.d("TAG","Marker is null");
+
+        Calendar lastCall = Calendar.getInstance();
+        lastCall.setTimeInMillis(lastCall.getTimeInMillis()-1000);
+        Calendar currentCall = Calendar.getInstance();
+
+        if(marker.isVisible()){
+            if(currentCall.getTimeInMillis() > lastCall.getTimeInMillis() + 1000) {
+                Connection con = new Connection();
+                con.requestCurrentAddress(getContext(), etFrom, marker.getPosition().latitude, marker.getPosition().longitude);
+                lastCall = currentCall;
+            }
+        }
+    }
+
+    @Override
+    public void onCameraMoveCanceled() {
+
+    }
+
+    private void getCurrentAddress(EditText et){
+
+        getLocationPermission();
+        try {
+            if (locationPermissionGranted) {
+                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener( getActivity(), new OnCompleteListener<Location>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful()) {
+                            // Set the map's camera position to the current location of the device.
+                            lastKnownLocation = task.getResult();
+                            if (lastKnownLocation != null) {
+                                Connection con = new Connection();
+                                con.requestCurrentAddress(getContext(), et, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                            }
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage(), e);
+        }
+    }
+
     private void setSearchETs(View view) {
         resultsLayout = view.findViewById(R.id.resultsLayout);
         etFrom = view.findViewById(R.id.etFrom);
-        etFrom.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+        getCurrentAddress(etFrom);
+
+        etFrom.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+            public void onClick(View v) {
+                marker.setVisible(true);
+                etFrom.setFocusable(true);
+                etFrom.setFocusableInTouchMode(true);
+            }
+        });
+        etFrom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                /*
+                String text = s.toString();
+                text.replaceAll("[|?*<\">+ \\[\\]/']", "");
+                if(text.length() != 0){
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
                 }
                 else
                     resultsLayout.setVisibility(View.GONE);
+
+                 */
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        etFrom.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    Toast.makeText(getContext(), etFrom.getText(), Toast.LENGTH_SHORT).show();
+                    marker.setVisible(false);
+                    return true;
+                }
+                return false;
             }
         });
 
         etTo = view.findViewById(R.id.etTo);
-        etTo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etTo.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    Toast.makeText(getContext(), etTo.getText(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        etTo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String text = s.toString();
+                text.replaceAll("[|?*<\">+\\[\\]/']", "");
+                if(text.length() != 0){
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
                 }
                 else
                     resultsLayout.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -420,6 +550,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         toolbar.setContentInsetsAbsolute(44,44);
         searchItem.setVisible(true);
         notificationItem.setVisible(true);
+        marker.setVisible(false);
     }
 
     public void setCloseSearchButton(View view){

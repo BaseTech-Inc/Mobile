@@ -54,6 +54,7 @@
                     android:drawableStart="@drawable/ic_search_black"
                     android:drawableLeft="@drawable/ic_search_black"
                     android:drawablePadding="5dp"
+                    android:focusable="false"
                     android:fontFamily="@font/open_sans_regular"
                     android:hint="Partida"
                     android:padding="5dp"
@@ -104,7 +105,7 @@
                 android:id="@+id/searchRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"/>
+                android:layout_marginHorizontal="24dp" />
 
         </RelativeLayout>
 
