@@ -388,12 +388,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String text = s.toString();
                 text.replaceAll("[|?*<\">+ \\[\\]/']", "");
-                if(text.length() != 0){
+                if(marker.isVisible()){
+                    resultsLayout.setVisibility(View.GONE);
+                }
+                else if(etFrom.isFocused() && text.length() != 0){
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
                 }
-                else
-                    resultsLayout.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -547,7 +549,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mapa");
     }
 
-
     private void expandSearchLayout() {
         searchLayout.setVisibility(View.VISIBLE);
         toolbar.setContentInsetsAbsolute(0,0);
@@ -561,6 +562,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         searchItem.setVisible(true);
         notificationItem.setVisible(true);
         marker.setVisible(false);
+        etFrom.setFocusable(false);
     }
 
     public void setCloseSearchButton(View view){

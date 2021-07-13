@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorSecondary"
-            android:paddingVertical="24dp">
+            android:paddingTop="24dp"
+            android:paddingBottom="80dp">
 
             <TextView
                 android:id="@+id/lblPrivacySettings"
@@ -46,16 +47,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblPrivacySettings" />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="24dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/privacySettingsRecycler" />
-
             <TextView
                 android:id="@+id/lblProtectionSettings"
                 android:layout_width="wrap_content"
@@ -67,7 +58,7 @@
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/privacySettingsRecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/protectionSettingsRecycler"
@@ -78,16 +69,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblProtectionSettings" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="24dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/protectionSettingsRecycler" />
 
             <TextView
                 android:id="@+id/lblAdsSettings"
@@ -100,7 +81,7 @@
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+                app:layout_constraintTop_toBottomOf="@+id/protectionSettingsRecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/adsSettingsRecycler"
@@ -111,16 +92,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblAdsSettings" />
-
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="24dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/adsSettingsRecycler" />
 
             <TextView
                 android:id="@+id/lblYourInfoSettings"
@@ -133,7 +104,7 @@
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/adsSettingsRecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/yourInfoSettingsRecycler"
@@ -144,16 +115,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblYourInfoSettings" />
-
-            <View
-                android:id="@+id/divider4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="24dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/yourInfoSettingsRecycler" />
 
             <TextView
                 android:id="@+id/lblLegalSettings"
@@ -166,7 +127,7 @@
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+                app:layout_constraintTop_toBottomOf="@+id/yourInfoSettingsRecycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/legalSettingsRecycler"

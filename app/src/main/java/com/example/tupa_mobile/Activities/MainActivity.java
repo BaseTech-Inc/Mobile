@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();

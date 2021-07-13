@@ -114,8 +114,9 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
-        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+        settingsList.add( new Settings("Atualizar dados da Conta", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Autenticação em dois Fatores", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+        settingsList.add( new Settings("Verificar Acessos", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
 
         adapter = new SettingsAdapter(context, settingsList);
         recyclerView.setAdapter(adapter);
@@ -127,8 +128,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
-        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+        settingsList.add( new Settings("Permitir Coleta de Dados", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Gerenciar Preferência de Anúncios", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
 
         adapter = new SettingsAdapter(context, settingsList);
         recyclerView.setAdapter(adapter);
@@ -153,8 +154,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Exemplo", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
-        settingsList.add( new Settings("Exemplo", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
+        settingsList.add( new Settings("Políticas de Privacidade", R.drawable.day_sunny, "...", new Intent(context, AboutUsActivity.class), 4));
+        settingsList.add( new Settings("Termos de Uso", R.drawable.clock_ilustraion_white_theme, "...", new Intent(context, HelpActivity.class), 4));
 
         adapter = new SettingsAdapter(context, settingsList);
         recyclerView.setAdapter(adapter);

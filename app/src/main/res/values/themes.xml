@@ -52,8 +52,10 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="MyTextApperance" parent="@android:style/TextAppearance.DialogWindowTitle">
-        <item name="android:background"> @color/LightOnSurfaceHighEmphasis </item>
+    <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
     </style>
 
     <style name="Theme.MaterialComponents.DayNight.NoActionBar.Popup">

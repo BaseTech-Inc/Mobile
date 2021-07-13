@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.TupaMobile"
     android:background="?attr/Surface"
+    android:theme="@style/Theme.TupaMobile"
     tools:context=".Fragments.HistoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <com.google.android.material.appbar.AppBarLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/mainToolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
-        android:theme="@style/ToolbarTheme"
         android:background="@drawable/bottom_borders"
+        android:elevation="0dp"
+        android:paddingBottom="1dp"
+        android:theme="@style/ToolbarTheme"
         app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,26 +36,33 @@
                 android:id="@+id/mainToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:titleTextAppearance="@style/Toolbar.TitleText"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/map_menu"
                 app:title="Mapa"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
                 app:titleTextColor="?attr/OnSurfaceHighEmphasis">
 
-                <include layout="@layout/search_layout" android:id="@+id/searchLayout" android:visibility="gone"/>
+                <include
+                    android:id="@+id/searchLayout"
+                    layout="@layout/search_layout"
+                    android:visibility="gone" />
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:backgroundTint="?attr/Surface"
+            app:tabMode="scrollable"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorFullWidth="false"
             app:tabSelectedTextColor="?attr/colorPrimary"
+            app:tabTextAppearance="@style/TabLayoutText"
             app:tabTextColor="?attr/OnSurfaceMediumEmphasis">
 
             <com.google.android.material.tabs.TabItem
@@ -83,6 +90,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout >
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
