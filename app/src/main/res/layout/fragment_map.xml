@@ -22,6 +22,11 @@
         <include
             android:id="@+id/map_toolbar"
             layout="@layout/map_toolbar"/>
+
+        <include
+            android:id="@+id/searchLayout"
+            layout="@layout/search_layout"
+            android:visibility="gone" />
     </FrameLayout>
 
 

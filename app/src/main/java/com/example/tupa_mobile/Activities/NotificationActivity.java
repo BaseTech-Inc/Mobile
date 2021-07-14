@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.tupa_mobile.Markers.Marker;
-import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.Notifications.Notification;
 import com.example.tupa_mobile.Notifications.NotificationAdapter;
 import com.example.tupa_mobile.R;

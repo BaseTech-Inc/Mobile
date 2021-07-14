@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="@drawable/bottom_borders"
+    android:backgroundTint="?attr/Surface"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout

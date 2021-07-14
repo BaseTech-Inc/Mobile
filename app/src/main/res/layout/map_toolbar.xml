@@ -39,13 +39,7 @@
                 app:menu="@menu/map_menu"
                 app:title="Mapa"
                 app:titleTextAppearance="@style/Toolbar.TitleText"
-                app:titleTextColor="?attr/OnSurfaceHighEmphasis">
-
-                <include
-                    android:id="@+id/searchLayout"
-                    layout="@layout/search_layout"
-                    android:visibility="gone" />
-            </androidx.appcompat.widget.Toolbar>
+                app:titleTextColor="?attr/OnSurfaceHighEmphasis"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </eightbitlab.com.blurview.BlurView>

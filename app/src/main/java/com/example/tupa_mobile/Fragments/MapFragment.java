@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -35,13 +35,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tupa_mobile.Activities.NotificationActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
-import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Location.Localization;
-import com.example.tupa_mobile.Markers.Marker;
+import com.example.tupa_mobile.Markers.CustomAdapterClickListener;
+import com.example.tupa_mobile.Markers.UserMarker;
 import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,21 +51,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, CustomAdapterClickListener {
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -75,20 +80,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
     private ViewGroup mapFrame;
-    private ArrayList<Marker> markers;
+    private ArrayList<UserMarker> userMarkers;
     private ArrayList<Address> addresses;
     private MarkerAdapter markerAdapter;
     private AddressAdapter addressAdapter;
     private RecyclerView bottomDrawerRecycler, searchRecycler;
     private GoogleMap map;
-    private com.google.android.gms.maps.model.Marker marker;
+    private Marker marker, destinationMarker;
     private LatLng currentLocation;
     private Calendar lastCall = Calendar.getInstance();
+    private Geocoder geocoder;
+    private UserMarker userMarker;
 
     private static final String TAG = Localization.class.getSimpleName();
 
     private CameraPosition cameraPosition;
     private Location lastKnownLocation;
+    private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private PlacesClient placesClient;
 
@@ -139,6 +147,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Places.initialize(getContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(getContext());
 
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(1000 * 30);
+        locationRequest.setFastestInterval(1000 * 5);
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         adjustToolbar(view);
@@ -156,9 +169,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setCompassEnabled(false);
-
-        marker = map.addMarker(new MarkerOptions().position(defaultLocation));
-        marker.setVisible(false);
 
         /*
 
@@ -188,6 +198,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.setOnCameraMoveStartedListener(this);
         map.setOnCameraMoveListener(this);
         map.setOnCameraMoveCanceledListener(this);
+
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -197,6 +208,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
+        marker = map.addMarker(new MarkerOptions().position(defaultLocation));
+        marker.setVisible(false);
     }
 
     private void getDeviceLocation() {
@@ -289,11 +302,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        com.google.android.gms.maps.model.Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
+        Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
     }
 
     @Override
-    public void onInfoWindowClick(@NonNull com.google.android.gms.maps.model.Marker marker) {
+    public void onInfoWindowClick(@NonNull Marker marker) {
         Toast.makeText(getContext(), "Parabéns, você clickou em: " + String.format("Latitude",marker.getPosition().latitude) + String.format("Longitude",marker.getPosition().longitude), Toast.LENGTH_LONG).show();
     }
 
@@ -311,20 +324,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onCameraMove() {
         LatLng midLatLng = map.getCameraPosition().target;
         if (marker!=null) marker.setPosition(midLatLng);
-        else Log.d("TAG","Marker is null");
+        else Log.d("TAG","UserMarker is null");
 
         Calendar currentCall = Calendar.getInstance();
 
         if(marker.isVisible()){
 
             if(getLastCall("LAST_API_CALL") == 0){
-                Connection con = new Connection();
-                con.requestCurrentAddress(getContext(), etFrom, marker.getPosition().latitude, marker.getPosition().longitude);
+                geocoder = new Geocoder(getContext());
+                try{
+                    List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
+                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                }
+                catch (Exception e){
+                    etFrom.setText("Unable to get address");
+                    Log.e(TAG, e.getMessage());
+                }
                 saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
             }
-            else if(getLastCall("LAST_API_CALL") + 2000 < currentCall.getTimeInMillis()){
-                Connection con = new Connection();
-                con.requestCurrentAddress(getContext(), etFrom, marker.getPosition().latitude, marker.getPosition().longitude);
+            else if(getLastCall("LAST_API_CALL") + 5000 < currentCall.getTimeInMillis()){
+                geocoder = new Geocoder(getContext());
+                try{
+                    List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
+                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                }
+                catch (Exception e){
+                    etFrom.setText("Unable to get address");
+                    Log.e(TAG, e.getMessage());
+                }
                 saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
             }
 
@@ -352,8 +379,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
-                                Connection con = new Connection();
-                                con.requestCurrentAddress(getContext(), et, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                                geocoder = new Geocoder(getContext());
+                                try{
+                                    List<android.location.Address> addresses = geocoder.getFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), 1);
+                                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                                }
+                                catch (Exception e){
+                                    etFrom.setText("Unable to get address");
+                                    Log.e(TAG, e.getMessage());
+                                }
                             }
                         }
                     }
@@ -381,7 +415,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         etFrom.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                marker.setVisible(false);
             }
 
             @Override
@@ -394,6 +428,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 else if(etFrom.isFocused() && text.length() != 0){
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
+
+                    //User query
+                    String query = s.toString();
+
+                    // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
+                    // and once again when the user makes a selection (for example when calling fetchPlace()).
+                    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+
+                    // Create a RectangularBounds object.
+                    RectangularBounds bounds = RectangularBounds.newInstance(
+                            new LatLng(-23.892792671007193, -46.97887828581721),
+                            new LatLng(-22.52756065617645, -46.02750163888053));
+
+                    // Use the builder to create a FindAutocompletePredictionsRequest.
+                    FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                            // Call either setLocationBias() OR setLocationRestriction().
+                            .setLocationBias(bounds)
+                            //.setLocationRestriction(bounds)
+                            .setOrigin(new LatLng(-23.5666595,-46.6084084))
+                            .setCountries("BRA")
+                            .setTypeFilter(TypeFilter.ADDRESS)
+                            .setSessionToken(token)
+                            .setQuery(query)
+                            .build();
+
+                    placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                        for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+                            Log.i(TAG, prediction.getPlaceId());
+                            Log.i(TAG, prediction.getPrimaryText(null).toString());
+                        }
+                    }).addOnFailureListener((exception) -> {
+                        if (exception instanceof ApiException) {
+                            ApiException apiException = (ApiException) exception;
+                            Log.e(TAG, "Status: " + apiException.getStatusCode());
+                            Log.e(TAG, "error: " + apiException.getMessage());
+                        }
+                    });
+
                 }
 
             }
@@ -474,10 +546,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.map_menu, menu);
+        searchItem = menu.findItem(R.id.searchItem);
+        notificationItem = menu.findItem(R.id.notificationItem);
+    }
+
     private void adjustBottomDrawer(View view) {
         bottomNavigationContainer = view.findViewById(R.id.bottomNavigationContainer);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomNavigationContainer);
-        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setPeekHeight(120);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -513,18 +593,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
         bottomDrawerRecycler = view.findViewById(R.id.savedLocationsRecycler);
         bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        markers = new ArrayList<>();
-        markerAdapter = new MarkerAdapter(view.getContext(), markers);
+        userMarkers = new ArrayList<>();
+        markerAdapter = new MarkerAdapter(getContext(), userMarkers, this);
         bottomDrawerRecycler.setAdapter(markerAdapter);
         createViews();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.map_menu, menu);
-        searchItem = menu.findItem(R.id.searchItem);
-        notificationItem = menu.findItem(R.id.notificationItem);
     }
 
     @Override
@@ -551,18 +623,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void expandSearchLayout() {
         searchLayout.setVisibility(View.VISIBLE);
-        toolbar.setContentInsetsAbsolute(0,0);
-        searchItem.setVisible(false);
-        notificationItem.setVisible(false);
+        toolbar.setVisibility(View.GONE);
     }
 
     private void closeSearchLayout(){
         searchLayout.setVisibility(View.GONE);
-        toolbar.setContentInsetsAbsolute(44,44);
-        searchItem.setVisible(true);
-        notificationItem.setVisible(true);
-        marker.setVisible(false);
-        etFrom.setFocusable(false);
+        toolbar.setVisibility(View.VISIBLE);
     }
 
     public void setCloseSearchButton(View view){
@@ -581,9 +647,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void createViews(){
-        markers.add(new Marker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano"));
-        markers.add(new Marker(R.drawable.stormy, "Work", "Av. Tiradentes"));
-        markers.add(new Marker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão"));
+        userMarkers.add(new UserMarker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano", map, -23.61601597825001, -46.64259490181567));
+        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes", map, -23.615298364074533, -46.6437107007666));
+        userMarkers.add(new UserMarker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão", map,-23.614954301071563, -46.643689243094215));
     }
 
     private void saveLastCall(String key, long value){
@@ -600,4 +666,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
+    @Override
+    public void onItemClick(View v, UserMarker userMarker) {
+        destinationMarker = map.addMarker(new MarkerOptions().position(userMarker.getLatLng()).title(userMarker.getName()));
+        this.userMarker = userMarker;
+        userMarker.setClicked(true);
+        expandSearchLayout();
+        etTo.setText(userMarker.getRegion());
+        resultsLayout.setVisibility(View.GONE);
+    }
 }
