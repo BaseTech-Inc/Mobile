@@ -2,26 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapFrame"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:theme="@style/Theme.TupaMobile"
-    tools:context=".Fragments.MapFragment"
     android:background="?attr/colorSecondary"
-    android:id="@+id/mapFrame">
+    android:theme="@style/Theme.TupaMobile"
+    tools:context=".Fragments.MapFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <FrameLayout
+        android:id="@+id/topFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="1dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include
             android:id="@+id/map_toolbar"
-            layout="@layout/map_toolbar"/>
+            layout="@layout/map_toolbar" />
 
         <include
             android:id="@+id/searchLayout"
@@ -29,17 +30,48 @@
             android:visibility="gone" />
     </FrameLayout>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/map"/>
+        <include layout="@layout/map" />
     </FrameLayout>
 
-    <include layout="@layout/bottom_map_drawer"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/confirmMarkerButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_circle"
+        android:backgroundTint="?attr/colorPrimary"
+        android:elevation="2dp"
+        android:src="@drawable/ic_check"
+        android:tint="?attr/colorOnPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/confirmRouteButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_circle"
+        android:backgroundTint="?attr/colorPrimary"
+        android:elevation="2dp"
+        android:text="Let's go, Bro?"
+        android:textAllCaps="false"
+        android:textSize="17sp"
+        android:tint="?attr/colorOnPrimary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topFrame" />
+
+    <include layout="@layout/bottom_map_drawer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

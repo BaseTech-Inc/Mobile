@@ -44,7 +44,6 @@
             android:layout_marginTop="13dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             app:cardCornerRadius="26dp"
-            app:layout_constraintEnd_toEndOf="@+id/weatherTemp"
             app:layout_constraintLeft_toLeftOf="@id/weatherTemp"
             app:layout_constraintStart_toStartOf="@id/weatherTemp"
             app:layout_constraintTop_toBottomOf="@+id/weatherTemp">
