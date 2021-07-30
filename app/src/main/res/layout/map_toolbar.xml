@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/mainToolbarLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/ToolbarBackground"
-    android:elevation="0dp"
-    android:foreground="@drawable/bottom_borders"
-    android:theme="@style/ToolbarTheme"
-    app:elevation="0dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="wrap_content">
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/blurView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/map_buttons"
+        android:padding="10dp"
+        android:theme="@style/ToolbarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:contentScrim="@drawable/bottom_borders"
-            app:layout_scrollFlags="scroll|enterAlways">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/Mapa" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/mainToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_collapseMode="pin"
-                app:menu="@menu/map_menu"
-                app:title="Mapa"
-                app:titleTextAppearance="@style/Toolbar.TitleText"
-                app:titleTextColor="?attr/OnSurfaceHighEmphasis"/>
+    </LinearLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </eightbitlab.com.blurview.BlurView>
-</com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnSearch"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/map_buttons"
+            android:src="@drawable/ic_search_black" />
+
+        <ImageButton
+            android:id="@+id/btnNotification"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/map_buttons"
+            android:src="@drawable/ic_notifications" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

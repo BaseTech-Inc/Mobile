@@ -89,8 +89,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private EditText etFrom, etTo;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button confirmRouteButton;
-    private ImageButton searchBack, confirmMarkerButton;
-    private ViewGroup searchLayout, resultsLayout;
+    private ImageButton searchBack, confirmMarkerButton, btnSearch, btnNotification;
+    private ViewGroup searchLayout, resultsLayout, mapToolbar;
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
     private ViewGroup mapFrame;
@@ -126,7 +126,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -159,10 +158,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-        adjustToolbar(view);
         adjustBottomDrawer(view);
         setCloseSearchButton(view);
         setSearchETs(view);
+        setToolbar(view);
         setConfirmMarkerButton(view);
         setConfirmRouteButton(view);
 
@@ -405,6 +404,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    private void setToolbar(View view){
+        mapToolbar = view.findViewById(R.id.map_toolbar);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        btnNotification = view.findViewById(R.id.btnNotification);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandSearchLayout();
+            }
+        });
+
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startNotificationActivity();
+            }
+        });
+    }
+
     private void setSearchETs(View view) {
         resultsLayout = view.findViewById(R.id.resultsLayout);
         etFrom = view.findViewById(R.id.etFrom);
@@ -631,36 +650,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         createViews();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()){
-            case R.id.searchItem:
-                expandSearchLayout();
-                break;
-            case R.id.notificationItem:
-                startNotificationActivity();
-                break;
-        }
-        return true;
-    }
-
-    private void adjustToolbar(View view){
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse);
-        mCollapsingToolbarLayout.setTitleEnabled(false);
-        toolbar = view.findViewById(R.id.mainToolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Mapa");
-    }
-
     private void expandSearchLayout() {
         searchLayout.setVisibility(View.VISIBLE);
-        toolbar.setVisibility(View.GONE);
+        mapToolbar.setVisibility(View.GONE);
     }
 
     private void closeSearchLayout(){
         searchLayout.setVisibility(View.GONE);
-        toolbar.setVisibility(View.VISIBLE);
+        mapToolbar.setVisibility(View.VISIBLE);
         confirmMarkerButton.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.GONE);
     }
