@@ -52,7 +52,7 @@ public class HistoryFragment extends Fragment {
         for(int i=0; i < tabs.getTabCount(); i++) {
             View tab = ((ViewGroup) tabs.getChildAt(0)).getChildAt(i);
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) tab.getLayoutParams();
-            p.setMargins(50, 0, 50, 0);
+            p.setMargins(100, 0, 100, 0);
             tab.requestLayout();
         }
 

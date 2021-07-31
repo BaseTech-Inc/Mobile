@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -75,13 +74,14 @@ import java.util.List;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, CustomAdapterClickListener {
 
     private static final String TAG = Localization.class.getSimpleName();
-    public static final int MAP_ZOOM_PADDING = 500;
+    public static final int MAP_TOP_ZOOM_PADDING = 1000;
     public static final int FASTEST_REQUEST_INTERVAL = 5;
     public static final int REQUEST_INTERVAL = 30;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static final int MAP_BOTTOM_ZOOM_PADDING = 300;
     private boolean BOTTOM_SHEET_DRAGGABLE = true;
 
     private LinearLayout bottomNavigationContainer;
@@ -340,7 +340,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 geocoder = new Geocoder(getContext());
                 try{
                     List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
-                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                    String street = addresses.get(0).getThoroughfare();
+                    String stNumber = addresses.get(0).getSubThoroughfare();
+                    etFrom.setText(String.format("%s, %s", street, stNumber));
                 }
                 catch (Exception e){
                     etFrom.setText("Unable to get address");
@@ -348,11 +350,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 }
                 saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
             }
-            else if(getLastCall("LAST_API_CALL") + 5000 < currentCall.getTimeInMillis()){
+            else if(getLastCall("LAST_API_CALL") + 4000 < currentCall.getTimeInMillis()){
                 geocoder = new Geocoder(getContext());
                 try{
                     List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
-                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                    String street = addresses.get(0).getThoroughfare();
+                    String stNumber = addresses.get(0).getSubThoroughfare();
+                    etFrom.setText(String.format("%s, %s", street, stNumber));
                 }
                 catch (Exception e){
                     etFrom.setText("Unable to get address");
@@ -388,7 +392,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                 geocoder = new Geocoder(getContext());
                                 try{
                                     List<android.location.Address> addresses = geocoder.getFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), 1);
-                                    etFrom.setText(addresses.get(0).getAddressLine(0));
+                                    String street = addresses.get(0).getThoroughfare();
+                                    String stNumber = addresses.get(0).getSubThoroughfare();
+                                    etFrom.setText(String.format("%s, %s", street, stNumber));
                                 }
                                 catch (Exception e){
                                     etFrom.setText("Unable to get address");
@@ -668,6 +674,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onClick(View v) {
                 closeSearchLayout();
+                getDeviceLocation();
+                etTo.setText("");
+                if(map != null){
+                    map.clear();
+                }
             }
         });
     }
@@ -702,8 +713,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             builder.include(getCoordinates(etTo.getText().toString()));
             LatLngBounds bounds = builder.build();
 
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, MAP_ZOOM_PADDING);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
+            map.setPadding(0, MAP_TOP_ZOOM_PADDING, 0, MAP_BOTTOM_ZOOM_PADDING);
             map.animateCamera(cu);
+
         }
     }
 
@@ -761,5 +774,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         etTo.setText(userMarker.getRegion());
         resultsLayout.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.VISIBLE);
+        centerRoute();
     }
 }
