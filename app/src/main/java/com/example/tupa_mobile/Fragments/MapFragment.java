@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.NotificationActivity;
+import com.example.tupa_mobile.Activities.RouteAssistantActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
 import com.example.tupa_mobile.Location.Localization;
@@ -666,6 +667,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapToolbar.setVisibility(View.VISIBLE);
         confirmMarkerButton.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.GONE);
+        BOTTOM_SHEET_DRAGGABLE = true;
     }
 
     private void setCloseSearchButton(View view){
@@ -701,6 +703,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         confirmRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startAssistantActivity();
             }
         });
     }
@@ -736,7 +739,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             Log.e(TAG, "Unable to get address");
             Log.e(TAG, e.getMessage());
         }
-        
+
         return latLng;
     }
 
@@ -745,9 +748,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         startActivity(intent);
     }
 
+    private void startAssistantActivity(){
+        Intent intent = new Intent(getContext(), RouteAssistantActivity.class);
+        startActivity(intent);
+    }
+
     private void createViews(){
         userMarkers.add(new UserMarker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano", map, -23.61601597825001, -46.64259490181567));
-        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes, 769", map, -23.530234576782785, -46.63209304604776));
+        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes, 769 - São Paulo", map, -23.530234576782785, -46.63209304604776));
         userMarkers.add(new UserMarker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão", map,-23.614954301071563, -46.643689243094215));
     }
 
