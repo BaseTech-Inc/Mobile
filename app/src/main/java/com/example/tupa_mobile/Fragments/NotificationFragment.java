@@ -41,9 +41,9 @@ public class NotificationFragment extends Fragment {
         adapter = new AlertAdapter(view.getContext(), alerts);
         cardRecyclerView.setAdapter(adapter);
 
-        for(int i=0; i<7; i++) {
-            createListData("Alerta de Alagamento", "Avenida Bla Bli Blop 333");
-        }
+       // for(int i=0; i<7; i++) {
+            createListData("Alerta de Alagamento", "Avenida Bla Bli Blop 333");//puxar do banco de dados
+       // }
 
         return view;
     }

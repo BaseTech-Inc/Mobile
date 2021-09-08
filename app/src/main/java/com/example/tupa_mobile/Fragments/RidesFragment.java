@@ -3,6 +3,8 @@ package com.example.tupa_mobile.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,57 +12,59 @@ import android.view.ViewGroup;
 
 import com.example.tupa_mobile.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RidesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
+import com.example.tupa_mobile.Rides.Rides;
+import com.example.tupa_mobile.Rides.RidesAdapter;
+
+
 public class RidesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private RecyclerView weekRecyclerView, monthRecyclerView, pastRecyclerView;
+    private RidesAdapter adapter;
+    private ArrayList<Rides> ride;
 
     public RidesFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RidesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RidesFragment newInstance(String param1, String param2) {
-        RidesFragment fragment = new RidesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rides, container, false);
+        View view = inflater.inflate(R.layout.fragment_rides, container, false);
+
+        weekRecyclerView = view.findViewById(R.id.weekAlertRecycler);
+        monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
+        pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
+
+        ride = new ArrayList<>();
+
+        for(int i=0; i<3; i++) {
+            createListData("22Km","09:55-11:05 (1h 9min)",R.drawable.ic_map );
+        }
+
+        adapter = new RidesAdapter(view.getContext(), ride);
+
+        weekRecyclerView.setAdapter(adapter);
+        weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        monthRecyclerView.setAdapter(adapter);
+        monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        pastRecyclerView.setAdapter(adapter);
+        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        return view;
+    }
+
+    public void createListData(String distance, String time, int map) {
+        // This method adds data to the recyclerView
+        Rides rides = new Rides(distance, time, map);
+        ride.add(rides);
     }
 }

@@ -23,6 +23,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertHolder>
         this.alerts = alerts;
     }
 
+
     @NonNull
     @Override
     public AlertHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
