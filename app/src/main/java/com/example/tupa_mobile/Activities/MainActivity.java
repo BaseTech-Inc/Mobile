@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.tupa_mobile.BackgroundService.LocationService;
 import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
 import com.example.tupa_mobile.Fragments.HistoryFragment;
