@@ -1,7 +1,8 @@
 package com.example.tupa_mobile.Connections;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Entity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -9,15 +10,15 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.Activities.LoginActivity;
+import com.example.tupa_mobile.Activities.MainActivity;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
-import com.example.tupa_mobile.Route.Coordinates;
 import com.example.tupa_mobile.Route.Metadata;
-import com.example.tupa_mobile.Route.Route;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.WeatherAPI.CurrentWeather;
 import com.example.tupa_mobile.WeatherAPI.Day;
@@ -28,17 +29,10 @@ import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
-import com.google.android.gms.common.api.Api;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,9 +76,9 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
-        Call<Weather> call = jsonPlaceHolderApi.getCurrentWeather(weatherApiKey, position, "no");
+        Call<Weather> call = API.getCurrentWeather(weatherApiKey, position, "no");
 
         call.enqueue(new Callback<Weather>() {
             @Override
@@ -122,9 +116,9 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
-        Call<Weather> call = jsonPlaceHolderApi.getForecast(weatherApiKey, position, 3, "no", "no");
+        Call<Weather> call = API.getForecast(weatherApiKey, position, 3, "no", "no");
 
         call.enqueue(new Callback<Weather>() {
 
@@ -156,9 +150,9 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
-        Call<OpenWeather> call = jsonPlaceHolderApi.getOpenForecastDaily(lat, lon, openApiKey, "metric");
+        Call<OpenWeather> call = API.getOpenForecastDaily(lat, lon, openApiKey, "metric");
 
         call.enqueue(new Callback<OpenWeather>() {
 
@@ -191,9 +185,9 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
-        Call<Weather> call = jsonPlaceHolderApi.getForecast(weatherApiKey, position, 1,"no", "no");
+        Call<Weather> call = API.getForecast(weatherApiKey, position, 1,"no", "no");
 
         call.enqueue(new Callback<Weather>() {
             @Override
@@ -232,7 +226,7 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
         /*
 
@@ -257,7 +251,7 @@ public class Connection {
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), finalRoute);
 
-        Call<RouteResponse> call = jsonPlaceHolderApi.postRoute(body);
+        Call<RouteResponse> call = API.postRoute(body);
 
         call.enqueue(new Callback<RouteResponse>() {
             @Override
@@ -288,9 +282,9 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        API API = retrofit.create(API.class);
 
-        Call<GeoCodingResponse> call = jsonPlaceHolderApi.getCurrentAddress(routeApiKey, longitude, latitude, 1);
+        Call<GeoCodingResponse> call = API.getCurrentAddress(routeApiKey, longitude, latitude, 1);
 
         call.enqueue(new Callback<GeoCodingResponse>() {
             @Override
@@ -312,5 +306,62 @@ public class Connection {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
             }
         });
+    }
+    public void registerUser(Context context, String username, String email, String password){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<UserResponse> call = api.postUser(username, email, password);
+
+        call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                Log.d("Conexao", response.message());
+                if (!response.isSuccessful()) {
+                    Log.d("Conexao", String.valueOf(response.isSuccessful()));
+                    return;
+                }
+                Intent it = new Intent(context, LoginActivity.class);
+                ((Activity)context).startActivity(it);
+                ((Activity)context).finish();
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void loginUser(Context context, String email, String password){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<LoginResponse> call = api.postLogin(email, password);
+
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if(response.isSuccessful()){
+                    Intent it = new Intent(context, MainActivity.class);
+                    ((Activity)context).startActivity(it);
+                    ((Activity)context).finish();
+                }else{
+                    Toast.makeText(((Activity)context), "Não bro, não é assim 😭", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 }

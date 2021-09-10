@@ -21,7 +21,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface JsonPlaceHolderApi {
+public interface API {
 
     @GET("current.json")
     Call<Weather> getCurrentWeather(
@@ -78,5 +78,18 @@ public interface JsonPlaceHolderApi {
             @Query("point.lon") double longitude,
             @Query("point.lat") double latitude,
             @Query("boundary.circle.radius") double radius
+    );
+
+    @POST("/api/Account/register")
+    Call<UserResponse> postUser(
+            @Query ("username") String username,
+            @Query ("email") String email,
+            @Query ("password") String password
+    );
+
+    @POST("/api/Account/login")
+    Call<LoginResponse> postLogin(
+            @Query ("email") String email,
+            @Query ("password") String password
     );
 }

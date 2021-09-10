@@ -9,6 +9,9 @@
     <string name="marcador">Marcador</string>
     <string name="adicionar">Adicionar</string>
     <string name="notificacao">Notificação</string>
+    <string name="OnBoarding"> Previsões de até 5 dias baseadas na sua localização ou região buscada. </string>
+    <string name="OnBoarding2"> Alertas de enchente em locais de risco, com monitoramento da sua localização. </string>
+    <string name="OnBoarding3"> Mapa meteorológico com alertas de enchentes e atualizações em tempo real. </string>
 
     <string-array name="listArray">
         <item>red</item>
