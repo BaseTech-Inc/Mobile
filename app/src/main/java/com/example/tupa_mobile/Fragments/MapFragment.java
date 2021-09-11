@@ -80,7 +80,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int DEFAULT_ZOOM = 15;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int MAP_BOTTOM_ZOOM_PADDING = 300;
     private boolean BOTTOM_SHEET_DRAGGABLE = true;
 
@@ -308,12 +308,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
+        //Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
     }
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
-        Toast.makeText(getContext(), "Parabéns, você clickou em: " + String.format("Latitude",marker.getPosition().latitude) + String.format("Longitude",marker.getPosition().longitude), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Parabéns, você clickou em: " + String.format("Latitude",marker.getPosition().latitude) + String.format("Longitude",marker.getPosition().longitude), Toast.LENGTH_LONG).show();
     }
 
     @Override
