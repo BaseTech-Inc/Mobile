@@ -27,10 +27,13 @@ import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.PolyUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -77,9 +80,25 @@ public class LocationService extends Service{
                         locationResult.addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
+
+                                if(location == null){
+                                    return;
+                                }
+
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
-                                Log.e(TAG, latitude + ", " + longitude);
+                                Log.d(TAG, latitude + ", " + longitude);
+
+                                ArrayList<LatLng> latLngs = new ArrayList<>();
+                                latLngs.add(new LatLng(-23.61667113533345, -46.648964070576255));
+                                latLngs.add(new LatLng(-23.613538121785556, -46.63819563711089));
+                                latLngs.add(new LatLng(-23.61926633610226, -46.63926737693445));
+                                latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
+
+                                if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
+                                    Log.e(TAG, "Você está dentro da área");
+                                }
+
                             }
                         });
                     }
