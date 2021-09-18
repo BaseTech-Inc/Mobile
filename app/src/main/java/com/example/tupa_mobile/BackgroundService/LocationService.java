@@ -51,6 +51,7 @@ public class LocationService extends Service{
     private boolean locationPermissionGranted;
 
     private NotificationManager notificationManager;
+    private boolean isNotificationActive = false;
 
     @Nullable
     @Override
@@ -96,21 +97,24 @@ public class LocationService extends Service{
                                 latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
 
                                 if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
-                                    //send notification
+                                        //send notification
+                                    if (!isNotificationActive) {
+                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), DYNAMIC_CHANNEL_ID)
+                                                .setSmallIcon(R.drawable.nibolas)
+                                                .setContentTitle("Cuidado!")
+                                                .setContentText("Você está entrando numa área de risco de alagamento!")
+                                                .setStyle(new NotificationCompat.BigTextStyle()
+                                                        .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), DYNAMIC_CHANNEL_ID)
-                                            .setSmallIcon(R.drawable.nibolas)
-                                            .setContentTitle("Cuidado!")
-                                            .setContentText("Você está entrando numa área de risco de alagamento!")
-                                            .setStyle(new NotificationCompat.BigTextStyle()
-                                                    .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
-                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                                    notificationManager.notify(DYNAMIC_ID, builder.build());
-
-                                    Log.e(TAG, "Você está dentro da área");
+                                        notificationManager.notify(DYNAMIC_ID, builder.build());
+                                        Log.e(TAG, "Você está dentro da área");
+                                        isNotificationActive = true;
+                                    }
                                 }
-
+                                else {
+                                    isNotificationActive = false;
+                                }
                             }
                         });
                     }
