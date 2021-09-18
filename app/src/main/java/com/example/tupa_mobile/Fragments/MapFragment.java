@@ -93,7 +93,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private EditText etFrom, etTo;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button confirmRouteButton;
-    private ImageButton searchBack, confirmMarkerButton, btnSearch, btnNotification;
+    private ImageButton searchBack, confirmMarkerButton, btnSearch, btnNotification, btnRiskAreas, btnAlerts;
     private ViewGroup searchLayout, resultsLayout, mapToolbar;
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
@@ -417,6 +417,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapToolbar = view.findViewById(R.id.map_toolbar);
         btnSearch = view.findViewById(R.id.btnSearch);
         btnNotification = view.findViewById(R.id.btnNotification);
+        btnRiskAreas = view.findViewById(R.id.btnRiskAreas);
+        btnAlerts = view.findViewById(R.id.btnAlerts);
+
+        btnRiskAreas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnAlerts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -598,6 +614,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
     }
 
+    private void unpinBottomSheet(){
+        BOTTOM_SHEET_DRAGGABLE = true;
+    }
+
     private void fillAddresses(){
         addresses.add(new Address("Alameda dos Guainumbis", "Planalto Paulista - SP", R.drawable.stormy));
         addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
@@ -669,6 +689,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapToolbar.setVisibility(View.VISIBLE);
         confirmMarkerButton.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.GONE);
+        unpinBottomSheet();
     }
 
     private void setCloseSearchButton(View view){
@@ -692,7 +713,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onClick(View v) {
                 confirmMarkerButton.setVisibility(View.GONE);
-                BOTTOM_SHEET_DRAGGABLE = true;
+                unpinBottomSheet();
                 marker.setVisible(false);
                 etTo.requestFocus();
             }
@@ -750,7 +771,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void createViews(){
         userMarkers.add(new UserMarker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano", map, -23.61601597825001, -46.64259490181567));
-        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes, 769", map, -23.530234576782785, -46.63209304604776));
+        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes, 769 - São Paulo", map, -23.530234576782785, -46.63209304604776));
         userMarkers.add(new UserMarker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão", map,-23.614954301071563, -46.643689243094215));
     }
 
@@ -775,6 +796,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         userMarker.setClicked(true);
         expandSearchLayout();
         etTo.setText(userMarker.getRegion());
+        pinBottomSheet();
         resultsLayout.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.VISIBLE);
         centerRoute();

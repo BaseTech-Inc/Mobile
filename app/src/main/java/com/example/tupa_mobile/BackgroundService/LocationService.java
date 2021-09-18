@@ -7,35 +7,27 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.tupa_mobile.Activities.MainActivity;
-import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 import static com.example.tupa_mobile.Fragments.MapFragment.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
@@ -44,13 +36,21 @@ public class LocationService extends Service{
     private int mInterval = 5000; // 5 seconds by default, can be changed later
     private Handler mHandler;
 
-    private static final int NOTIF_ID = 1;
-    private static final String NOTIF_CHANNEL_ID = "Channel_Id";
-    private static final String NOTIF_CHANNEL_DESC = "Channel_Desc";
+    private static final int MAIN_ID = 1;
+    private static final String MAIN_CHANNEL_ID = "Channel_Id";
+    private static final String MAIN_CHANNEL_NAME = "Channel_Name";
+    private static final String MAIN_CHANNEL_DESC = "Channel_Desc";
+
+    private static final int DYNAMIC_ID = 2;
+    private static final String DYNAMIC_CHANNEL_ID = "DYNAMIC_Id";
+    private static final String DYNAMIC_CHANNEL_NAME = "DYNAMIC_Name";
+    private static final String DYNAMIC_CHANNEL_DESC = "DYNAMIC_Desc";
 
     private static final String TAG = LocationService.class.getSimpleName();
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
+
+    private NotificationManager notificationManager;
 
     @Nullable
     @Override
@@ -96,6 +96,18 @@ public class LocationService extends Service{
                                 latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
 
                                 if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
+                                    //send notification
+
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), DYNAMIC_CHANNEL_ID)
+                                            .setSmallIcon(R.drawable.nibolas)
+                                            .setContentTitle("Cuidado!")
+                                            .setContentText("Você está entrando numa área de risco de alagamento!")
+                                            .setStyle(new NotificationCompat.BigTextStyle()
+                                                    .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                                    notificationManager.notify(DYNAMIC_ID, builder.build());
+
                                     Log.e(TAG, "Você está dentro da área");
                                 }
 
@@ -148,10 +160,10 @@ public class LocationService extends Service{
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
-        createNotificationChannel();
+        createNotificationChannels();
 
-        startForeground(NOTIF_ID, new NotificationCompat.Builder(this,
-                NOTIF_CHANNEL_ID) // don't forget create a notification channel first
+        startForeground(MAIN_ID, new NotificationCompat.Builder(this,
+                MAIN_CHANNEL_ID) // don't forget create a notification channel first
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(getString(R.string.app_name))
@@ -160,19 +172,25 @@ public class LocationService extends Service{
                 .build());
     }
 
-    private void createNotificationChannel() {
+    private void createNotificationChannels() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = NOTIF_CHANNEL_ID;
-            String description = NOTIF_CHANNEL_DESC;
-            int importance = NotificationManager.IMPORTANCE_MIN;
-            NotificationChannel channel = new NotificationChannel(NOTIF_CHANNEL_ID, name, importance);
-            channel.setDescription(description);
+            //Main notification channel
+            NotificationChannel channel = new NotificationChannel(MAIN_CHANNEL_ID, MAIN_CHANNEL_NAME, NotificationManager.IMPORTANCE_MIN);
+            channel.setDescription(MAIN_CHANNEL_DESC);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+
+            //Secondary channel
+            NotificationChannel channel1 = new NotificationChannel(DYNAMIC_CHANNEL_ID, DYNAMIC_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            channel1.setDescription(DYNAMIC_CHANNEL_DESC);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            notificationManager.createNotificationChannel(channel1);
+
         }
     }
 }

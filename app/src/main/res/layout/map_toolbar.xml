@@ -30,6 +30,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/btnRiskAreas"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/map_buttons"
+            android:src="@drawable/ic_add" />
+
+        <ImageButton
+            android:id="@+id/btnAlerts"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/map_buttons"
+            android:src="@drawable/ic_add" />
+
+        <ImageButton
             android:id="@+id/btnSearch"
             android:layout_width="40dp"
             android:layout_height="40dp"
