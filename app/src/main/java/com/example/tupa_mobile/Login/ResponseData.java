@@ -1,4 +1,4 @@
-package com.example.tupa_mobile.Connections;
+package com.example.tupa_mobile.Login;
 
 public class ResponseData {
     String uid, access_token, token_type, expiration;

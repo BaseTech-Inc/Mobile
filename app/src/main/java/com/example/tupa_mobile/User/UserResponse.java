@@ -1,4 +1,4 @@
-package com.example.tupa_mobile.Connections;
+package com.example.tupa_mobile.User;
 
 import java.util.ArrayList;
 

@@ -33,11 +33,11 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
 
     private final CustomAdapterClickListener clickListener;
     private Context context;
-    private ArrayList<UserMarker> userMarkers;
+    private ArrayList<MarkersData> markersData;
 
-    public MarkerAdapter(Context context, ArrayList<UserMarker> userMarkers, final CustomAdapterClickListener clickListener) {
+    public MarkerAdapter(Context context, ArrayList<MarkersData> markersData, final CustomAdapterClickListener clickListener) {
         this.context = context;
-        this.userMarkers = userMarkers;
+        this.markersData = markersData;
         this.clickListener = clickListener;
     }
 
@@ -50,13 +50,13 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
 
     @Override
     public void onBindViewHolder(@NonNull MarkerHolder holder, int position) {
-        UserMarker userMarker = userMarkers.get(position);
-        holder.setDetails(userMarker);
+        MarkersData markerData = markersData.get(position);
+        holder.setDetails(markerData);
     }
 
     @Override
     public int getItemCount() {
-        return this.userMarkers.size();
+        return this.markersData.size();
     }
 
     public class MarkerHolder extends RecyclerView.ViewHolder {
@@ -77,18 +77,28 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
             markerRegion = view.findViewById(R.id.txtLocationRegion);
         }
 
-        public void setDetails(UserMarker userMarker) {
+        public void setDetails(MarkersData markerData) {
 
             drawerCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clickListener.onItemClick(v, userMarker);
+                    clickListener.onItemClick(v, markerData);
                 }
             });
 
-            icoMarker.setImageResource(userMarker.getType());
-            markerName.setText(userMarker.getName());
-            markerRegion.setText(userMarker.getRegion());
+            switch (markerData.getId()){
+                case "1":
+                    icoMarker.setImageResource(R.drawable.day_sunny);
+                case "2":
+                    icoMarker.setImageResource(R.drawable.night_clear);
+                case "3":
+                    icoMarker.setImageResource(R.drawable.arrow_right_icon_white_black_theme_small);
+                default:
+                    icoMarker.setImageResource(R.drawable.nibolas);
+            }
+
+            markerName.setText(markerData.getNome());
+            markerRegion.setText(markerData.getNome());
         }
 
         private Activity unwrap(Context context) {

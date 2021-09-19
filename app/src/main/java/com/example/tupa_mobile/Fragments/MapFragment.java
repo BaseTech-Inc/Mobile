@@ -35,8 +35,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tupa_mobile.Activities.NotificationActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.Markers.CustomAdapterClickListener;
+import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.Markers.UserMarker;
 import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
@@ -50,14 +52,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
@@ -69,7 +68,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,7 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private ViewGroup searchLayout, resultsLayout, mapToolbar;
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
-    private ViewGroup mapFrame;
+    private ViewGroup mapFrame, emptyMarkersLayout;
     private ArrayList<UserMarker> userMarkers;
     private ArrayList<Address> addresses;
     private MarkerAdapter markerAdapter;
@@ -118,6 +116,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private boolean locationPermissionGranted;
 
     private double latitude, longitude;
+    private ArrayList<MarkersData> markersData;
+    private MarkersData markerData;
 
     public MapFragment() {
         // Required empty public constructor
@@ -636,6 +636,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void adjustBottomDrawer(View view) {
         bottomNavigationContainer = view.findViewById(R.id.bottomNavigationContainer);
+        emptyMarkersLayout = view.findViewById(R.id.emptyMarkersLayout);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomNavigationContainer);
         bottomSheetBehavior.setPeekHeight(120);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -671,12 +672,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                  */
             }
         });
+        markersData = new ArrayList<>();
+        Connection con = new Connection();
+        markersData = con.getMarkers("1");
+
         bottomDrawerRecycler = view.findViewById(R.id.savedLocationsRecycler);
         bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        userMarkers = new ArrayList<>();
-        markerAdapter = new MarkerAdapter(getContext(), userMarkers, this);
-        bottomDrawerRecycler.setAdapter(markerAdapter);
-        createViews();
+
+        if(markersData != null){
+            markerAdapter = new MarkerAdapter(getContext(), markersData, this);
+            bottomDrawerRecycler.setAdapter(markerAdapter);
+        }
+        else{
+            emptyMarkersLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void expandSearchLayout() {
@@ -790,10 +799,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     @Override
-    public void onItemClick(View v, UserMarker userMarker) {
+    public void onItemClick(View v, MarkersData markerData) {
         destinationMarker = map.addMarker(new MarkerOptions().position(userMarker.getLatLng()).title(userMarker.getName()));
-        this.userMarker = userMarker;
-        userMarker.setClicked(true);
+        this.markerData = markerData;
+        markerData.setClicked(true);
         expandSearchLayout();
         etTo.setText(userMarker.getRegion());
         pinBottomSheet();

@@ -1,23 +1,17 @@
 package com.example.tupa_mobile.Connections;
 
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
+import com.example.tupa_mobile.Login.LoginResponse;
+import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
-import com.example.tupa_mobile.Route.Route;
 import com.example.tupa_mobile.Route.RouteResponse;
+import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -91,5 +85,10 @@ public interface API {
     Call<LoginResponse> postLogin(
             @Query ("email") String email,
             @Query ("password") String password
+    );
+
+    @GET("/api/v1/Marcadores")
+    Call<GetMarkersResponse> getMarkers(
+            @Query("UserId") String userId
     );
 }

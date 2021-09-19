@@ -1,26 +1,21 @@
 package com.example.tupa_mobile.User;
 
 public class User {
+    private String id, username, email, password, contaBancaria, applicationUserID;
+    private UserType tipoUsuario;
 
-    private int userId;
-    private String name, email, password, bankAccount;
-    private boolean verified;
-
-    public User(int userId, String name, String email, String password, String bankAccount, boolean verified) {
-        this.userId = userId;
-        this.name = name;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
-        this.bankAccount = bankAccount;
-        this.verified = verified;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -31,11 +26,15 @@ public class User {
         return password;
     }
 
-    public String getBankAccount() {
-        return bankAccount;
+    public UserType getTipoUsuario() {
+        return tipoUsuario;
     }
 
-    public boolean isVerified() {
-        return verified;
+    public String getContaBancaria() {
+        return contaBancaria;
+    }
+
+    public String getApplicationUserID() {
+        return applicationUserID;
     }
 }

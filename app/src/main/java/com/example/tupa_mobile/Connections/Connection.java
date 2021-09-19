@@ -15,11 +15,15 @@ import com.example.tupa_mobile.Activities.MainActivity;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
+import com.example.tupa_mobile.Login.LoginResponse;
+import com.example.tupa_mobile.Markers.GetMarkersResponse;
+import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Route.Metadata;
 import com.example.tupa_mobile.Route.RouteResponse;
+import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.CurrentWeather;
 import com.example.tupa_mobile.WeatherAPI.Day;
 import com.example.tupa_mobile.WeatherAPI.Forecast;
@@ -42,6 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Connection {
 
+    public static final String TAG = "Conexao";
     private ForecastDayAdapter adapter;
     private String weatherApiKey = "0253a3a9322d4be2a5b174410211404";
     private String openApiKey = "601d15071f30c2f71f3e59a0df95e8a1";
@@ -67,6 +72,7 @@ public class Connection {
     private ArrayList<GeoCodingFeatures> geoCodingFeaturesArrayList;
     private GeoCodingFeatures geoCodingFeatures;
     private GeoCodingProperties geoCodingProperties;
+    private ArrayList<MarkersData> markersData;
 
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
@@ -269,7 +275,7 @@ public class Connection {
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable t) {
 
-                Log.d("failure", String.valueOf(t));
+                Log.e(TAG, String.valueOf(t));
 
             }
         });
@@ -319,9 +325,9 @@ public class Connection {
         call.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                Log.d("Conexao", response.message());
+                Log.d(TAG, response.message());
                 if (!response.isSuccessful()) {
-                    Log.d("Conexao", String.valueOf(response.isSuccessful()));
+                    Log.d(TAG, String.valueOf(response.isSuccessful()));
                     return;
                 }
                 Intent it = new Intent(context, LoginActivity.class);
@@ -363,5 +369,37 @@ public class Connection {
             }
         });
 
+    }
+
+    public ArrayList<MarkersData> getMarkers(String userId){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetMarkersResponse> call = api.getMarkers(userId);
+
+        call.enqueue(new Callback<GetMarkersResponse>() {
+            @Override
+            public void onResponse(Call<GetMarkersResponse> call, Response<GetMarkersResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.d(TAG, String.valueOf(response.isSuccessful()));
+                    return;
+                }
+                GetMarkersResponse markersResponse = response.body();
+                if (markersResponse.getData() == null){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                markersData = markersResponse.getData();
+            }
+
+            @Override
+            public void onFailure(Call<GetMarkersResponse> call, Throwable t) {
+
+            }
+        });
+        return markersData;
     }
 }
