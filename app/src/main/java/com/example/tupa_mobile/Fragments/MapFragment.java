@@ -76,14 +76,14 @@ import java.util.List;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, CustomAdapterClickListener {
 
     private static final String TAG = Localization.class.getSimpleName();
-    public static final int MAP_TOP_ZOOM_PADDING = 1000;
+    public static final int ROUTE_TOP_ZOOM_PADDING = 1000;
     public static final int FASTEST_REQUEST_INTERVAL = 5;
     public static final int REQUEST_INTERVAL = 30;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int DEFAULT_ZOOM = 15;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    public static final int MAP_BOTTOM_ZOOM_PADDING = 300;
+    public static final int ROUTE_BOTTOM_ZOOM_PADDING = 300;
     private boolean BOTTOM_SHEET_DRAGGABLE = true;
 
     private LinearLayout bottomNavigationContainer;
@@ -217,8 +217,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        marker = map.addMarker(new MarkerOptions().position(defaultLocation));
-        marker.setVisible(false);
+        createMarker();
     }
 
     private void getDeviceLocation() {
@@ -307,6 +306,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    private Marker createMarker(){
+        marker = map.addMarker(new MarkerOptions().position(defaultLocation));
+        marker.setVisible(false);
+        return marker;
     }
 
     @Override
@@ -423,7 +428,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         btnRiskAreas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pinBottomSheet();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(new LatLng(-23.6182683, -46.639479));
+                builder.include(new LatLng(-24.6182683, -47.639479));
+                LatLngBounds bounds = builder.build();
 
+                addRiskMarkers();
+
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+                map.animateCamera(cu);
             }
         });
 
@@ -618,6 +632,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         BOTTOM_SHEET_DRAGGABLE = true;
     }
 
+    private void addRiskMarkers(){
+        map.addMarker(new MarkerOptions().position(new LatLng(-23.6182683, -46.639479)));
+        map.addMarker(new MarkerOptions().position(new LatLng(-24.6182683, -47.639479)));
+    }
+
     private void fillAddresses(){
         addresses.add(new Address("Alameda dos Guainumbis", "Planalto Paulista - SP", R.drawable.stormy));
         addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
@@ -695,9 +714,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void closeSearchLayout(){
         searchLayout.setVisibility(View.GONE);
+        etFrom.setFocusable(false);
         mapToolbar.setVisibility(View.VISIBLE);
         confirmMarkerButton.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.GONE);
+        map.setPadding(0,0,0,0);
         unpinBottomSheet();
     }
 
@@ -712,6 +733,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 if(map != null){
                     map.clear();
                 }
+                createMarker();
             }
         });
     }
@@ -747,7 +769,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             LatLngBounds bounds = builder.build();
 
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
-            map.setPadding(0, MAP_TOP_ZOOM_PADDING, 0, MAP_BOTTOM_ZOOM_PADDING);
+            map.setPadding(0, ROUTE_TOP_ZOOM_PADDING, 0, ROUTE_BOTTOM_ZOOM_PADDING);
             map.animateCamera(cu);
 
         }
