@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Connections;
 
+import com.example.tupa_mobile.Alerts.GetAlertResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
@@ -90,5 +91,12 @@ public interface API {
     @GET("/api/v1/Marcadores")
     Call<GetMarkersResponse> getMarkers(
             @Query("UserId") String userId
+    );
+
+    @GET("/api/v1/Alertas")
+    Call<GetAlertResponse> getAlerts(
+            @Query("year") int year,
+            @Query("month") int month,
+            @Query("day") int day
     );
 }

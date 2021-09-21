@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tupa_mobile.Activities.NotificationActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
+import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.Markers.CustomAdapterClickListener;
@@ -118,6 +119,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private double latitude, longitude;
     private ArrayList<MarkersData> markersData;
     private MarkersData markerData;
+    private ArrayList<AlertData> alertsData;
+    private AlertData alertData;
 
     public MapFragment() {
         // Required empty public constructor
@@ -429,22 +432,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             @Override
             public void onClick(View v) {
                 pinBottomSheet();
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                builder.include(new LatLng(-23.6182683, -46.639479));
-                builder.include(new LatLng(-24.6182683, -47.639479));
-                LatLngBounds bounds = builder.build();
-
                 addRiskMarkers();
-
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
-                map.animateCamera(cu);
             }
         });
 
         btnAlerts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                pinBottomSheet();
+                addAlertMarkers();
             }
         });
 
@@ -635,6 +631,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void addRiskMarkers(){
         map.addMarker(new MarkerOptions().position(new LatLng(-23.6182683, -46.639479)));
         map.addMarker(new MarkerOptions().position(new LatLng(-24.6182683, -47.639479)));
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(new LatLng(-23.6182683, -46.639479));
+        builder.include(new LatLng(-24.6182683, -47.639479));
+        LatLngBounds bounds = builder.build();
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+        map.animateCamera(cu);
+    }
+
+    private void addAlertMarkers() {
+        Connection con = new Connection();
+        alertsData = con.getAlerts(2021,1,1);
+        if (alertsData != null){
+            for(AlertData alertData : alertsData){
+                map.addMarker(new MarkerOptions().position(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude())));
+            }
+        }
+        else Log.e(TAG, "There are no Alerts");
     }
 
     private void fillAddresses(){

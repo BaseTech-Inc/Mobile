@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.LoginActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.Alerts.AlertData;
+import com.example.tupa_mobile.Alerts.GetAlertResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
@@ -73,6 +75,7 @@ public class Connection {
     private GeoCodingFeatures geoCodingFeatures;
     private GeoCodingProperties geoCodingProperties;
     private ArrayList<MarkersData> markersData;
+    private ArrayList<AlertData> alertsData;
 
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
@@ -401,5 +404,40 @@ public class Connection {
             }
         });
         return markersData;
+    }
+
+    public ArrayList<AlertData> getAlerts(int year, int month, int day){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetAlertResponse> call = api.getAlerts(year, month, day);
+
+        call.enqueue(new Callback<GetAlertResponse>() {
+            @Override
+            public void onResponse(Call<GetAlertResponse> call, Response<GetAlertResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.d(TAG, String.valueOf(response.isSuccessful()));
+                    return;
+                }
+                GetAlertResponse getAlertResponse = response.body();
+                if (getAlertResponse == null){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                alertsData = getAlertResponse.getData();
+
+            }
+
+            @Override
+            public void onFailure(Call<GetAlertResponse> call, Throwable t) {
+
+            }
+        });
+
+        return alertsData;
     }
 }
