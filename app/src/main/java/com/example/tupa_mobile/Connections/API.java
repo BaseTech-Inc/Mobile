@@ -13,6 +13,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -90,11 +92,13 @@ public interface API {
 
     @GET("/api/v1/Marcadores")
     Call<GetMarkersResponse> getMarkers(
+            @Header("Authorization") String access_token,
             @Query("UserId") String userId
     );
 
     @GET("/api/v1/Alertas")
     Call<GetAlertResponse> getAlerts(
+            @Header("Authorization") String access_token,
             @Query("year") int year,
             @Query("month") int month,
             @Query("day") int day

@@ -643,13 +643,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void addAlertMarkers() {
         Connection con = new Connection();
-        alertsData = con.getAlerts(2021,1,1);
-        if (alertsData != null){
-            for(AlertData alertData : alertsData){
-                map.addMarker(new MarkerOptions().position(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude())));
-            }
-        }
-        else Log.e(TAG, "There are no Alerts");
+        con.getAlerts(map,2021,9,21);
     }
 
     private void fillAddresses(){
@@ -706,20 +700,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                  */
             }
         });
-        markersData = new ArrayList<>();
-        Connection con = new Connection();
-        markersData = con.getMarkers("1");
 
         bottomDrawerRecycler = view.findViewById(R.id.savedLocationsRecycler);
         bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        if(markersData != null){
-            markerAdapter = new MarkerAdapter(getContext(), markersData, this);
-            bottomDrawerRecycler.setAdapter(markerAdapter);
-        }
-        else{
-            emptyMarkersLayout.setVisibility(View.VISIBLE);
-        }
+        Connection con = new Connection();
+        con.getMarkers(getContext(), bottomDrawerRecycler, emptyMarkersLayout, this, "1");
     }
 
     private void expandSearchLayout() {

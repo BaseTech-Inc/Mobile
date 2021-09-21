@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +21,9 @@ import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.Login.LoginResponse;
+import com.example.tupa_mobile.Markers.CustomAdapterClickListener;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
+import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
@@ -35,6 +40,13 @@ import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -76,7 +88,7 @@ public class Connection {
     private GeoCodingProperties geoCodingProperties;
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
-
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiIyNDQ5ZGRkZi1lMWZjLTRhMGMtYjFmNS1hYjIxMzQxZTUyZTUiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyMjU3NjU2LCJleHAiOjE2MzIyNjEyNTYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.auhLHj9MrB67mhBOxTU8YD_A_PU9mSP-2EdrLKWT1h0";
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
 
@@ -374,39 +386,44 @@ public class Connection {
 
     }
 
-    public ArrayList<MarkersData> getMarkers(String userId){
+    public void getMarkers(Context context, RecyclerView bottomDrawerRecycler, ViewGroup emptyMarkersLayout, CustomAdapterClickListener clickListener, String userId){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
 
-        Call<GetMarkersResponse> call = api.getMarkers(userId);
+        Call<GetMarkersResponse> call = api.getMarkers("Bearer " + access_token, userId);
 
         call.enqueue(new Callback<GetMarkersResponse>() {
             @Override
             public void onResponse(Call<GetMarkersResponse> call, Response<GetMarkersResponse> response) {
                 if (!response.isSuccessful()) {
-                    Log.d(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
                     return;
                 }
                 GetMarkersResponse markersResponse = response.body();
-                if (markersResponse.getData() == null){
-                    Log.d(TAG, "Data attribute is null");
+                if (markersResponse.getData() == null || markersResponse.getData().size() < 1){
+                    emptyMarkersLayout.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "Data attribute is null or empty");
                     return;
                 }
                 markersData = markersResponse.getData();
+                MarkerAdapter markerAdapter = new MarkerAdapter(context, markersData, clickListener);
+                bottomDrawerRecycler.setAdapter(markerAdapter);
             }
 
             @Override
             public void onFailure(Call<GetMarkersResponse> call, Throwable t) {
-
+                Log.e(TAG, "Marker connection failed");
+                emptyMarkersLayout.setVisibility(View.VISIBLE);
             }
         });
-        return markersData;
     }
 
-    public ArrayList<AlertData> getAlerts(int year, int month, int day){
+    public void getAlerts(GoogleMap map, int year, int month, int day){
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
@@ -414,13 +431,16 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetAlertResponse> call = api.getAlerts(year, month, day);
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
 
         call.enqueue(new Callback<GetAlertResponse>() {
             @Override
             public void onResponse(Call<GetAlertResponse> call, Response<GetAlertResponse> response) {
+
                 if (!response.isSuccessful()) {
-                    Log.d(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
                     return;
                 }
                 GetAlertResponse getAlertResponse = response.body();
@@ -428,8 +448,15 @@ public class Connection {
                     Log.d(TAG, "Data attribute is null");
                     return;
                 }
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 alertsData = getAlertResponse.getData();
-
+                for(AlertData alertData : alertsData){
+                    builder.include(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude()));
+                    map.addMarker(new MarkerOptions().position(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude())));
+                }
+                LatLngBounds bounds = builder.build();
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+                map.animateCamera(cu);
             }
 
             @Override
@@ -437,7 +464,5 @@ public class Connection {
 
             }
         });
-
-        return alertsData;
     }
 }
