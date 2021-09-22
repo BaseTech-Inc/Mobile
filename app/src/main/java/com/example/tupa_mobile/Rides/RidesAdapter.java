@@ -53,8 +53,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesHolder>
         }
 
         void setDetails(Rides rides){
-            txtDistance.setText(rides.getDistance());
-            txtTime.setText(rides.getTime());
+            txtDistance.setText(rides.getDistanciaPercurso());
+            int time = (int) (Float.parseFloat(rides.getTempoChegada()) - Float.parseFloat(rides.getTempoPartida()));
+            txtTime.setText(time);
         }
     }
 

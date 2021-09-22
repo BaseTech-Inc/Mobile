@@ -10,19 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.R;
-
-import java.util.ArrayList;
-
-import com.example.tupa_mobile.Rides.Rides;
-import com.example.tupa_mobile.Rides.RidesAdapter;
 
 
 public class RidesFragment extends Fragment {
 
     private RecyclerView weekRecyclerView, monthRecyclerView, pastRecyclerView;
-    private RidesAdapter adapter;
-    private ArrayList<Rides> ride;
+    public static final String TAG = "Rides";
 
     public RidesFragment() {
         // Required empty public constructor
@@ -44,27 +39,60 @@ public class RidesFragment extends Fragment {
         monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
         pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
 
-        ride = new ArrayList<>();
 
-        for(int i=0; i<3; i++) {
-            createListData("22Km","09:55-11:05 (1h 9min)",R.drawable.ic_map );
-        }
 
-        adapter = new RidesAdapter(view.getContext(), ride);
+      weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        weekRecyclerView.setAdapter(adapter);
-        weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        monthRecyclerView.setAdapter(adapter);
-        monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        pastRecyclerView.setAdapter(adapter);
-        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+      monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+      pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        Connection connection = new Connection();
+        connection.getRides(weekRecyclerView, view.getContext());
+
+
+
+
+
+
+//        ride = new ArrayList<>();
+//
+//        for(int i=0; i<3; i++) {
+//            createListData("tempoChegada:" +ridees.getTempoChegada(),"tempoPartida:" +ridees.getTempoPartida(),R.drawable.ic_map );
+//        }
+//
+//        adapter = new RidesAdapter(view.getContext(), ride);
+//
+//        weekRecyclerView.setAdapter(adapter);
+//        weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        monthRecyclerView.setAdapter(adapter);
+//        monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        pastRecyclerView.setAdapter(adapter);
+//        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         return view;
     }
 
-    public void createListData(String distance, String time, int map) {
-        // This method adds data to the recyclerView
-        Rides rides = new Rides(distance, time, map);
-        ride.add(rides);
-    }
+
 }
+
+//
+// call.enqueue(new Callback<List<Rides>>() {
+//@Override
+//public void onResponse(Call<List<Rides>> call, Response<List<Rides>> response) {
+//        if (!response.isSuccessful()){
+//        return;
+//        }
+//        List<Rides> rides =response.body();
+//        ride = new ArrayList<>();
+//
+//        for(int i=0; i<3; i++) {
+//        createListData("tempoChegada:" +ridees.getTempoChegada(),"tempoPartida:" +ridees.getTempoPartida(), ridees.getDistanciaPercurso() );
+//        }
+//        }
+//
+//@Override
+//public void onFailure(Call<List<Rides>> call, Throwable t) {
+//
+//        }
+//        });

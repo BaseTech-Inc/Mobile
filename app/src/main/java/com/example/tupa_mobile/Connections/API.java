@@ -5,6 +5,7 @@ import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
+import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
@@ -102,5 +103,9 @@ public interface API {
             @Query("year") int year,
             @Query("month") int month,
             @Query("day") int day
+    );
+    @GET("api/v1/HistoricoUsuario")
+    Call <GetRidesResponse> getRides(
+            @Header("Authorization") String key
     );
 }

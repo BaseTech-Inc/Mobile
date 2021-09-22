@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.LoginActivity;
@@ -28,6 +29,8 @@ import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
+import com.example.tupa_mobile.Rides.GetRidesResponse;
+import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.Route.Metadata;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
@@ -88,7 +91,7 @@ public class Connection {
     private GeoCodingProperties geoCodingProperties;
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiIyNDQ5ZGRkZi1lMWZjLTRhMGMtYjFmNS1hYjIxMzQxZTUyZTUiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyMjU3NjU2LCJleHAiOjE2MzIyNjEyNTYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.auhLHj9MrB67mhBOxTU8YD_A_PU9mSP-2EdrLKWT1h0";
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiJmNTdkZmQ0Zi1lYzVlLTQ1NWEtOTRkOS0yODIxMWI5YzE5MTkiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyMzMwNjYxLCJleHAiOjE2MzIzMzQyNjEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.xGIyZRjfT6xQFBxpkAGeSTFc02SLdZEEq0kTiQCPUcI";
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
 
@@ -461,6 +464,42 @@ public class Connection {
 
             @Override
             public void onFailure(Call<GetAlertResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getRides(RecyclerView weekRecyclerView, Context context){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+
+        call.enqueue(new Callback<GetRidesResponse>() {
+            @Override
+            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetRidesResponse getRidesResponse = response.body();
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+
+                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
+                weekRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
 
             }
         });
