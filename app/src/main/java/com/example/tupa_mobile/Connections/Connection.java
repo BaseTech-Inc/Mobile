@@ -1,8 +1,10 @@
 package com.example.tupa_mobile.Connections;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +32,7 @@ import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
+import com.example.tupa_mobile.R;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.Route.Metadata;
@@ -91,7 +95,9 @@ public class Connection {
     private GeoCodingProperties geoCodingProperties;
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiJmNTdkZmQ0Zi1lYzVlLTQ1NWEtOTRkOS0yODIxMWI5YzE5MTkiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyMzMwNjYxLCJleHAiOjE2MzIzMzQyNjEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.xGIyZRjfT6xQFBxpkAGeSTFc02SLdZEEq0kTiQCPUcI";
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiIyNmNjNDZjNS1hZWYwLTQ4MTEtYmRkMS0yY2JhNDZjOGU1ZGQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyNDEyMTcxLCJleHAiOjE2MzI0MTU3NzEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.NVg5BFo5-xh2Ixaf1N9w45Qdh8rQ_XORtX0ATbsCLyM";
+    private boolean isRiskNotificationActive = false;
+    private boolean isAlertNotificationActive = false;
 
     public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
 
@@ -405,6 +411,7 @@ public class Connection {
                     Log.e(TAG, String.valueOf(response.isSuccessful()));
                     Log.e(TAG, response.message());
                     Log.e(TAG, response.toString());
+                    emptyMarkersLayout.setVisibility(View.VISIBLE);
                     return;
                 }
                 GetMarkersResponse markersResponse = response.body();
@@ -469,6 +476,53 @@ public class Connection {
         });
     }
 
+    public void getAlertsList(Context context, int year, int month, int day, double longitude, double latitude, int ALERT_ID, String ALERT_CHANNEL_ID, NotificationManager notificationManager){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
+
+        call.enqueue(new Callback<GetAlertResponse>() {
+            @Override
+            public void onResponse(Call<GetAlertResponse> call, Response<GetAlertResponse> response) {
+
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlertResponse getAlertResponse = response.body();
+                if (getAlertResponse == null){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                alertsData = getAlertResponse.getData();
+                double radius = 0.01;
+
+                for(AlertData alertData : alertsData){
+                    double centerLongitude = alertData.getPonto().getLongitude();
+                    double centerLatitude = alertData.getPonto().getLatitude();
+
+                    if(Math.pow((longitude - centerLongitude), 2) + Math.pow((latitude - centerLatitude), 2) < Math.pow(radius, 2)){
+                        saveInsideFlood(context,"CONTAINS",true);
+                        return;
+                    }
+                }
+                saveInsideFlood(context,"CONTAINS",false);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlertResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void getRides(RecyclerView weekRecyclerView, Context context){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
@@ -503,5 +557,21 @@ public class Connection {
 
             }
         });
+    }
+
+    public void saveInsideFlood(Context context, String key, boolean value){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value).apply();
+
+    }
+
+    public boolean getInsideFlood(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+        return sp.getBoolean(key, false);
+
     }
 }

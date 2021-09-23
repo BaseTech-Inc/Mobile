@@ -5,7 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -19,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -46,12 +49,18 @@ public class LocationService extends Service{
     private static final String DYNAMIC_CHANNEL_NAME = "DYNAMIC_Name";
     private static final String DYNAMIC_CHANNEL_DESC = "DYNAMIC_Desc";
 
+    private static final int ALERT_ID = 3;
+    private static final String ALERT_CHANNEL_ID = "ALERT_Id";
+    private static final String ALERT_CHANNEL_NAME = "ALERT_Name";
+    private static final String ALERT_CHANNEL_DESC = "ALERT_Desc";
+
     private static final String TAG = LocationService.class.getSimpleName();
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
 
     private NotificationManager notificationManager;
-    private boolean isNotificationActive = false;
+    private boolean isRiskNotificationActive = false;
+    private boolean isAlertNotificationActive = false;
 
     @Nullable
     @Override
@@ -63,8 +72,8 @@ public class LocationService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Do service here
         mHandler = new Handler();
-        startRepeatingTask();
         startForeground();
+        startRepeatingTask();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -81,47 +90,17 @@ public class LocationService extends Service{
                         locationResult.addOnSuccessListener(new OnSuccessListener<Location>() {
                             @Override
                             public void onSuccess(Location location) {
-
                                 if(location == null){
                                     return;
                                 }
-
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                Log.d(TAG, latitude + ", " + longitude);
-
-                                ArrayList<LatLng> latLngs = new ArrayList<>();
-                                latLngs.add(new LatLng(-23.61667113533345, -46.648964070576255));
-                                latLngs.add(new LatLng(-23.613538121785556, -46.63819563711089));
-                                latLngs.add(new LatLng(-23.61926633610226, -46.63926737693445));
-                                latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
-
-                                if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
-                                        //send notification
-                                    if (!isNotificationActive) {
-                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), DYNAMIC_CHANNEL_ID)
-                                                .setSmallIcon(R.drawable.nibolas)
-                                                .setContentTitle("Cuidado!")
-                                                .setContentText("Você está entrando numa área de risco de alagamento!")
-                                                .setStyle(new NotificationCompat.BigTextStyle()
-                                                        .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
-                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                                        notificationManager.notify(DYNAMIC_ID, builder.build());
-                                        Log.e(TAG, "Você está dentro da área");
-                                        isNotificationActive = true;
-                                    }
-                                }
-                                else {
-                                    isNotificationActive = false;
-                                }
+                                checkRiskArea(location);
+                                checkAlertArea(location);
                             }
                         });
                     }
                 } catch (SecurityException e)  {
                     Log.e("Exception: %s", e.getMessage(), e);
                 }
-                Log.d("Teste", "ta funfando");
 
                 //this function can change value of mInterval.
             } finally {
@@ -131,6 +110,66 @@ public class LocationService extends Service{
             }
         }
     };
+
+    private void checkAlertArea(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        Connection connection = new Connection();
+        connection.getAlertsList(getBaseContext(), 2021, 9, 21, longitude, latitude, ALERT_ID, ALERT_CHANNEL_ID, notificationManager);
+
+        if (getInsideFlood(getBaseContext(), "CONTAINS")) {
+            if (!getInsideFlood(getBaseContext(), "NOTIFICATION")){
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), ALERT_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.nibolas)
+                        .setContentTitle("Cuidado!")
+                        .setContentText("Essa área está alagada!")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                notificationManager.notify(ALERT_ID, builder.build());
+                Log.e(TAG, "Área Alagada");
+                saveInsideFlood(getBaseContext(), "NOTIFICATION", true);
+            }
+        }
+        if (!getInsideFlood(getBaseContext(), "CONTAINS")){
+            saveInsideFlood(getBaseContext(), "NOTIFICATION", false);
+        }
+    }
+
+    private void checkRiskArea(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        latLngs.add(new LatLng(-23.61667113533345, -46.648964070576255));
+        latLngs.add(new LatLng(-23.613538121785556, -46.63819563711089));
+        latLngs.add(new LatLng(-23.61926633610226, -46.63926737693445));
+        latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
+
+        if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
+                //send notification
+            if (!isRiskNotificationActive) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), DYNAMIC_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.nibolas)
+                        .setContentTitle("Cuidado!")
+                        .setContentText("Você está entrando numa área de risco de alagamento!")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                notificationManager.notify(DYNAMIC_ID, builder.build());
+                Log.e(TAG, "Você está dentro da área");
+                isRiskNotificationActive = true;
+            }
+        }
+        else {
+            isRiskNotificationActive = false;
+        }
+    }
+
+
 
     private void getLocationPermission() {
         /*
@@ -191,10 +230,29 @@ public class LocationService extends Service{
             //Secondary channel
             NotificationChannel channel1 = new NotificationChannel(DYNAMIC_CHANNEL_ID, DYNAMIC_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
             channel1.setDescription(DYNAMIC_CHANNEL_DESC);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             notificationManager.createNotificationChannel(channel1);
 
+            //Alert channel
+            NotificationChannel channel2 = new NotificationChannel(ALERT_CHANNEL_ID, ALERT_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            channel2.setDescription(ALERT_CHANNEL_DESC);
+            notificationManager.createNotificationChannel(channel2);
+
         }
+    }
+
+    public void saveInsideFlood(Context context, String key, boolean value){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value).apply();
+
+    }
+
+    public boolean getInsideFlood(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+        return sp.getBoolean(key, false);
+
     }
 }
