@@ -8,7 +8,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -38,12 +40,23 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
     private EditText etSearch;
+    private String email, password;
+    private SharedPreferences sp;
     private int ItemsList = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+        email = sp.getString("email", null);
+        password = sp.getString("password", null);
+
+        if(email != null || email != null){
+            Log.d("Deus", sp.getString("email", email));
+            Log.d("Deus", sp.getString("password", password));
+        }
 
         bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnNavigationItemSelectedListener(navListener);

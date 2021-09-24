@@ -1,5 +1,7 @@
 package com.example.tupa_mobile.Connections;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -95,6 +97,7 @@ public class Connection {
     private GeoCodingProperties geoCodingProperties;
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
+    private SharedPreferences sp;
     private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiIyNmNjNDZjNS1hZWYwLTQ4MTEtYmRkMS0yY2JhNDZjOGU1ZGQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyNDEyMTcxLCJleHAiOjE2MzI0MTU3NzEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.NVg5BFo5-xh2Ixaf1N9w45Qdh8rQ_XORtX0ATbsCLyM";
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
@@ -365,7 +368,6 @@ public class Connection {
             }
         });
     }
-
     public void loginUser(Context context, String email, String password){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
@@ -379,6 +381,12 @@ public class Connection {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
+                    sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("email", email);
+                    editor.putString("password", password);
+                    editor.apply();
+
                     Intent it = new Intent(context, MainActivity.class);
                     ((Activity)context).startActivity(it);
                     ((Activity)context).finish();

@@ -5,7 +5,9 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -30,12 +32,23 @@ public class OnBoardingActivity extends AppCompatActivity {
     private TextView skip;
     private ViewPager2 viewPager2;
     private ImageView[] dots;
+    private String email;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_boarding);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        sp = getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+        email = sp.getString("email", null);
+
+        if(email != null)
+        {
+            Intent it = new Intent(OnBoardingActivity.this, MainActivity.class);
+            startActivity(it);
+        }else{}
 
         dotsLayout = findViewById(R.id.dots_layout);
         getStarted = findViewById(R.id.start_btn);

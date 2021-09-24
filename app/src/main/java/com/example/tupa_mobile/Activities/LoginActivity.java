@@ -3,6 +3,7 @@ package com.example.tupa_mobile.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button volt_log, cont_log;
     private EditText email_et_log, password_et_log;
     private String email, password;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
         email_et_log = findViewById(R.id.email_et_log);
         password_et_log = findViewById(R.id.senha_et_log);
 
+        sp = getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+        email = sp.getString("email", null);
+        password = sp.getString("password", null);
 
         volt_log.setOnClickListener(new View.OnClickListener() {
             @Override
