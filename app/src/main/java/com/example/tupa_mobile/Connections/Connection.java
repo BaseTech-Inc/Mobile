@@ -98,7 +98,7 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiIyNmNjNDZjNS1hZWYwLTQ4MTEtYmRkMS0yY2JhNDZjOGU1ZGQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOWIxMzk0MGEtMTI0NS00YWM4LTg0MjEtZGExMzFkODEzNTc4IiwibmJmIjoxNjMyNDEyMTcxLCJleHAiOjE2MzI0MTU3NzEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.NVg5BFo5-xh2Ixaf1N9w45Qdh8rQ_XORtX0ATbsCLyM";
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiI3NDYwNDY5Mi00ZmFjLTRhNDctODk0MS1kNjZjM2U4NWQ4ZTQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiYTFmZjU2MzEtMTdhZS00NjY2LTljNWQtMjUyYTcxNDcxMGFmIiwibmJmIjoxNjMyOTMyMzY3LCJleHAiOjE2MzMwMTg3NjcsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.kQ1M7sgEdNmzjsSafE1hsSF64HFl2nhWTBcXZiVq3gw";
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
@@ -558,6 +558,76 @@ public class Connection {
 
                 RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
                 weekRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+    public void getRidesMonth(RecyclerView monthRecyclerView, Context context){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+
+        call.enqueue(new Callback<GetRidesResponse>() {
+            @Override
+            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetRidesResponse getRidesResponse = response.body();
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+
+                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
+                monthRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+    public void getRidesPast(RecyclerView pastRecyclerView, Context context){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+
+        call.enqueue(new Callback<GetRidesResponse>() {
+            @Override
+            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetRidesResponse getRidesResponse = response.body();
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+
+                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
+                pastRecyclerView.setAdapter(adapter);
             }
 
             @Override

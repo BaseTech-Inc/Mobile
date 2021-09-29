@@ -49,6 +49,8 @@ public class RidesFragment extends Fragment {
 
         Connection connection = new Connection();
         connection.getRides(weekRecyclerView, view.getContext());
+        connection.getRidesMonth(monthRecyclerView, view.getContext());
+        connection.getRidesPast(pastRecyclerView, view.getContext());
 
 
 
