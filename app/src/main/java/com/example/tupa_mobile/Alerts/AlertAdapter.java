@@ -16,9 +16,9 @@ import java.util.ArrayList;
 public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertHolder> {
 
     private Context context;
-    private ArrayList<Alert> alerts;
+    private ArrayList<AlerBairro> alerts;
 
-    public AlertAdapter(Context context, ArrayList<Alert> alerts) {
+    public AlertAdapter(Context context, ArrayList<AlerBairro> alerts) {
         this.context = context;
         this.alerts = alerts;
     }
@@ -33,7 +33,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertHolder>
 
     @Override
     public void onBindViewHolder(@NonNull AlertHolder holder, int position) {
-        Alert alert = alerts.get(position);
+        AlerBairro alert = alerts.get(position);
         holder.setDetails(alert);
     }
 
@@ -54,9 +54,9 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertHolder>
             txtAlertAddress = itemView.findViewById(R.id.txtNotificationAddress);
         }
 
-        void setDetails(Alert alert){
-            txtAlertTitle.setText(alert.getTitle());
-            txtAlertAddress.setText(alert.getAddress());
+        void setDetails(AlerBairro alert){
+            txtAlertTitle.setText(alert.getDescricao());
+           txtAlertAddress.setText(alert.getDistricts().getNome());
         }
     }
 }

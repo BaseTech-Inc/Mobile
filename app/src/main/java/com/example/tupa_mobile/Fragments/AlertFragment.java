@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.tupa_mobile.Alerts.Alert;
+import com.example.tupa_mobile.Alerts.AlerBairro;
+import com.example.tupa_mobile.Alerts.AlerBairro;
 import com.example.tupa_mobile.Alerts.AlertAdapter;
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.SettingsPage.Settings;
 import com.example.tupa_mobile.WeatherAPI.ForecastDay;
 import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
@@ -23,8 +25,7 @@ import java.util.ArrayList;
 public class AlertFragment extends Fragment {
 
     private RecyclerView weekRecyclerView, monthRecyclerView, pastRecyclerView;
-    private AlertAdapter adapter;
-    private ArrayList<Alert> alerts;
+    public static final String TAG = "AlerBairro";
 
     public AlertFragment() {
         // Required empty public constructor
@@ -46,27 +47,23 @@ public class AlertFragment extends Fragment {
         monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
         pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
 
-        alerts = new ArrayList<>();
-
-        for(int i=0; i<3; i++) {
-            createListData("Alerta de Alagamento", "Avenida Bla Bli Blop 333");
-        }
-
-        adapter = new AlertAdapter(view.getContext(), alerts);
-
-        weekRecyclerView.setAdapter(adapter);
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        monthRecyclerView.setAdapter(adapter);
+
         monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        pastRecyclerView.setAdapter(adapter);
+
         pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        Connection connection = new Connection();
+        connection.getAlerBairro(weekRecyclerView, view.getContext());
+        connection.getAlerBairroMonth(monthRecyclerView, view.getContext());
+        connection.getAlerBairroPast(pastRecyclerView, view.getContext());
 
         return view;
     }
 
-    public void createListData(String date, String desc) {
-        // This method adds data to the recyclerView
-        Alert alert = new Alert(date, desc);
-        alerts.add(alert);
-    }
+//    public void createListData(String date, String desc) {
+//        // This method adds data to the recyclerView
+//        AlerBairro alert = new AlerBairro(date, desc);
+//        alerts.add(alert);
+//    }
 }

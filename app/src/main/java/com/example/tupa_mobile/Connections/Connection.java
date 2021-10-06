@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.LoginActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
+import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
@@ -58,6 +60,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -98,7 +101,7 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiI3NDYwNDY5Mi00ZmFjLTRhNDctODk0MS1kNjZjM2U4NWQ4ZTQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiYTFmZjU2MzEtMTdhZS00NjY2LTljNWQtMjUyYTcxNDcxMGFmIiwibmJmIjoxNjMyOTMyMzY3LCJleHAiOjE2MzMwMTg3NjcsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.kQ1M7sgEdNmzjsSafE1hsSF64HFl2nhWTBcXZiVq3gw";
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiJlMTcxMGJmOS05ZGYxLTQ0YTEtODg1Ny0zMGJiYWEyZGY2ZmUiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiODk1Nzc4MjUtNGVlNy00OTM2LTg0ZjctOWE5OWI0YjQ4MjFhIiwibmJmIjoxNjMzNTM2NzgwLCJleHAiOjE2MzM2MjMxODAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.4oh30kXNf4zhrDZCHfZqJOA0MLJsEPV4nlzkOLy5pwE";
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
@@ -551,10 +554,10 @@ public class Connection {
                 }
                 GetRidesResponse getRidesResponse = response.body();
                 if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
+                    Log.d(TAG, "Data attribute is null1");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai1");
 
                 RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
                 weekRecyclerView.setAdapter(adapter);
@@ -586,10 +589,10 @@ public class Connection {
                 }
                 GetRidesResponse getRidesResponse = response.body();
                 if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
+                    Log.d(TAG, "Data attribute is null2");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai2");
 
                 RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
                 monthRecyclerView.setAdapter(adapter);
@@ -621,10 +624,10 @@ public class Connection {
                 }
                 GetRidesResponse getRidesResponse = response.body();
                 if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
+                    Log.d(TAG, "Data attribute is null3");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai3");
 
                 RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
                 pastRecyclerView.setAdapter(adapter);
@@ -651,5 +654,135 @@ public class Connection {
         SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
 
+    }
+    public void getAlerBairro(RecyclerView weekRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + access_token, 2021, 1, 1,"Casa Verde");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.e(TAG, "Data attribute is null4");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai4");
+                Log.d(TAG, String.valueOf(getAlerBairroResponse));
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                weekRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+                Log.e(TAG, "fudeu");
+                Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+    public void getAlerBairroMonth(RecyclerView monthRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + access_token, 2021, 1, 1,"Santana");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+                Log.d(TAG, String.valueOf(response.body()));
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                monthRecyclerView.setAdapter(adapter);
+                if (adapter == null)
+                {
+                    Log.d(TAG, "Deu merda");
+                }
+                Log.e(TAG, "Deu certo");
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+
+            }
+        });
+    }
+    public void getAlerBairroPast(RecyclerView pastRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + access_token, 2021, 1, 1,"Santana");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                pastRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
