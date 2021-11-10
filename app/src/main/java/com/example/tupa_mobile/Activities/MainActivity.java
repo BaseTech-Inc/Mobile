@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
     private EditText etSearch;
-    private String email, password;
+    private String email, password, token;
     private SharedPreferences sp;
     private int ItemsList = 1;
 
@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
         email = sp.getString("email", null);
         password = sp.getString("password", null);
+        token = sp.getString("token", null);
 
-        if(email != null || email != null){
+        if(token != null){
             Log.d("Deus", sp.getString("email", email));
             Log.d("Deus", sp.getString("password", password));
         }

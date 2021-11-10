@@ -16,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button volt_log, cont_log;
     private EditText email_et_log, password_et_log;
-    private String email, password;
+    private String email, password, token;
     private SharedPreferences sp;
 
     @Override
@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         sp = getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
         email = sp.getString("email", null);
         password = sp.getString("password", null);
+        token = sp.getString("token", null);
 
         volt_log.setOnClickListener(new View.OnClickListener() {
             @Override

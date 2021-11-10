@@ -10,19 +10,18 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.NotificationCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.LoginActivity;
+import com.example.tupa_mobile.Activities.LoginOptionsActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
 import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
@@ -34,7 +33,7 @@ import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
-import com.example.tupa_mobile.R;
+import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.Route.Metadata;
@@ -54,7 +53,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -381,10 +379,13 @@ public class Connection {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()){
+                    LoginResponse response2 = response.body();
+
                     sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("email", email);
                     editor.putString("password", password);
+                    editor.putString("token", response2.getData().getAccess_token());
                     editor.apply();
 
                     Intent it = new Intent(context, MainActivity.class);
@@ -652,4 +653,83 @@ public class Connection {
         return sp.getBoolean(key, false);
 
     }
+
+    public void ResetPassword(Context context, String email){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ResetPasswordResponse> call = api.postPassword(email);
+
+        call.enqueue(new Callback<ResetPasswordResponse>() {
+
+            @Override
+            public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                if(response.isSuccessful()) {
+                    Intent it = new Intent(context, LoginOptionsActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+                    Log.d("Deus", email);
+                }else{
+                    Log.d("Deus", "Vish");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                Log.e("Deus", "Deu algum erro");
+                Log.e("Deus", t.getMessage());
+                Log.e("Deus", t.toString());
+            }
+        });
+
+    }
+
+    public void ChangePassword(Context context, String token, String oldPass, String newPass) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ChangePasswordResponse> call = api.postChangePassword("Bearer " + token, oldPass, newPass);
+
+        call.enqueue(new Callback<ChangePasswordResponse>() {
+
+            @Override
+            public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
+                if(response.isSuccessful()) {
+                    sp = context.getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.clear();
+                    editor.commit();
+
+                    Log.d("Deus", oldPass);
+                    Log.d("Deus", newPass);
+
+                    Intent it = new Intent(context, LoginActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+
+                }else{
+                    Log.d("Deus", "Vish");
+                    Log.e("Deus", response.message());
+                    Log.e("Deus", response.toString());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ChangePasswordResponse> call, Throwable t) {
+                Log.e("Deus", "Deu algum erro");
+                Log.e("Deus", t.getMessage());
+                Log.e("Deus", t.toString());
+            }
+        });
+
+    }
+
+
 }

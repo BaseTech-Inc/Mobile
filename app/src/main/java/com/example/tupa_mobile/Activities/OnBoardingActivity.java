@@ -32,7 +32,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     private TextView skip;
     private ViewPager2 viewPager2;
     private ImageView[] dots;
-    private String email;
+    private String token;
     private SharedPreferences sp;
 
     @Override
@@ -42,12 +42,13 @@ public class OnBoardingActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         sp = getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
-        email = sp.getString("email", null);
+        token = sp.getString("token", null);
 
-        if(email != null)
+        if(token != null)
         {
             Intent it = new Intent(OnBoardingActivity.this, MainActivity.class);
             startActivity(it);
+            finish();
         }else{}
 
         dotsLayout = findViewById(R.id.dots_layout);

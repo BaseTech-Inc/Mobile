@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TupaMobile">
         <activity
+            android:name=".Passwords.ResetPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Passwords.ChangePasswordActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activities.RegisterActivity"
             android:exported="true" />
         <activity
@@ -29,10 +35,7 @@
             android:exported="true" />
         <activity
             android:name=".Activities.SplashActivity"
-            android:exported="true" >
-
-        </activity>
-
+            android:exported="true" />
 
         <service android:name=".BackgroundService.LocationService" />
 
@@ -60,6 +63,7 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
