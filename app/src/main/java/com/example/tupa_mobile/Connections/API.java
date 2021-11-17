@@ -7,6 +7,7 @@ import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
@@ -120,5 +121,10 @@ public interface API {
             @Header("Authorization") String access_token,
             @Query ("oldPassword") String oldPass,
             @Query ("newPassword") String newPass
+    );
+
+    @GET("/api/Account/basic-profile")
+    Call<ProfileResponse> postProfile(
+            @Header ("Authorization") String access_token
     );
 }
