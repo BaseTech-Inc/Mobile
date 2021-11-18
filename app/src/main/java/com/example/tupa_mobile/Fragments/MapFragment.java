@@ -643,7 +643,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void addAlertMarkers() {
         Connection con = new Connection();
-        con.getAlerts(map,2021,9,21);
+        con.getAlerts(getContext(), map,2021,9,21);
     }
 
     private void fillAddresses(){

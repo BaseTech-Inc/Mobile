@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(token != null){
             Connection connection = new Connection();
-            connection.InfoProfile(MainActivity.this, token);
+            connection.InfoProfile(MainActivity.this);
         }
 
         bottomNav = findViewById(R.id.bottomNavigationView);

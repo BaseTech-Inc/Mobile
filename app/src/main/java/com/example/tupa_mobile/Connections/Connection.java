@@ -78,6 +78,7 @@ public class Connection {
     private String position = "-23.6182683,-46.639479";
     private String lat = "-23.6182683";
     private String lon = "-46.639479";
+    private String token;
     private ArrayList<ForecastDay> forecastDays;
     private ForecastDay forecastDay;
     private ArrayList<ForecastHour> forecastHours;
@@ -97,7 +98,6 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXV0aGVudGljYXRlZCIsIk1hbmFnZXIiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiI3NDYwNDY5Mi00ZmFjLTRhNDctODk0MS1kNjZjM2U4NWQ4ZTQiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiYTFmZjU2MzEtMTdhZS00NjY2LTljNWQtMjUyYTcxNDcxMGFmIiwibmJmIjoxNjMyOTMyMzY3LCJleHAiOjE2MzMwMTg3NjcsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.kQ1M7sgEdNmzjsSafE1hsSF64HFl2nhWTBcXZiVq3gw";
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
@@ -382,18 +382,17 @@ public class Connection {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()) {
-                    LoginResponse response2 = response.body();
+                    LoginResponse loginResponse = response.body();
 
                     sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("email", email);
-                    editor.putString("password", password);
-                    editor.putString("token", response2.getData().getAccess_token());
+                    editor.putString("token", loginResponse.getData().getAccess_token());
                     editor.apply();
 
                     Intent it = new Intent(context, MainActivity.class);
                     ((Activity) context).startActivity(it);
                     ((Activity) context).finish();
+
                 } else {
                     Toast.makeText(((Activity) context), "Não bro, não é assim 😭", Toast.LENGTH_SHORT).show();
                 }
@@ -414,7 +413,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetMarkersResponse> call = api.getMarkers("Bearer " + access_token, userId);
+        Call<GetMarkersResponse> call = api.getMarkers("Bearer " + getToken(context), userId);
 
         call.enqueue(new Callback<GetMarkersResponse>() {
             @Override
@@ -445,7 +444,7 @@ public class Connection {
         });
     }
 
-    public void getAlerts(GoogleMap map, int year, int month, int day) {
+    public void getAlerts(Context context, GoogleMap map, int year, int month, int day) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
@@ -453,7 +452,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + getToken(context), year, month, day);
 
         call.enqueue(new Callback<GetAlertResponse>() {
             @Override
@@ -496,7 +495,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + getToken(context), year, month, day);
 
         call.enqueue(new Callback<GetAlertResponse>() {
             @Override
@@ -542,7 +541,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+        Call<GetRidesResponse> call = api.getRides("Bearer " + getToken(context));
 
         call.enqueue(new Callback<GetRidesResponse>() {
             @Override
@@ -578,7 +577,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+        Call<GetRidesResponse> call = api.getRides("Bearer " + getToken(context));
 
         call.enqueue(new Callback<GetRidesResponse>() {
             @Override
@@ -614,7 +613,10 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+        sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+        token = sp.getString("token", null);
+
+        Call<GetRidesResponse> call = api.getRides("Bearer " + token);
 
         call.enqueue(new Callback<GetRidesResponse>() {
             @Override
@@ -679,6 +681,8 @@ public class Connection {
                     Log.d(TAG, email);
                 } else {
                     Log.d(TAG, "Error");
+                    Log.d(TAG, response.message());
+                    Log.d(TAG, response.toString());
                 }
             }
 
@@ -692,14 +696,14 @@ public class Connection {
 
     }
 
-    public void ChangePassword(Context context, String token, String oldPass, String newPass) {
+    public void ChangePassword(Context context, String oldPass, String newPass) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
 
-        Call<ChangePasswordResponse> call = api.postChangePassword("Bearer " + token, oldPass, newPass);
+        Call<ChangePasswordResponse> call = api.postChangePassword("Bearer " + getToken(context), oldPass, newPass);
 
         call.enqueue(new Callback<ChangePasswordResponse>() {
 
@@ -736,14 +740,14 @@ public class Connection {
 
     }
 
-    public void InfoProfile(Context context, String token) {
+    public void InfoProfile(Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
 
-        Call<ProfileResponse> call = api.postProfile("Bearer " + token);
+        Call<ProfileResponse> call = api.postProfile("Bearer " + getToken(context));
 
         call.enqueue(new Callback<ProfileResponse>() {
             @Override
@@ -754,7 +758,9 @@ public class Connection {
 
                         sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("email", response3.getData().getEmail());
                         editor.putString("name", response3.getData().getName());
+                        editor.apply();
 
                     }else {
                         Log.d(TAG, "Is null");
@@ -772,4 +778,14 @@ public class Connection {
             }
         });
     }
+
+    public String getToken(Context context){
+
+        sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+        token = sp.getString("token", null);
+
+        return token;
+    }
+
+
 }

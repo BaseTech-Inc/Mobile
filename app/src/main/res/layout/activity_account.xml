@@ -14,10 +14,11 @@
         layout="@layout/notification_toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="24dp"
         android:backgroundTint="?attr/colorSecondary"
+        android:paddingVertical="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
@@ -77,6 +78,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblAccountManagement" />
+
+        <TextView
+            android:id="@+id/lblLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sair da Conta"
+            android:layout_marginTop="12dp"
+            android:textColor="?attr/Error"
+            app:layout_constraintStart_toStartOf="@id/accountManagementRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/accountManagementRecycler"
+
+
+            />
+
+        <TextView
+            android:id="@+id/lblDeleteAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Excluir Conta"
+            android:layout_marginTop="12dp"
+            android:textColor="?attr/Error"
+            app:layout_constraintStart_toStartOf="@id/accountManagementRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/lblLogout"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_key_focused.xml" value="0.18981481481481483" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/drawable/map_buttons.xml" value="0.1935185185185185" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/drawable/top_borders_blue.xml" value="0.1935185185185185" />
-        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_account.xml" value="0.2" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_account.xml" value="0.22" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_change_password.xml" value="0.18614130434782608" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_login.xml" value="0.15760869565217392" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_login_options.xml" value="0.15760869565217392" />
@@ -24,8 +24,13 @@
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_reset_password.xml" value="0.18614130434782608" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_splash.xml" value="0.15760869565217392" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/profile_item.xml" value="0.17255434782608695" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_dangerous.xml" value="0.18614130434782608" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_item.xml" value="0.18614130434782608" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_item_noimage.xml" value="0.22" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_no_arrow_or_icon.xml" value="0.18" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_selector.xml" value="0.25" />
+        <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_switch_item.xml" value="0.25" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/slider_item.xml" value="0.15760869565217392" />
         <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_history.xml" value="0.20923913043478262" />

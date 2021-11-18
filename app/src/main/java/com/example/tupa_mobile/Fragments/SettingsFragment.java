@@ -1,7 +1,9 @@
 package com.example.tupa_mobile.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -45,6 +47,9 @@ public class SettingsFragment extends Fragment {
     private ViewGroup searchLayout;
     private ArrayList<Settings> settingsList;
     private SettingsAdapter adapter;
+    private TextView location, name;
+    private String lblName;
+    private SharedPreferences sp;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -63,6 +68,14 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         searchLayout = view.findViewById(R.id.searchLayout);
+        location = view.findViewById(R.id.lblLocation);
+        name = view.findViewById(R.id.lblNameAccount);
+
+        sp = getActivity().getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+        lblName = sp.getString("name", null);
+
+        name.setText(lblName);
+
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapse);
         mCollapsingToolbarLayout.setTitleEnabled(false);
