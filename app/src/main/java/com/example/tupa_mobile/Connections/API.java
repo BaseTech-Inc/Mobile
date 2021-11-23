@@ -144,8 +144,8 @@ public interface API {
     @PUT("/api/Account/basic-profile")
     Call<PutProfileResponse> putProfile(
             @Header ("Authorization") String access_token,
-            @Query ("UserName") String newName,
-            @Query ("TipoUsuario") String tipo
+            @Query ("UserName") String UserName,
+            @Query ("TipoUsuario") String TipoUsuario
     );
 
     @GET("/api/Account/image-profile")

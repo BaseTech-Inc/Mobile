@@ -735,12 +735,12 @@ public class Connection {
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 if(response.isSuccessful()){
                     if(response != null){
-                        ProfileResponse response3 = response.body();
 
                         sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
-                        editor.putString("email", response3.getData().getEmail());
-                        editor.putString("name", response3.getData().getName());
+                        editor.putString("email", response.body().getData().getEmail());
+                        editor.putString("name", response.body().getData().getName());
+                        editor.putString("tipo", response.body().getData().getTipoUsuario());
                         editor.apply();
 
                     }else {
@@ -773,7 +773,7 @@ public class Connection {
             @Override
             public void onResponse(Call<PutProfileResponse> call, Response<PutProfileResponse> response) {
                 if(response.isSuccessful()){
-                    Intent it = new Intent(context, AccountActivity.class);
+                    Intent it = new Intent(context, MainActivity.class);
                     ((Activity) context).startActivity(it);
                     ((Activity) context).finish();
 

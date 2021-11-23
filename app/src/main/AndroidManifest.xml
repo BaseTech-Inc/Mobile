@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".BackgroundService.BackgroundApplication"
@@ -36,14 +36,13 @@
             android:exported="true" />
         <activity
             android:name=".Activities.SplashActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
-            </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".BackgroundService.LocationService" />
 
@@ -63,13 +62,13 @@
         <activity android:name=".Activities.PrivacyActivity" />
         <activity android:name=".Activities.AccountActivity" />
         <activity android:name=".Activities.GraphActivity" />
+        <activity android:name=".Activities.ChangeUsernameActivity" />
         <activity
             android:name=".Activities.NotificationActivity"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.MainActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

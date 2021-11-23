@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tupa_mobile.Activities.AboutUsActivity;
 import com.example.tupa_mobile.Activities.AccountActivity;
+import com.example.tupa_mobile.Activities.ChangeUsernameActivity;
 import com.example.tupa_mobile.Activities.ConnectionsActivity;
 import com.example.tupa_mobile.Activities.HelpActivity;
 import com.example.tupa_mobile.Activities.NotificationSettingsActivity;
@@ -79,7 +80,7 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Nome de usuário", R.drawable.day_sunny, sp.getString("name", ""), new Intent(context, AboutUsActivity.class), 2));
+        settingsList.add( new Settings("Nome de usuário", R.drawable.day_sunny, sp.getString("name", ""), new Intent(context, ChangeUsernameActivity.class), 2));
         settingsList.add( new Settings("Email", R.drawable.clock_ilustraion_white_theme, sp.getString("email", ""), new Intent(context, HelpActivity.class), 2));
         settingsList.add( new Settings("Telefone", R.drawable.clock_ilustraion_white_theme, "9****-1234", new Intent(context, HelpActivity.class), 2));
         settingsList.add( new Settings("Mudar Senha", R.drawable.clock_ilustraion_white_theme, "******", new Intent(context, ChangePasswordActivity.class), 2));
