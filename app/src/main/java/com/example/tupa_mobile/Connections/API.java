@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Connections;
 
+import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
 import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
@@ -108,6 +109,15 @@ public interface API {
             @Query("year") int year,
             @Query("month") int month,
             @Query("day") int day
+    );
+
+    @GET("/api/v1/Alertas/Bairro")
+    Call <GetAlerBairroResponse> getAlertBairro(
+            @Header("Authorization") String key,
+            @Query("year") int year,
+            @Query("month") int month,
+            @Query("day") int day,
+            @Query("districts") String districts
     );
     @GET("api/v1/HistoricoUsuario")
     Call <GetRidesResponse> getRides(

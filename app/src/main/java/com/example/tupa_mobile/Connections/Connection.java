@@ -23,7 +23,9 @@ import com.example.tupa_mobile.Activities.AccountActivity;
 import com.example.tupa_mobile.Activities.LoginActivity;
 import com.example.tupa_mobile.Activities.LoginOptionsActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
+import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
 import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
@@ -63,6 +65,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
@@ -560,11 +563,12 @@ public class Connection {
                     return;
                 }
                 GetRidesResponse getRidesResponse = response.body();
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1) {
-                    Log.d(TAG, "Data attribute is null");
+              
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null1");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai1");
 
                 RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
                 weekRecyclerView.setAdapter(adapter);
@@ -596,11 +600,12 @@ public class Connection {
                     return;
                 }
                 GetRidesResponse getRidesResponse = response.body();
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1) {
-                    Log.d(TAG, "Data attribute is null");
+              
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null2");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai2");
 
                 RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
                 monthRecyclerView.setAdapter(adapter);
@@ -635,11 +640,12 @@ public class Connection {
                     return;
                 }
                 GetRidesResponse getRidesResponse = response.body();
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1) {
-                    Log.d(TAG, "Data attribute is null");
+              
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null3");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai3");
 
                 RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
                 pastRecyclerView.setAdapter(adapter);
@@ -668,17 +674,61 @@ public class Connection {
 
     }
 
+    public void getAlerBairro(RecyclerView weekRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+          
+           Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Casa Verde");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.e(TAG, "Data attribute is null4");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai4");
+                Log.d(TAG, String.valueOf(getAlerBairroResponse));
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                weekRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+                Log.e(TAG, "fudeu");
+              Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+
     public void ResetPassword(Context context, String email) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
-
+          
         Call<ResetPasswordResponse> call = api.postPassword(email);
 
         call.enqueue(new Callback<ResetPasswordResponse>() {
-
             @Override
             public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
                 if (response.isSuccessful()) {
@@ -696,11 +746,55 @@ public class Connection {
             @Override
             public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
                 Log.e(TAG, "Master Error");
-                Log.e(TAG, t.getMessage());
-                Log.e(TAG, t.toString());
+             }
+        });
+    }
+    
+    public void getAlerBairroMonth(RecyclerView monthRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+      
+        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Santana");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+                Log.d(TAG, String.valueOf(response.body()));
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                monthRecyclerView.setAdapter(adapter);
+                if (adapter == null)
+                {
+                    Log.d(TAG, "Deu merda");
+                }
+                Log.e(TAG, "Deu certo");
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+
             }
         });
-
     }
 
     public void ChangePassword(Context context, String oldPass, String newPass) {
@@ -709,11 +803,10 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
-
+      
         Call<ChangePasswordResponse> call = api.postChangePassword("Bearer " + getToken(context), oldPass, newPass);
 
         call.enqueue(new Callback<ChangePasswordResponse>() {
-
             @Override
             public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
                 if (response.isSuccessful()) {
@@ -734,7 +827,6 @@ public class Connection {
                     Log.e(TAG, response.message());
                     Log.e(TAG, response.toString());
                 }
-
             }
 
             @Override
@@ -744,7 +836,6 @@ public class Connection {
                 Log.e(TAG, t.toString());
             }
         });
-
     }
 
     public void LoadInfoProfile(Context context) {
@@ -815,8 +906,49 @@ public class Connection {
 
             }
         });
-
     }
+        
+    public void getAlerBairroPast(RecyclerView pastRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+  
+        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Santana");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai");
+
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                pastRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+
+            }
+        });
+    }        
 
     public void LoadImageProfile(Context context, CircleImageView profile) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -824,7 +956,7 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
-
+  
         Call<ImageResponse> call = api.getImageProfile("Bearer " + getToken(context));
 
         call.enqueue(new Callback<ImageResponse>() {
@@ -848,10 +980,8 @@ public class Connection {
 
             @Override
             public void onFailure(Call<ImageResponse> call, Throwable t) {
-
                 Log.e("Errado", t.getMessage());
                 Log.e("Erradíssimo", t.toString());
-
             }
         });
     }
@@ -862,8 +992,6 @@ public class Connection {
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
-
-
 
         Call<ImageResponse> call = api.putImageProfile("Bearer " + getToken(context), encoded);
 
@@ -888,9 +1016,7 @@ public class Connection {
                 Log.e("Ivo", t.getMessage());
             }
         });
-
     }
-
 
     public String getToken(Context context){
 
@@ -899,6 +1025,4 @@ public class Connection {
 
         return token;
     }
-
-
 }
