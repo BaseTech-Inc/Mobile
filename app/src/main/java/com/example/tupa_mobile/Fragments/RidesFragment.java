@@ -36,21 +36,21 @@ public class RidesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rides, container, false);
 
         weekRecyclerView = view.findViewById(R.id.weekAlertRecycler);
-        monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
-        pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
+//        monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
+//        pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
 
 
 
       weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-      monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-      pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//      monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//
+//      pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection connection = new Connection();
         connection.getRides(weekRecyclerView, view.getContext());
-        connection.getRidesMonth(monthRecyclerView, view.getContext());
-        connection.getRidesPast(pastRecyclerView, view.getContext());
+//        connection.getRidesMonth(monthRecyclerView, view.getContext());
+//        connection.getRidesPast(pastRecyclerView, view.getContext());
 
 
 

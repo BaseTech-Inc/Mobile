@@ -44,19 +44,19 @@ public class AlertFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_alert, container, false);
 
         weekRecyclerView = view.findViewById(R.id.weekAlertRecycler);
-        monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
-        pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
+//        monthRecyclerView = view.findViewById(R.id.monthAlertRecycler);
+//        pastRecyclerView = view.findViewById(R.id.previousAlertRecycler);
 
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        monthRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//
+//        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection connection = new Connection();
         connection.getAlerBairro(weekRecyclerView, view.getContext());
-        connection.getAlerBairroMonth(monthRecyclerView, view.getContext());
-        connection.getAlerBairroPast(pastRecyclerView, view.getContext());
+//        connection.getAlerBairroMonth(monthRecyclerView, view.getContext());
+//        connection.getAlerBairroPast(pastRecyclerView, view.getContext());
 
         return view;
     }

@@ -581,82 +581,9 @@ public class Connection {
         });
     }
 
-    public void getRidesMonth(RecyclerView monthRecyclerView, Context context) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + getToken(context));
 
-        call.enqueue(new Callback<GetRidesResponse>() {
-            @Override
-            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetRidesResponse getRidesResponse = response.body();
-              
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null2");
-                    return;
-                }
-                Log.e(TAG, "Funciona carai2");
-
-                RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
-                monthRecyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public void getRidesPast(RecyclerView pastRecyclerView, Context context) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .addConverterFactory(GsonConverterFactory.create()).build();
-
-        API api = retrofit.create(API.class);
-
-        sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
-        token = sp.getString("token", null);
-
-        Call<GetRidesResponse> call = api.getRides("Bearer " + token);
-
-        call.enqueue(new Callback<GetRidesResponse>() {
-            @Override
-            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetRidesResponse getRidesResponse = response.body();
-              
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null3");
-                    return;
-                }
-                Log.e(TAG, "Funciona carai3");
-
-                RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
-                pastRecyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
-
-            }
-        });
-    }
 
     public void saveInsideFlood(Context context, String key, boolean value) {
 
@@ -701,6 +628,7 @@ public class Connection {
                 GetAlerBairroResponse getAlerBairroResponse = response.body();
                 if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
                     Log.e(TAG, "Data attribute is null4");
+                    Log.d(TAG, response.body().getMessage());
                     return;
                 }
                 Log.e(TAG, "Funciona carai4");
@@ -750,52 +678,7 @@ public class Connection {
         });
     }
     
-    public void getAlerBairroMonth(RecyclerView monthRecyclerView, Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        API api = retrofit.create(API.class);
-      
-        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Santana");
-
-        call.enqueue(new Callback<GetAlerBairroResponse>() {
-            @Override
-            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetAlerBairroResponse getAlerBairroResponse = response.body();
-                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
-                    return;
-                }
-                Log.e(TAG, "Funciona carai");
-                Log.d(TAG, String.valueOf(response.body()));
-                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
-                monthRecyclerView.setAdapter(adapter);
-                if (adapter == null)
-                {
-                    Log.d(TAG, "Deu merda");
-                }
-                Log.e(TAG, "Deu certo");
-            }
-
-            @Override
-            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
-
-            }
-        });
-    }
 
     public void ChangePassword(Context context, String oldPass, String newPass) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -908,47 +791,7 @@ public class Connection {
         });
     }
         
-    public void getAlerBairroPast(RecyclerView pastRecyclerView, Context context){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        API api = retrofit.create(API.class);
-  
-        Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Santana");
-
-        call.enqueue(new Callback<GetAlerBairroResponse>() {
-            @Override
-            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetAlerBairroResponse getAlerBairroResponse = response.body();
-                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
-                    return;
-                }
-                Log.e(TAG, "Funciona carai");
-
-                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
-                pastRecyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
-
-            }
-        });
-    }        
 
     public void LoadImageProfile(Context context, CircleImageView profile) {
         Retrofit retrofit = new Retrofit.Builder()
