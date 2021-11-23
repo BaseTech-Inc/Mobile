@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.tupa_mobile.BackgroundService.LocationService;
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Fragments.SettingsFragment;
 import com.example.tupa_mobile.Fragments.ForecastFragment;
 import com.example.tupa_mobile.Fragments.HistoryFragment;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNav;
     private EditText etSearch;
-    private String email, password;
+    private String token;
     private SharedPreferences sp;
     private int ItemsList = 1;
 
@@ -50,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
-        email = sp.getString("email", null);
-        password = sp.getString("password", null);
+        token = sp.getString("token", null);
 
-        if(email != null || email != null){
-            Log.d("Deus", sp.getString("email", email));
-            Log.d("Deus", sp.getString("password", password));
+        if(token != null){
+            Connection connection = new Connection();
+            connection.LoadInfoProfile(MainActivity.this);
         }
 
         bottomNav = findViewById(R.id.bottomNavigationView);
