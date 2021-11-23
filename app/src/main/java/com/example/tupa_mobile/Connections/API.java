@@ -9,6 +9,7 @@ import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
+import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
@@ -128,6 +129,13 @@ public interface API {
     @GET("/api/Account/basic-profile")
     Call<ProfileResponse> getProfile(
             @Header ("Authorization") String access_token
+    );
+
+    @PUT("/api/Account/basic-profile")
+    Call<PutProfileResponse> putProfile(
+            @Header ("Authorization") String access_token,
+            @Query ("UserName") String newName,
+            @Query ("TipoUsuario") String tipo
     );
 
     @GET("/api/Account/image-profile")

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.Activities.AccountActivity;
 import com.example.tupa_mobile.Activities.LoginActivity;
 import com.example.tupa_mobile.Activities.LoginOptionsActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
@@ -39,6 +40,7 @@ import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
+import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.Route.Metadata;
@@ -745,7 +747,7 @@ public class Connection {
 
     }
 
-    public void InfoProfile(Context context) {
+    public void LoadInfoProfile(Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -782,6 +784,38 @@ public class Connection {
                 Log.e(TAG, t.toString());
             }
         });
+    }
+
+    public void SendInfoProfile(Context context, String name, String tipo) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<PutProfileResponse> call = api.putProfile("Bearer " + getToken(context), name, tipo);
+
+        call.enqueue(new Callback<PutProfileResponse>() {
+            @Override
+            public void onResponse(Call<PutProfileResponse> call, Response<PutProfileResponse> response) {
+                if(response.isSuccessful()){
+                    Intent it = new Intent(context, AccountActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+
+                }else{
+                    Log.d("Buda", "Is null");
+                    Log.e("Buda", response.message());
+                    Log.e("Buda", response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PutProfileResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public void LoadImageProfile(Context context, CircleImageView profile) {
