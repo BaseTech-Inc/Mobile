@@ -12,6 +12,7 @@ import com.example.tupa_mobile.Activities.AccountActivity;
 import com.example.tupa_mobile.Activities.ChangeUsernameActivity;
 import com.example.tupa_mobile.Activities.ConnectionsActivity;
 import com.example.tupa_mobile.Activities.HelpActivity;
+import com.example.tupa_mobile.Activities.LoginOptionsActivity;
 import com.example.tupa_mobile.Activities.NotificationSettingsActivity;
 import com.example.tupa_mobile.Activities.PrivacyActivity;
 import com.example.tupa_mobile.Activities.ThemeSettingsActivity;
@@ -95,7 +96,7 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Sair da sessão", R.drawable.day_sunny, "", new Intent(context, AboutUsActivity.class), 3));
+        settingsList.add( new Settings("Sair da sessão", R.drawable.day_sunny, "", new Intent(context, LoginOptionsActivity.class), 3));
         settingsList.add( new Settings("Excluir conta", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), 3));
 
         adapter = new SettingsAdapter(context, settingsList);

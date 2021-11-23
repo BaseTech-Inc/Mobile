@@ -8,6 +8,7 @@ import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.AccountResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
@@ -19,6 +20,7 @@ import com.example.tupa_mobile.WeatherAPI.Weather;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -157,6 +159,11 @@ public interface API {
     Call<ImageResponse> putImageProfile(
             @Header ("Authorization") String access_token,
             @Body String body
+    );
+
+    @DELETE("/api/Account")
+    Call<AccountResponse> deleteAccount(
+            @Header ("Authorization") String access_token
     );
 
 }

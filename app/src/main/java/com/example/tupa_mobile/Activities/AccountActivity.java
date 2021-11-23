@@ -55,19 +55,17 @@ public class AccountActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.clear();
                 editor.commit();
-                Intent it = new Intent(getBaseContext(), LoginOptionsActivity.class);
+                Intent it = new Intent(AccountActivity.this, LoginOptionsActivity.class);
                 startActivity(it);
-                finish();
+                finishAffinity();
             }
         });
 
         lblDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Excluiu a conta, kk", Toast.LENGTH_SHORT);
-                /*Intent it = new Intent(getBaseContext(), LoginOptionsActivity.class);
-                startActivity(it);
-                finish();*/
+                Connection connection = new Connection();
+                connection.DeleteAccount(AccountActivity.this);
             }
         });
 

@@ -40,6 +40,7 @@ import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.AccountResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
@@ -857,6 +858,36 @@ public class Connection {
             public void onFailure(Call<ImageResponse> call, Throwable t) {
                 Log.d("Ivo", "Fudeu enorme");
                 Log.e("Ivo", t.getMessage());
+            }
+        });
+    }
+
+    public void DeleteAccount(Context context){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<AccountResponse> call = api.deleteAccount("Bearer " + getToken(context));
+
+        call.enqueue(new Callback<AccountResponse>() {
+            @Override
+            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
+                sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.clear();
+                editor.commit();
+
+                ((Activity) context).finishAffinity();
+                System.exit(0);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<AccountResponse> call, Throwable t) {
+
             }
         });
     }
