@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.R;
 import com.example.tupa_mobile.SettingsPage.SettingsCreator;
 

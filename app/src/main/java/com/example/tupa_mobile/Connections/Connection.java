@@ -7,6 +7,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,7 @@ import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.RidesAdapter;
@@ -58,6 +62,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -747,7 +752,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<ProfileResponse> call = api.postProfile("Bearer " + getToken(context));
+        Call<ProfileResponse> call = api.getProfile("Bearer " + getToken(context));
 
         call.enqueue(new Callback<ProfileResponse>() {
             @Override
@@ -778,6 +783,80 @@ public class Connection {
             }
         });
     }
+
+    public void LoadImageProfile(Context context, CircleImageView profile) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ImageResponse> call = api.getImageProfile("Bearer " + getToken(context));
+
+        call.enqueue(new Callback<ImageResponse>() {
+            @Override
+            public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                if (response.isSuccessful()) {
+
+                    Log.d("Morte", response.body().getData());
+
+                    byte[] decodedString = Base64.decode(response.body().getData(), Base64.DEFAULT);
+                    Bitmap image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    profile.setImageBitmap(image);
+
+
+                }else {
+                    Log.d("Ala", "Algo errado");
+                    Log.e("Ala", response.message());
+                    Log.e("Ala", response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImageResponse> call, Throwable t) {
+
+                Log.e("Errado", t.getMessage());
+                Log.e("Erradíssimo", t.toString());
+
+            }
+        });
+    }
+
+    public void SendImageProfile(Context context, String encoded) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+
+
+        Call<ImageResponse> call = api.putImageProfile("Bearer " + getToken(context), encoded);
+
+        call.enqueue(new Callback<ImageResponse>() {
+            @Override
+            public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                if(response.isSuccessful())
+                {
+                    sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("image", encoded);
+                    editor.apply();
+                    Log.d("Ivo", "Deu certo");
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImageResponse> call, Throwable t) {
+                Log.d("Ivo", "Fudeu enorme");
+                Log.e("Ivo", t.getMessage());
+            }
+        });
+
+    }
+
 
     public String getToken(Context context){
 

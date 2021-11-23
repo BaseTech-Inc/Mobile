@@ -7,6 +7,7 @@ import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
@@ -19,6 +20,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface API {
@@ -124,7 +126,19 @@ public interface API {
     );
 
     @GET("/api/Account/basic-profile")
-    Call<ProfileResponse> postProfile(
+    Call<ProfileResponse> getProfile(
             @Header ("Authorization") String access_token
     );
+
+    @GET("/api/Account/image-profile")
+    Call<ImageResponse> getImageProfile(
+            @Header ("Authorization") String access_token
+    );
+
+    @PUT("/api/Account/image-profile")
+    Call<ImageResponse> putImageProfile(
+            @Header ("Authorization") String access_token,
+            @Body String body
+    );
+
 }
