@@ -2,6 +2,7 @@ package com.example.tupa_mobile.Graph;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -23,7 +24,10 @@ public class ForecastGraph {
     private LineDataSet lineDataSet, lineDataSet2;
     private LineData lineData;
 
-    public void createGraph(LineChart forecastChart, Context context){
+    public void createGraph(LineChart forecastChart, Context context, ArrayList<Entry> MaxTemp, ArrayList<Entry> MinTemp){
+
+        Log.d("Conexão", String.valueOf(MaxTemp.get(0).getY()));
+        Log.d("Conexão", String.valueOf(MinTemp.get(0).getY()));
 
         lineList = new ArrayList<>();
         lineList.add(new Entry(1,18));
@@ -45,11 +49,11 @@ public class ForecastGraph {
         lineList2.add(new Entry(7,11));
         lineList2.add(new Entry(8,5));
 
-        lineDataSet = new LineDataSet(lineList, "Max Temperatures");
+        lineDataSet = new LineDataSet(MaxTemp, "Max Temperatures");
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawVerticalHighlightIndicator(false);
 
-        lineDataSet2 = new LineDataSet(lineList2, "Min Temperatures");
+        lineDataSet2 = new LineDataSet(MinTemp, "Min Temperatures");
         lineDataSet2.setDrawHorizontalHighlightIndicator(false);
         lineDataSet2.setDrawVerticalHighlightIndicator(false);
         lineDataSet2.setColor(Color.BLUE);

@@ -27,6 +27,7 @@ import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Graph.ForecastGraph;
 import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
@@ -58,6 +59,9 @@ import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -109,6 +113,7 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
+    private ArrayList<Entry> lineList, lineList2;
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
@@ -258,6 +263,55 @@ public class Connection {
             }
         });
     }
+
+    public void requestGraphOpenForecast(LineChart forecastChart, Context context) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        API API = retrofit.create(API.class);
+
+        Call<OpenWeather> call = API.getOpenForecastDaily(lat, lon, openApiKey, "metric");
+
+        call.enqueue(new Callback<OpenWeather>() {
+
+            @Override
+            public void onResponse(Call<OpenWeather> call, Response<OpenWeather> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    openWeather = response.body();
+                    openDaily = new ArrayList<>(openWeather.getDaily());
+
+                    ArrayList<Entry> MaxTemps = new ArrayList<>();
+                    ArrayList<Entry> MinTemps = new ArrayList<>();
+                    int i = 1;
+
+                    for(OpenDaily daily: openDaily) {
+                        MaxTemps.add(new Entry(i, (float) daily.getTemp().getMax()));
+                        MinTemps.add(new Entry(i, (float) daily.getTemp().getMin()));
+
+                        Log.d(TAG, "Max: " + daily.getTemp().getMax() + " Min: " + daily.getTemp().getMin() + " Valor do i: " + i);
+
+                        i++;
+                    }
+
+                    ForecastGraph forecastGraph = new ForecastGraph();
+                    forecastGraph.createGraph(forecastChart, context, MaxTemps, MinTemps);
+
+                    Log.d(TAG, String.valueOf(response.body().getLat()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenWeather> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
 
     public void postRoute(TextView txtResponse, Context context) {
 
