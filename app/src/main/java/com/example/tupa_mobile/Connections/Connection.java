@@ -293,15 +293,13 @@ public class Connection {
                         MaxTemps.add(new Entry(i, (float) daily.getTemp().getMax()));
                         MinTemps.add(new Entry(i, (float) daily.getTemp().getMin()));
 
-                        Log.d(TAG, "Max: " + daily.getTemp().getMax() + " Min: " + daily.getTemp().getMin() + " Valor do i: " + i);
-
                         i++;
                     }
 
                     ForecastGraph forecastGraph = new ForecastGraph();
                     forecastGraph.createGraph(forecastChart, context, MaxTemps, MinTemps);
 
-                    Log.d(TAG, String.valueOf(response.body().getLat()));
+                    Log.d(TAG, MaxTemps.toString());
                 }
             }
 

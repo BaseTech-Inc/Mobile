@@ -21,44 +21,21 @@ import java.util.ArrayList;
 public class ForecastGraph {
 
     private ArrayList<Entry> lineList, lineList2;
-    private LineDataSet lineDataSet, lineDataSet2;
+    private LineDataSet lineDataSetMax, lineDataSetMin;
     private LineData lineData;
 
     public void createGraph(LineChart forecastChart, Context context, ArrayList<Entry> MaxTemp, ArrayList<Entry> MinTemp){
 
-        Log.d("Conexão", String.valueOf(MaxTemp.get(0).getY()));
-        Log.d("Conexão", String.valueOf(MinTemp.get(0).getY()));
+        lineDataSetMax = new LineDataSet(MaxTemp, "Max Temperatures");
+        lineDataSetMax.setDrawHorizontalHighlightIndicator(false);
+        lineDataSetMax.setDrawVerticalHighlightIndicator(false);
 
-        lineList = new ArrayList<>();
-        lineList.add(new Entry(1,18));
-        lineList.add(new Entry(2,25));
-        lineList.add(new Entry(3,22));
-        lineList.add(new Entry(4,24));
-        lineList.add(new Entry(5,26));
-        lineList.add(new Entry(6,21));
-        lineList.add(new Entry(7,25));
-        lineList.add(new Entry(8,24));
+        lineDataSetMin = new LineDataSet(MinTemp, "Min Temperatures");
+        lineDataSetMin.setDrawHorizontalHighlightIndicator(false);
+        lineDataSetMin.setDrawVerticalHighlightIndicator(false);
+        lineDataSetMin.setColor(Color.BLUE);
 
-        lineList2 = new ArrayList<>();
-        lineList2.add(new Entry(1,10));
-        lineList2.add(new Entry(2,7));
-        lineList2.add(new Entry(3,12));
-        lineList2.add(new Entry(4,11));
-        lineList2.add(new Entry(5,9));
-        lineList2.add(new Entry(6,10));
-        lineList2.add(new Entry(7,11));
-        lineList2.add(new Entry(8,5));
-
-        lineDataSet = new LineDataSet(MaxTemp, "Max Temperatures");
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawVerticalHighlightIndicator(false);
-
-        lineDataSet2 = new LineDataSet(MinTemp, "Min Temperatures");
-        lineDataSet2.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet2.setDrawVerticalHighlightIndicator(false);
-        lineDataSet2.setColor(Color.BLUE);
-
-        lineData = new LineData(lineDataSet, lineDataSet2);
+        lineData = new LineData(lineDataSetMax, lineDataSetMin);
         lineData.setValueTextSize(12);
 
         forecastChart.setData(lineData);

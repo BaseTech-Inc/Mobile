@@ -3,6 +3,7 @@ package com.example.tupa_mobile.SettingsPage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,8 +66,11 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(context, AboutUsActivity.class), 0));
-        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), 0));
+        Uri uriAbout = Uri.parse("https://tupaweb.azurewebsites.net/About");
+        Uri uriHelp = Uri.parse("https://tupaweb.azurewebsites.net/Settings/Help");
+
+        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(Intent.ACTION_VIEW, uriAbout), 0));
+        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(Intent.ACTION_VIEW, uriHelp), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
