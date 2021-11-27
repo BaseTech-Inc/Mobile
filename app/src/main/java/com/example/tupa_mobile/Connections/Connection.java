@@ -843,8 +843,6 @@ public class Connection {
             }
         });
     }
-        
-
 
     public void LoadImageProfile(Context context, CircleImageView profile) {
         Retrofit retrofit = new Retrofit.Builder()
