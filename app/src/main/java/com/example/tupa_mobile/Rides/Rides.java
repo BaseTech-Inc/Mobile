@@ -1,5 +1,6 @@
 package com.example.tupa_mobile.Rides;
 
+import com.example.tupa_mobile.Districts.Districts;
 import com.example.tupa_mobile.User.User;
 import com.google.gson.annotations.SerializedName;
 public class Rides {
@@ -11,6 +12,7 @@ public class Rides {
     private String tempoPartida;
     private String distanciaPercurso;
     private String rota;
+    private Districts distro;
 
     public Rides(String tempoChegada, String tempoPartida, String distanciaPercurso) {
     }
@@ -40,7 +42,9 @@ public class Rides {
     public String getDistanciaPercurso() {
         return distanciaPercurso;
     }
-
+    public Districts getDistrito() {
+        return distro;
+    }
     public String getRota() {
         return rota;
     }

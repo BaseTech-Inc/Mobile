@@ -67,7 +67,7 @@ private boolean atividade;
         return descricao;
     }
 
-    public boolean isTransitividade() {
+    public boolean getTransitividade() {
         return transitividade;
     }
 

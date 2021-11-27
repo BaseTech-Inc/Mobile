@@ -1,25 +1,36 @@
 package com.example.tupa_mobile.Location;
 
+
+import com.example.tupa_mobile.Mainn.Mainn;
+import com.example.tupa_mobile.Weather.Weather;
+import com.google.android.gms.maps.model.LatLng;
+
 public class Location {
+    private LatLng coord;
+    private Weather weather;
+    private Mainn mainn;
 
-    private String name, currentDesc;
-    private Double temp;
-
-    public Location(String name, String currentDesc, Double temp) {
-        this.name = name;
-        this.currentDesc = currentDesc;
-        this.temp = temp;
+    public Location(LatLng coord, Weather weather, Mainn mainn) {
+        this.coord = coord;
+        this.weather = weather;
+        this.mainn = mainn;
     }
 
-    public String getName() {
-        return name;
+    public LatLng getCoord() {
+        return coord;
     }
 
-    public String getCurrentDesc() {
-        return currentDesc;
+    public Weather getWeather() {
+        return weather;
     }
 
-    public Double getTemp() {
-        return temp;
+    public Mainn getMainn() {
+        return mainn;
     }
+
+
+
+
+
+
 }

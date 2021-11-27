@@ -56,9 +56,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
         public void setDetails(Location location) {
 
-            txtLocation.setText(truncate(location.getName(), 13));
-            txtCurrentDesc.setText(location.getCurrentDesc());
-            txtCurrentTemp.setText(location.getTemp() + "°");
+            txtLocation.setText(location.getCoord().toString());
+            txtCurrentDesc.setText(location.getWeather().getDescription());
+            txtCurrentTemp.setText(location.getMainn().getTemp() + "°");
 
 
         }

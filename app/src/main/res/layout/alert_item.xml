@@ -49,24 +49,42 @@
                 android:id="@+id/txtNotificationAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
-                android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:text="alagamento sjsjsksjksj sjssj"
                 android:fontFamily="@font/open_sans_regular"
+                android:text="alagamento sjsjsksjksj sjssj"
+                android:textColor="?attr/OnSurfaceMediumEmphasis"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/txtNotificationTitle"
-                app:layout_constraintTop_toBottomOf="@+id/txtNotificationTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/txtNotificationTitle"
+                app:layout_constraintVertical_bias="0.083" />
 
-            <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginHorizontal="12dp"
-                android:background="@drawable/night_cloudy"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:id="@+id/txtInitialTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="gfgs"
+                android:textColor="?attr/OnSurfaceMediumEmphasis"
+                android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtNotificationTitle"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/txtFinalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="rhff"
+                android:textColor="?attr/OnSurfaceMediumEmphasis"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtInitialTime"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <RelativeLayout
             android:id="@+id/notificationExpandableLayout"

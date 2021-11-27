@@ -33,9 +33,25 @@
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_selector.xml" value="0.25" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_switch_item.xml" value="0.25" />
         <entry key="..\:/OSCAR/ETESP/TCC/GitHub/Tupa-Mobile/app/src/main/res/layout/slider_item.xml" value="0.15760869565217392" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_icon_intransitavel_ativo.xml" value="0.31145833333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_forecast_popup.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_graph.xml" value="0.1625" />
         <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/alert_item.xml" value="0.33469202898550726" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/forecast_hour_item.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/forecast_item.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/forecast_location_item.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_alert.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_auto_complete.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_forecast.xml" value="0.29583333333333334" />
         <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_history.xml" value="0.20923913043478262" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_notification.xml" value="0.1625" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_past_forecasts.xml" value="0.29583333333333334" />
         <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/fragment_rides.xml" value="0.20923913043478262" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/notification_item.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/notification_toolbar.xml" value="0.1625" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/open_forecast_item.xml" value="0.1625" />
+        <entry key="..\:/Users/Nicolas/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/rides_item.xml" value="0.5" />
       </map>
     </option>
   </component>

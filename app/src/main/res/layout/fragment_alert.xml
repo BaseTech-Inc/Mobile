@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:text="Esta semana"
+                android:text="Últimos alertas"
                 android:textColor="?attr/OnSurfaceMediumEmphasis"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,53 +47,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtThisWeek" />
 
-            <TextView
-                android:id="@+id/txtThisMonth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="24dp"
-                android:text="Este mês"
-                android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:textSize="17sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weekAlertRecycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/monthAlertRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.473"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtThisMonth" />
-
-            <TextView
-                android:id="@+id/txtPrevious"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="24dp"
-                android:text="Há mais tempo"
-                android:textColor="?attr/OnSurfaceMediumEmphasis"
-                android:textSize="17sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/monthAlertRecycler" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/previousAlertRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.473"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtPrevious" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

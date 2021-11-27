@@ -27,6 +27,8 @@ import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Location.GetLocationResponse;
+import com.example.tupa_mobile.Location.LocationAdapter;
 import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
@@ -44,6 +46,7 @@ import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
+import com.example.tupa_mobile.Rides.Rides;
 import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.Route.Metadata;
 import com.example.tupa_mobile.Route.RouteResponse;
@@ -563,7 +566,7 @@ public class Connection {
                     return;
                 }
                 GetRidesResponse getRidesResponse = response.body();
-              
+
                 if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
                     Log.d(TAG, "Data attribute is null1");
                     return;
@@ -571,6 +574,7 @@ public class Connection {
                 Log.e(TAG, "Funciona carai1");
 
                 RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
+
                 weekRecyclerView.setAdapter(adapter);
             }
 
@@ -580,6 +584,77 @@ public class Connection {
             }
         });
     }
+    public void getDecoCoor(RecyclerView weekRecyclerView, String encodedPoints, Context context) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<GetRidesResponse> call = api.getDecoCoor("Bearer " + getToken(context), encodedPoints);
+
+        call.enqueue(new Callback<GetRidesResponse>() {
+            @Override
+            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetRidesResponse getRidesResponse = response.body();
+
+                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
+                    Log.d(TAG, "Data attribute is null1");
+                    return;
+                }
+                Log.e(TAG, "Funciona carai1");
+
+            }
+
+            @Override
+            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+//    public void getLocation(RecyclerView locationsRecycler, Context context) {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://tupaserver.azurewebsites.net")
+//                .addConverterFactory(GsonConverterFactory.create()).build();
+//
+//        API api = retrofit.create(API.class);
+//
+//        Call<GetLocationResponse> call = api.getLocation("Bearer " + getToken(context) );
+//
+//        call.enqueue(new Callback<GetLocationResponse>() {
+//            @Override
+//            public void onResponse(Call<GetLocationResponse> call, Response<GetLocationResponse> response) {
+//                if (!response.isSuccessful()) {
+//                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+//                    Log.e(TAG, response.message());
+//                    Log.e(TAG, response.toString());
+//                    return;
+//                }
+//                GetLocationResponse getLocationResponse = response.body();
+//
+//                if (getLocationResponse == null || getLocationResponse.getData().size() < 1){
+//                    Log.d(TAG, "Data attribute is null1");
+//                    return;
+//                }
+//                Log.e(TAG, "Funciona carai1");
+//
+//                LocationAdapter adapter = new LocationAdapter(context, getLocationResponse.getData());
+//                locationsRecycler.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GetLocationResponse> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     public void getRidesMonth(RecyclerView monthRecyclerView, Context context) {
         Retrofit retrofit = new Retrofit.Builder()
