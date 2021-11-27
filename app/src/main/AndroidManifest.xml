@@ -59,7 +59,6 @@
         <activity android:name=".Activities.ThemeSettingsActivity" />
         <activity android:name=".Activities.NotificationSettingsActivity" />
         <activity android:name=".Activities.ConnectionsActivity" />
-        <activity android:name=".Activities.PrivacyActivity" />
         <activity android:name=".Activities.AccountActivity" />
         <activity android:name=".Activities.GraphActivity" />
         <activity android:name=".Activities.ChangeUsernameActivity" />
