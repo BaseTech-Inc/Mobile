@@ -88,7 +88,6 @@ public class SettingsFragment extends Fragment {
         // TODO Add your menu entries here
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.settings_menu, menu);
-        notificationItem = menu.findItem(R.id.notificationItem);
     }
 
     @Override

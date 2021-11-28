@@ -99,32 +99,4 @@ public class HistoryFragment extends Fragment {
 
         return view;
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.history_menu, menu);
-        searchItem = menu.findItem(R.id.searchItem);
-        notificationItem = menu.findItem(R.id.notificationItem);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()){
-            case R.id.searchItem:
-
-                break;
-            case R.id.notificationItem:
-                startNotificationActivity();
-                break;
-        }
-        return true;
-    }
-
-    private void startNotificationActivity() {
-        Intent intent = new Intent(getContext(), NotificationActivity.class);
-        startActivity(intent);
-    }
 }

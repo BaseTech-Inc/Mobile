@@ -98,7 +98,6 @@ public class ForecastFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.forecast_menu, menu);
         addItem = menu.findItem(R.id.addItem);
-        notificationItem = menu.findItem(R.id.notificationItem);
     }
 
     @Override
@@ -107,9 +106,6 @@ public class ForecastFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.addItem:
                 startForecastPopup();
-                break;
-            case R.id.notificationItem:
-                startNotificationActivity();
                 break;
         }
         return true;
@@ -130,11 +126,6 @@ public class ForecastFragment extends Fragment {
                 .setBlurRadius(10);
 
         Intent intent = new Intent(getContext(), ForecastPopupActivity.class);
-        startActivity(intent);
-    }
-
-    private void startNotificationActivity() {
-        Intent intent = new Intent(getContext(), NotificationActivity.class);
         startActivity(intent);
     }
 

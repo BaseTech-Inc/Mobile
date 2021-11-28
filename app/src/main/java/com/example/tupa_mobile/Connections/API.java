@@ -6,6 +6,7 @@ import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
+import com.example.tupa_mobile.RiskPoints.RiskPointResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
@@ -13,6 +14,7 @@ import com.example.tupa_mobile.WeatherAPI.Weather;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -93,8 +95,7 @@ public interface API {
 
     @GET("/api/v1/Marcadores")
     Call<GetMarkersResponse> getMarkers(
-            @Header("Authorization") String access_token,
-            @Query("UserId") String userId
+            @Header("Authorization") String access_token
     );
 
     @GET("/api/v1/Alertas")
@@ -104,8 +105,28 @@ public interface API {
             @Query("month") int month,
             @Query("day") int day
     );
-    @GET("api/v1/HistoricoUsuario")
+
+    @GET("/api/v1/HistoricoUsuario")
     Call <GetRidesResponse> getRides(
+            @Header("Authorization") String key
+    );
+
+    @POST("/api/v1/Marcadores")
+    Call<GetMarkersResponse> postMarker(
+            @Header("Authorization") String key,
+            @Query("Latitude") double lat,
+            @Query("Longitude") double lng,
+            @Query("Nome") String name
+    );
+
+    @DELETE("/api/v1/Marcadores")
+    Call<GetMarkersResponse> deleteMarker(
+            @Header("Authorization") String key,
+            @Query("Id") String id
+    );
+
+    @GET("/api/v1/PontoRisco")
+    Call<RiskPointResponse> getRiskPoints(
             @Header("Authorization") String key
     );
 }

@@ -4,66 +4,173 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:background="@drawable/map_buttons"
         android:padding="10dp"
         android:theme="@style/ToolbarTheme"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/Mapa" />
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo_2_white_theme"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tvCurrentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:fontFamily="@font/open_sans_regular"
+            android:visibility="gone"
+            android:text="São Paulo - SP"
+            app:layout_constraintStart_toStartOf="@+id/ivLogo"
+            app:layout_constraintEnd_toEndOf="@+id/ivLogo"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogo"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:gravity="end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnRiskAreas"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginVertical="10dp"
-            android:background="@drawable/map_buttons"
-            android:src="@drawable/ic_add" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/btnAlerts"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="15dp"
-            android:background="@drawable/map_buttons"
-            android:src="@drawable/ic_add" />
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/map_buttons"
+                android:tint="?attr/OnSurfaceMediumEmphasis"
+                android:src="@drawable/ic_arrow_back"
+                android:visibility="gone"/>
 
-        <ImageButton
-            android:id="@+id/btnSearch"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginVertical="10dp"
-            android:background="@drawable/map_buttons"
-            android:src="@drawable/ic_search_black" />
+            <ImageButton
+                android:id="@+id/btnMyLocation"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/map_buttons"
+                android:tint="?attr/OnSurfaceMediumEmphasis"
+                android:src="@drawable/ic_gps_fixed_black_24dp" />
 
-        <ImageButton
-            android:id="@+id/btnNotification"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginVertical="10dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/map_buttons"
-            android:src="@drawable/ic_notifications" />
+            <ImageButton
+                android:id="@+id/btnSandwich"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/map_buttons"
+                android:tint="?attr/OnSurfaceMediumEmphasis"
+                android:src="@drawable/ic_menu" />
 
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="10dp">
+
+            <LinearLayout
+                android:gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:background="@drawable/map_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/OnSurfaceHighEmphasis"
+                        android:textSize="17sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="4dp"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:text="Áreas de Risco"/>
+
+                    <ImageButton
+                        android:id="@+id/btnRiskAreas"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/map_buttons"
+                        android:tint="?attr/OnSurfaceHighEmphasis"
+                        android:src="@drawable/ic_warning_black_24dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:background="@drawable/map_buttons"
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/OnSurfaceHighEmphasis"
+                        android:textSize="17sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="4dp"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:text="Alertas"/>
+
+                    <ImageButton
+                        android:id="@+id/btnAlerts"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/map_buttons"
+                        android:tint="?attr/OnSurfaceHighEmphasis"
+                        android:src="@drawable/ic_campaign_black_24dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:background="@drawable/map_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/OnSurfaceHighEmphasis"
+                        android:textSize="17sp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="4dp"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:text="Rotas"/>
+
+                    <ImageButton
+                        android:id="@+id/btnSearch"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/map_buttons"
+                        android:tint="?attr/OnSurfaceHighEmphasis"
+                        android:src="@drawable/ic_alt_route_black_24dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

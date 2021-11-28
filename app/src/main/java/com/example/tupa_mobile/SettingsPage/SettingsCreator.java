@@ -28,9 +28,9 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Conta", R.drawable.day_sunny, "Edson Koiti", new Intent(context, AccountActivity.class), 0));
-        settingsList.add( new Settings("Privacidade", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, PrivacyActivity.class), 0));
-        settingsList.add( new Settings("Conexões", R.drawable.night_clear, "Outras intera...", new Intent(context, ConnectionsActivity.class), 0));
+        settingsList.add( new Settings("Conta", R.drawable.ic_person_focused, "Edson Koiti", new Intent(context, AccountActivity.class), 0));
+        settingsList.add( new Settings("Privacidade", R.drawable.ic_lock_black_24dp, "", new Intent(context, PrivacyActivity.class), 0));
+        settingsList.add( new Settings("Conexões", R.drawable.ic_link_black_24dp, "Outras intera...", new Intent(context, ConnectionsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -43,8 +43,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Notificações", R.drawable.day_sunny, "Todas", new Intent(context, NotificationSettingsActivity.class), 0));
-        settingsList.add( new Settings("Tema", R.drawable.clock_ilustraion_white_theme, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), 0));
+        settingsList.add( new Settings("Notificações", R.drawable.ic_notifications, "Todas", new Intent(context, NotificationSettingsActivity.class), 0));
+        settingsList.add( new Settings("Tema", R.drawable.ic_palette_black_24dp, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -58,8 +58,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(context, AboutUsActivity.class), 0));
-        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(context, HelpActivity.class), 0));
+        settingsList.add( new Settings("Sobre", R.drawable.ic_info_black_24dp, "", new Intent(context, AboutUsActivity.class), 0));
+        settingsList.add( new Settings("Ajuda", R.drawable.ic_help_black_24dp, "", new Intent(context, HelpActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 

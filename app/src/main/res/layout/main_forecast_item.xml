@@ -90,9 +90,9 @@
 
             <ImageView
                 android:id="@+id/icoHumidity"
-                android:layout_width="20dp"
+                android:layout_width="18dp"
                 android:layout_height="20dp"
-                android:src="@drawable/stormy" />
+                android:src="@drawable/ic_water_drop_black_24dp" />
 
             <TextView
                 android:id="@+id/txtHumidity"
@@ -107,7 +107,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/stormy" />
+                android:src="@drawable/ic_speed_black_24dp"
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/txtPressure"
@@ -122,7 +123,8 @@
                 android:id="@+id/icoWind"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/stormy" />
+                android:src="@drawable/ic_air_black_24dp"
+                app:tint="?attr/colorPrimary"/>
 
             <TextView
                 android:id="@+id/txtWind"

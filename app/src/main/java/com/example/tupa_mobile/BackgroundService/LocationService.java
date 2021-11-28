@@ -54,6 +54,11 @@ public class LocationService extends Service{
     private static final String ALERT_CHANNEL_NAME = "ALERT_Name";
     private static final String ALERT_CHANNEL_DESC = "ALERT_Desc";
 
+    private static final int RISK_ID = 4;
+    private static final String RISK_CHANNEL_ID = "RISK_Id";
+    private static final String RISK_NAME = "RISK_Name";
+    private static final String RISK_CHANNEL_DESC = "RISK_Desc";
+
     private static final String TAG = LocationService.class.getSimpleName();
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
@@ -116,7 +121,7 @@ public class LocationService extends Service{
         double longitude = location.getLongitude();
 
         Connection connection = new Connection();
-        connection.getAlertsList(getBaseContext(), 2021, 9, 21, longitude, latitude, ALERT_ID, ALERT_CHANNEL_ID, notificationManager);
+        connection.getAlertsList(getBaseContext(), 2021, 1, 1, longitude, latitude, ALERT_ID, ALERT_CHANNEL_ID, notificationManager);
 
         if (getInsideFlood(getBaseContext(), "CONTAINS")) {
             if (!getInsideFlood(getBaseContext(), "NOTIFICATION")){
@@ -125,7 +130,7 @@ public class LocationService extends Service{
                         .setContentTitle("Cuidado!")
                         .setContentText("Essa área está alagada!")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                                .bigText("A avenida pipipi popopo está alagada"))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
                 notificationManager.notify(ALERT_ID, builder.build());
@@ -142,11 +147,32 @@ public class LocationService extends Service{
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        ArrayList<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(-23.61667113533345, -46.648964070576255));
-        latLngs.add(new LatLng(-23.613538121785556, -46.63819563711089));
-        latLngs.add(new LatLng(-23.61926633610226, -46.63926737693445));
-        latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
+        Connection connection = new Connection();
+        connection.getRiskPointsList(getBaseContext(), longitude, latitude);
+
+        if(getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            if(!getInsideRiskArea(getBaseContext(), "NOTIFICATION")){
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), RISK_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.nibolas)
+                        .setContentTitle("Cuidado!")
+                        .setContentText("Risco!!!")
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                notificationManager.notify(ALERT_ID, builder.build());
+                Log.e(TAG, "Risco Cisco!");
+                saveInsideRiskArea(getBaseContext(), "NOTIFICATION", true);
+            }
+        }
+        if (!getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            saveInsideRiskArea(getBaseContext(), "NOTIFICATION", false);
+        }
+
+        /*
+
+        Connection con = new Connection();
+        con.getRiskPointsList(getBaseContext(), longitude, latitude);
 
         if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
                 //send notification
@@ -167,6 +193,8 @@ public class LocationService extends Service{
         else {
             isRiskNotificationActive = false;
         }
+
+         */
     }
 
 
@@ -237,6 +265,11 @@ public class LocationService extends Service{
             channel2.setDescription(ALERT_CHANNEL_DESC);
             notificationManager.createNotificationChannel(channel2);
 
+            //Risk Area channel
+            NotificationChannel channel3 = new NotificationChannel(RISK_CHANNEL_ID, RISK_NAME, NotificationManager.IMPORTANCE_HIGH);
+            channel3.setDescription(RISK_CHANNEL_DESC);
+            notificationManager.createNotificationChannel(channel3);
+
         }
     }
 
@@ -252,6 +285,22 @@ public class LocationService extends Service{
     public boolean getInsideFlood(Context context, String key){
 
         SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+        return sp.getBoolean(key, false);
+
+    }
+
+    public void saveInsideRiskArea(Context context, String key, boolean value){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value).apply();
+
+    }
+
+    public boolean getInsideRiskArea(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
 
     }

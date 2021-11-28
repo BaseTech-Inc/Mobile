@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtHumidity"
+        android:id="@+id/txtMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
@@ -30,19 +30,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/icoHumidity" />
-
-    <TextView
-        android:id="@+id/txtMinTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:fontFamily="@font/montserrat_semibold"
-        android:text="Adicionar Marcadores"
-        android:layout_marginVertical="24dp"
-        android:textColor="?attr/colorPrimaryVariant"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHumidity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
