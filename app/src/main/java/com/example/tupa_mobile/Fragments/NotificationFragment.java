@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tupa_mobile.Alerts.Alert;
+import com.example.tupa_mobile.Alerts.AlerBairro;
+
 import com.example.tupa_mobile.Alerts.AlertAdapter;
+import com.example.tupa_mobile.Districts.Districts;
 import com.example.tupa_mobile.R;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class NotificationFragment extends Fragment {
 
     private RecyclerView cardRecyclerView;
     private AlertAdapter adapter;
-    private ArrayList<Alert> alerts;
+    private ArrayList<AlerBairro> alerts;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -42,15 +44,15 @@ public class NotificationFragment extends Fragment {
         cardRecyclerView.setAdapter(adapter);
 
        // for(int i=0; i<7; i++) {
-            createListData("Alerta de Alagamento", "Avenida Bla Bli Blop 333");//puxar do banco de dados
+//            createListData("Alerta de Alagamento", "Avenida Bla Bli Blop 333");//puxar do banco de dados
        // }
 
         return view;
     }
 
-    public void createListData(String date, String desc) {
+    public void createListData(String descricao, Districts districts) {
         // This method adds data to the recyclerView
-        Alert alert = new Alert(date, desc);
+        AlerBairro alert = new AlerBairro(descricao, districts);
         alerts.add(alert);
     }
 }

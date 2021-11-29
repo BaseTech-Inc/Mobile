@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.HorizontalScrollView;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Graph.ForecastGraph;
 import com.example.tupa_mobile.Graph.GraphDayItem;
 import com.example.tupa_mobile.Graph.GraphDayItemAdapter;
@@ -51,8 +52,8 @@ public class GraphActivity extends AppCompatActivity {
 
         forecastChart = findViewById(R.id.forecastChart);
 
-        ForecastGraph forecastGraph = new ForecastGraph();
-        forecastGraph.createGraph(forecastChart, getApplicationContext());
+        Connection connection = new Connection();
+        connection.requestGraphOpenForecast(forecastChart, getApplicationContext());
     }
 
     @Override

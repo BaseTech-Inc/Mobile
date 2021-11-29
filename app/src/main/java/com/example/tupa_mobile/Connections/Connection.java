@@ -12,10 +12,11 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,10 +26,16 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.Activities.AccountActivity;
 import com.example.tupa_mobile.Activities.LoginActivity;
+import com.example.tupa_mobile.Activities.LoginOptionsActivity;
 import com.example.tupa_mobile.Activities.MainActivity;
+import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
+import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Graph.ForecastGraph;
+import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingFeatures;
 import com.example.tupa_mobile.GeoCoding.GeoCodingProperties;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
@@ -41,7 +48,11 @@ import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
-import com.example.tupa_mobile.R;
+import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.AccountResponse;
+import com.example.tupa_mobile.Profile.ImageResponse;
+import com.example.tupa_mobile.Profile.ProfileResponse;
+import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.RidesAdapter;
 import com.example.tupa_mobile.RiskPoints.RiskPointData;
@@ -58,6 +69,9 @@ import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,13 +79,13 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -92,6 +106,7 @@ public class Connection {
     private String position = "-23.6182683,-46.639479";
     private String lat = "-23.6182683";
     private String lon = "-46.639479";
+    private String token;
     private ArrayList<ForecastDay> forecastDays;
     private ForecastDay forecastDay;
     private ArrayList<ForecastHour> forecastHours;
@@ -111,11 +126,11 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiTWFuYWdlciIsIkF1dGhlbnRpY2F0ZWQiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiI0NmUxZmRlMy03MTAwLTQ2ZDgtOTZlMS1iYmU4ZTk1MjQ4YWUiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOTM2OTE0MzktMmRlOS00YWE3LThmOGMtNjVkMTU1NGZlZGEwIiwibmJmIjoxNjM4MTk0Mzk4LCJleHAiOjE2MzgyODA3OTgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.nbcGv0ljzHZwcub5JxZYIuMZa8wvi9Ptcg588qFZG2o";
+    private ArrayList<Entry> lineList, lineList2;
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
-    public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context){
+    public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -130,7 +145,7 @@ public class Connection {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
 
-                if (response.isSuccessful() && response.body()!=null) {
+                if (response.isSuccessful() && response.body() != null) {
 
                     weather = response.body();
                     location = weather.getLocation();
@@ -155,7 +170,7 @@ public class Connection {
         });
     }
 
-    public void requestForecast(RecyclerView recyclerView, Context context){
+    public void requestForecast(RecyclerView recyclerView, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -171,7 +186,7 @@ public class Connection {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
 
-                if (response.isSuccessful() && response.body()!=null) {
+                if (response.isSuccessful() && response.body() != null) {
 
                     weather = response.body();
                     forecast = weather.getForecast();
@@ -189,7 +204,7 @@ public class Connection {
         });
     }
 
-    public void requestOpenForecast(RecyclerView recyclerView, Context context){
+    public void requestOpenForecast(RecyclerView recyclerView, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/")
@@ -205,7 +220,7 @@ public class Connection {
             @Override
             public void onResponse(Call<OpenWeather> call, Response<OpenWeather> response) {
 
-                if (response.isSuccessful() && response.body()!=null) {
+                if (response.isSuccessful() && response.body() != null) {
 
                     openWeather = response.body();
                     openDaily = new ArrayList<>(openWeather.getDaily());
@@ -224,7 +239,7 @@ public class Connection {
         });
     }
 
-    public void requestHourForecast(RecyclerView recyclerView, Context context){
+    public void requestHourForecast(RecyclerView recyclerView, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -233,13 +248,13 @@ public class Connection {
 
         API API = retrofit.create(API.class);
 
-        Call<Weather> call = API.getForecast(weatherApiKey, position, 1,"no", "no");
+        Call<Weather> call = API.getForecast(weatherApiKey, position, 1, "no", "no");
 
         call.enqueue(new Callback<Weather>() {
             @Override
             public void onResponse(Call<Weather> call, Response<Weather> response) {
 
-                if (response.isSuccessful() && response.body()!=null) {
+                if (response.isSuccessful() && response.body() != null) {
 
                     weather = response.body();
                     forecast = weather.getForecast();
@@ -262,7 +277,54 @@ public class Connection {
         });
     }
 
-    public void postRoute(TextView txtResponse, Context context){
+    public void requestGraphOpenForecast(LineChart forecastChart, Context context) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        API API = retrofit.create(API.class);
+
+        Call<OpenWeather> call = API.getOpenForecastDaily(lat, lon, openApiKey, "metric");
+
+        call.enqueue(new Callback<OpenWeather>() {
+
+            @Override
+            public void onResponse(Call<OpenWeather> call, Response<OpenWeather> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    openWeather = response.body();
+                    openDaily = new ArrayList<>(openWeather.getDaily());
+
+                    ArrayList<Entry> MaxTemps = new ArrayList<>();
+                    ArrayList<Entry> MinTemps = new ArrayList<>();
+                    int i = 1;
+
+                    for(OpenDaily daily: openDaily) {
+                        MaxTemps.add(new Entry(i, (float) daily.getTemp().getMax()));
+                        MinTemps.add(new Entry(i, (float) daily.getTemp().getMin()));
+
+                        i++;
+                    }
+
+                    ForecastGraph forecastGraph = new ForecastGraph();
+                    forecastGraph.createGraph(forecastChart, context, MaxTemps, MinTemps);
+
+                    Log.d(TAG, MaxTemps.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenWeather> call, Throwable t) {
+                Toast.makeText(context, t.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+
+    public void postRoute(TextView txtResponse, Context context) {
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new SpeechRecognitionInterceptor()).build();
 
@@ -321,7 +383,7 @@ public class Connection {
         });
     }
 
-    public void requestCurrentAddress(Context context, EditText editText, double latitude, double longitude){
+    public void requestCurrentAddress(Context context, EditText editText, double latitude, double longitude) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.openrouteservice.org/geocode/")
@@ -336,7 +398,7 @@ public class Connection {
             @Override
             public void onResponse(Call<GeoCodingResponse> call, Response<GeoCodingResponse> response) {
 
-                if (response.isSuccessful() && response.body()!=null) {
+                if (response.isSuccessful() && response.body() != null) {
 
                     geoCodingResponse = response.body();
                     geoCodingFeaturesArrayList = geoCodingResponse.getFeatures();
@@ -353,7 +415,8 @@ public class Connection {
             }
         });
     }
-    public void registerUser(Context context, String username, String email, String password){
+
+    public void registerUser(Context context, String username, String email, String password) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -371,8 +434,8 @@ public class Connection {
                     return;
                 }
                 Intent it = new Intent(context, LoginActivity.class);
-                ((Activity)context).startActivity(it);
-                ((Activity)context).finish();
+                ((Activity) context).startActivity(it);
+                ((Activity) context).finish();
             }
 
             @Override
@@ -381,7 +444,8 @@ public class Connection {
             }
         });
     }
-    public void loginUser(Context context, String email, String password){
+
+    public void loginUser(Context context, String email, String password) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -393,18 +457,20 @@ public class Connection {
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
+                    LoginResponse loginResponse = response.body();
+
                     sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("email", email);
-                    editor.putString("password", password);
+                    editor.putString("token", loginResponse.getData().getAccess_token());
                     editor.apply();
 
                     Intent it = new Intent(context, MainActivity.class);
-                    ((Activity)context).startActivity(it);
-                    ((Activity)context).finish();
-                }else{
-                    Toast.makeText(((Activity)context), "Não bro, não é assim 😭", Toast.LENGTH_SHORT).show();
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+
+                } else {
+                    Toast.makeText(((Activity) context), "Não bro, não é assim 😭", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -423,7 +489,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetMarkersResponse> call = api.getMarkers("Bearer " + access_token);
+        Call<GetMarkersResponse> call = api.getMarkers("Bearer " + getToken(context));
 
         call.enqueue(new Callback<GetMarkersResponse>() {
             @Override
@@ -436,7 +502,7 @@ public class Connection {
                     return;
                 }
                 GetMarkersResponse markersResponse = response.body();
-                if (markersResponse.getData() == null || markersResponse.getData().size() < 1){
+                if (markersResponse.getData() == null || markersResponse.getData().size() < 1) {
                     emptyMarkersLayout.setVisibility(View.VISIBLE);
                     Log.d(TAG, "Data attribute is null or empty");
                     return;
@@ -469,7 +535,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + getToken(context), year, month, day);
 
         call.enqueue(new Callback<GetAlertResponse>() {
             @Override
@@ -482,7 +548,7 @@ public class Connection {
                     return;
                 }
                 GetAlertResponse getAlertResponse = response.body();
-                if (getAlertResponse == null){
+                if (getAlertResponse == null) {
                     Log.d(TAG, "Data attribute is null");
                     return;
                 }
@@ -513,7 +579,7 @@ public class Connection {
         });
     }
 
-    public void getAlertsList(Context context, int year, int month, int day, double longitude, double latitude, int ALERT_ID, String ALERT_CHANNEL_ID, NotificationManager notificationManager){
+    public void getAlertsList(Context context, int year, int month, int day, double longitude, double latitude, int ALERT_ID, String ALERT_CHANNEL_ID, NotificationManager notificationManager) {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.MINUTES)
@@ -528,7 +594,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetAlertResponse> call = api.getAlerts("Bearer " + access_token, year, month, day);
+        Call<GetAlertResponse> call = api.getAlerts("Bearer " + getToken(context), year, month, day);
 
         call.enqueue(new Callback<GetAlertResponse>() {
             @Override
@@ -541,7 +607,7 @@ public class Connection {
                     return;
                 }
                 GetAlertResponse getAlertResponse = response.body();
-                if (getAlertResponse == null){
+                if (getAlertResponse == null) {
                     Log.d(TAG, "Data attribute is null");
                     return;
                 }
@@ -560,7 +626,7 @@ public class Connection {
                         }
                     }
                 }
-                saveInsideFlood(context,"CONTAINS",false);
+                saveInsideFlood(context, "CONTAINS", false);
             }
 
             @Override
@@ -570,14 +636,14 @@ public class Connection {
         });
     }
 
-    public void getRides(RecyclerView weekRecyclerView, Context context){
+    public void getRides(RecyclerView weekRecyclerView, Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tupaserver.azurewebsites.net")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
+        Call<GetRidesResponse> call = api.getRides("Bearer " + getToken(context));
 
         call.enqueue(new Callback<GetRidesResponse>() {
             @Override
@@ -589,13 +655,14 @@ public class Connection {
                     return;
                 }
                 GetRidesResponse getRidesResponse = response.body();
+              
                 if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
+                    Log.d(TAG, "Data attribute is null1");
                     return;
                 }
-                Log.e(TAG, "Funciona carai");
+                Log.e(TAG, "Funciona carai1");
 
-                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
+                RidesAdapter adapter = new RidesAdapter(context, getRidesResponse.getData());
                 weekRecyclerView.setAdapter(adapter);
             }
 
@@ -605,83 +672,251 @@ public class Connection {
             }
         });
     }
-    public void getRidesMonth(RecyclerView monthRecyclerView, Context context){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        API api = retrofit.create(API.class);
 
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
 
-        call.enqueue(new Callback<GetRidesResponse>() {
-            @Override
-            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetRidesResponse getRidesResponse = response.body();
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
-                    return;
-                }
-                Log.e(TAG, "Funciona carai");
 
-                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
-                monthRecyclerView.setAdapter(adapter);
-            }
 
-            @Override
-            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
-
-            }
-        });
-    }
-    public void getRidesPast(RecyclerView pastRecyclerView, Context context){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://tupaserver.azurewebsites.net")
-                .addConverterFactory(GsonConverterFactory.create()).build();
-
-        API api = retrofit.create(API.class);
-
-        Call<GetRidesResponse> call = api.getRides("Bearer " + access_token);
-
-        call.enqueue(new Callback<GetRidesResponse>() {
-            @Override
-            public void onResponse(Call<GetRidesResponse> call, Response<GetRidesResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.e(TAG, String.valueOf(response.isSuccessful()));
-                    Log.e(TAG, response.message());
-                    Log.e(TAG, response.toString());
-                    return;
-                }
-                GetRidesResponse getRidesResponse = response.body();
-                if (getRidesResponse == null || getRidesResponse.getData().size() < 1){
-                    Log.d(TAG, "Data attribute is null");
-                    return;
-                }
-
-                RidesAdapter adapter = new RidesAdapter( context,getRidesResponse.getData());
-                pastRecyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<GetRidesResponse> call, Throwable t) {
-                Log.e(TAG, t.getMessage());
-            }
-        });
-    }
-
-    public void saveInsideFlood(Context context, String key, boolean value){
+    public void saveInsideFlood(Context context, String key, boolean value) {
 
         SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value).apply();
 
+    }
+
+    public boolean getInsideFlood(Context context, String key) {
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
+        return sp.getBoolean(key, false);
+
+    }
+
+    public void getAlerBairro(RecyclerView weekRecyclerView, Context context){
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+          
+           Call<GetAlerBairroResponse> call = api.getAlertBairro("Bearer " + getToken(context), 2021, 1, 1,"Casa Verde");
+
+        call.enqueue(new Callback<GetAlerBairroResponse>() {
+            @Override
+            public void onResponse(Call<GetAlerBairroResponse> call, Response<GetAlerBairroResponse> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, String.valueOf(response.isSuccessful()));
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                    return;
+                }
+                GetAlerBairroResponse getAlerBairroResponse = response.body();
+                if (getAlerBairroResponse == null || getAlerBairroResponse.getData().size() < 1){
+                    Log.e(TAG, "Data attribute is null4");
+                    Log.d(TAG, response.body().getMessage());
+                    return;
+                }
+                Log.e(TAG, "Funciona carai4");
+                Log.d(TAG, String.valueOf(getAlerBairroResponse));
+                AlertAdapter adapter = new AlertAdapter( context,getAlerBairroResponse.getData());
+                weekRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
+                Log.e(TAG, "fudeu");
+              Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+
+    public void ResetPassword(Context context, String email) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+          
+        Call<ResetPasswordResponse> call = api.postPassword(email);
+
+        call.enqueue(new Callback<ResetPasswordResponse>() {
+            @Override
+            public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                if (response.isSuccessful()) {
+                    Intent it = new Intent(context, LoginOptionsActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+                    Log.d(TAG, email);
+                } else {
+                    Log.d(TAG, "Error");
+                    Log.d(TAG, response.message());
+                    Log.d(TAG, response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                Log.e(TAG, "Master Error");
+             }
+        });
+    }
+    
+
+
+    public void ChangePassword(Context context, String oldPass, String newPass) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+      
+        Call<ChangePasswordResponse> call = api.postChangePassword("Bearer " + getToken(context), oldPass, newPass);
+
+        call.enqueue(new Callback<ChangePasswordResponse>() {
+            @Override
+            public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
+                if (response.isSuccessful()) {
+                    sp = context.getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.clear();
+                    editor.commit();
+
+                    Log.d(TAG, oldPass);
+                    Log.d(TAG, newPass);
+
+                    Intent it = new Intent(context, LoginActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+
+                } else {
+                    Log.d(TAG, "Error");
+                    Log.e(TAG, response.message());
+                    Log.e(TAG, response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangePasswordResponse> call, Throwable t) {
+                Log.e(TAG, "Master Error");
+                Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    public void LoadInfoProfile(Context context) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ProfileResponse> call = api.getProfile("Bearer " + getToken(context));
+
+        call.enqueue(new Callback<ProfileResponse>() {
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                if(response.isSuccessful()){
+                    if(response != null){
+
+                        sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString("email", response.body().getData().getEmail());
+                        editor.putString("name", response.body().getData().getName());
+                        editor.putString("tipo", response.body().getData().getTipoUsuario());
+                        editor.apply();
+
+                    }else {
+                        Log.d(TAG, "Is null");
+                        Log.e(TAG, response.message());
+                        Log.e(TAG, response.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                Log.e(TAG, "Deu algum erro");
+                Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    public void SendInfoProfile(Context context, String name, String tipo) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<PutProfileResponse> call = api.putProfile("Bearer " + getToken(context), name, tipo);
+
+        call.enqueue(new Callback<PutProfileResponse>() {
+            @Override
+            public void onResponse(Call<PutProfileResponse> call, Response<PutProfileResponse> response) {
+                if(response.isSuccessful()){
+                    Intent it = new Intent(context, MainActivity.class);
+                    ((Activity) context).startActivity(it);
+                    ((Activity) context).finish();
+
+                }else{
+                    Log.d("Buda", "Is null");
+                    Log.e("Buda", response.message());
+                    Log.e("Buda", response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PutProfileResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void LoadImageProfile(Context context, CircleImageView profile) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+  
+        Call<ImageResponse> call = api.getImageProfile("Bearer " + getToken(context));
+
+        call.enqueue(new Callback<ImageResponse>() {
+            @Override
+            public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                if (response.isSuccessful()) {
+
+                    Log.d("Morte", response.body().getData());
+
+                    byte[] decodedString = Base64.decode(response.body().getData(), Base64.DEFAULT);
+                    Bitmap image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    profile.setImageBitmap(image);
+
+
+                }else {
+                    Log.d("Ala", "Algo errado");
+                    Log.e("Ala", response.message());
+                    Log.e("Ala", response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImageResponse> call, Throwable t) {
+                Log.e("Errado", t.getMessage());
+                Log.e("Erradíssimo", t.toString());
+            }
+        });
     }
 
     public void saveFloodName(Context context, String key, String value){
@@ -693,11 +928,80 @@ public class Connection {
 
     }
 
-    public boolean getInsideFlood(Context context, String key){
+    public boolean getInsideFlood(Context context, String key) {
 
         SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
 
+    }
+    public void SendImageProfile(Context context, String encoded) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ImageResponse> call = api.putImageProfile("Bearer " + getToken(context), encoded);
+
+        call.enqueue(new Callback<ImageResponse>() {
+            @Override
+            public void onResponse(Call<ImageResponse> call, Response<ImageResponse> response) {
+                if(response.isSuccessful())
+                {
+                    sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("image", encoded);
+                    editor.apply();
+                    Log.d("Ivo", "Deu certo");
+                }else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImageResponse> call, Throwable t) {
+                Log.d("Ivo", "Fudeu enorme");
+                Log.e("Ivo", t.getMessage());
+            }
+        });
+    }
+
+    public void DeleteAccount(Context context){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<AccountResponse> call = api.deleteAccount("Bearer " + getToken(context));
+
+        call.enqueue(new Callback<AccountResponse>() {
+            @Override
+            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
+                sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.clear();
+                editor.commit();
+
+                ((Activity) context).finishAffinity();
+                System.exit(0);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<AccountResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public String getToken(Context context){
+
+        sp = context.getSharedPreferences("MyUserPrefs", MODE_PRIVATE);
+        token = sp.getString("token", null);
+
+        return token;
     }
 
     public void postMarker(Context context, double lat, double lng, String name){

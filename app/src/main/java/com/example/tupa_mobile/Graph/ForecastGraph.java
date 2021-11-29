@@ -2,6 +2,7 @@ package com.example.tupa_mobile.Graph;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -20,41 +21,21 @@ import java.util.ArrayList;
 public class ForecastGraph {
 
     private ArrayList<Entry> lineList, lineList2;
-    private LineDataSet lineDataSet, lineDataSet2;
+    private LineDataSet lineDataSetMax, lineDataSetMin;
     private LineData lineData;
 
-    public void createGraph(LineChart forecastChart, Context context){
+    public void createGraph(LineChart forecastChart, Context context, ArrayList<Entry> MaxTemp, ArrayList<Entry> MinTemp){
 
-        lineList = new ArrayList<>();
-        lineList.add(new Entry(1,18));
-        lineList.add(new Entry(2,25));
-        lineList.add(new Entry(3,22));
-        lineList.add(new Entry(4,24));
-        lineList.add(new Entry(5,26));
-        lineList.add(new Entry(6,21));
-        lineList.add(new Entry(7,25));
-        lineList.add(new Entry(8,24));
+        lineDataSetMax = new LineDataSet(MaxTemp, "Max Temperatures");
+        lineDataSetMax.setDrawHorizontalHighlightIndicator(false);
+        lineDataSetMax.setDrawVerticalHighlightIndicator(false);
 
-        lineList2 = new ArrayList<>();
-        lineList2.add(new Entry(1,10));
-        lineList2.add(new Entry(2,7));
-        lineList2.add(new Entry(3,12));
-        lineList2.add(new Entry(4,11));
-        lineList2.add(new Entry(5,9));
-        lineList2.add(new Entry(6,10));
-        lineList2.add(new Entry(7,11));
-        lineList2.add(new Entry(8,5));
+        lineDataSetMin = new LineDataSet(MinTemp, "Min Temperatures");
+        lineDataSetMin.setDrawHorizontalHighlightIndicator(false);
+        lineDataSetMin.setDrawVerticalHighlightIndicator(false);
+        lineDataSetMin.setColor(Color.BLUE);
 
-        lineDataSet = new LineDataSet(lineList, "Max Temperatures");
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawVerticalHighlightIndicator(false);
-
-        lineDataSet2 = new LineDataSet(lineList2, "Min Temperatures");
-        lineDataSet2.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet2.setDrawVerticalHighlightIndicator(false);
-        lineDataSet2.setColor(Color.BLUE);
-
-        lineData = new LineData(lineDataSet, lineDataSet2);
+        lineData = new LineData(lineDataSetMax, lineDataSetMin);
         lineData.setValueTextSize(12);
 
         forecastChart.setData(lineData);
