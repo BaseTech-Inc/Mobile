@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/notif_main"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/notifImage"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
+        android:src="@drawable/logo_2_white_theme" />
+
+    <TextView
+        android:id="@+id/notification_title"
+        style="@style/TextAppearance.Compat.Notification.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/notifImage"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Título"
+        android:textColor="#1C1C1C"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/notification_desc"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_title"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/notifImage"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="descrição descrição descrição descrição descrição"
+        android:textColor="#1C1C1C"
+        android:textSize="13sp" />
+</RelativeLayout>

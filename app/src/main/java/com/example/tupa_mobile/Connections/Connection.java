@@ -111,7 +111,7 @@ public class Connection {
     private ArrayList<MarkersData> markersData;
     private ArrayList<AlertData> alertsData;
     private SharedPreferences sp;
-    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBdXRoZW50aWNhdGVkIiwic3ViIjoidmFiaXM4MTg0NCIsImp0aSI6Ijk2YTc3ZjQ5LWFlM2YtNDJjOS1iZmM5LTE2NGY4YjMzNTQ2MSIsImVtYWlsIjoidmFiaXM4MTg0NEBqYXNtbmUuY29tIiwidWlkIjoiMWNjYzAwNDMtZjMyNS00MTExLWFjNjktMjYwY2FlY2IxMmRkIiwibmJmIjoxNjM4MDM2NDMyLCJleHAiOjE2MzgxMjI4MzIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.ZCNUvS7Q2iFpIgpRE8vkiX9CtwP58YrmwZKv8ias7YY";
+    private String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiTWFuYWdlciIsIkF1dGhlbnRpY2F0ZWQiXSwic3ViIjoibWFuYWdlckBsb2NhbGhvc3QiLCJqdGkiOiI0NmUxZmRlMy03MTAwLTQ2ZDgtOTZlMS1iYmU4ZTk1MjQ4YWUiLCJlbWFpbCI6Im1hbmFnZXJAbG9jYWxob3N0IiwidWlkIjoiOTM2OTE0MzktMmRlOS00YWE3LThmOGMtNjVkMTU1NGZlZGEwIiwibmJmIjoxNjM4MTk0Mzk4LCJleHAiOjE2MzgyODA3OTgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEvIiwiYXVkIjoiVXNlciJ9.nbcGv0ljzHZwcub5JxZYIuMZa8wvi9Ptcg588qFZG2o";
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
@@ -487,16 +487,23 @@ public class Connection {
                     return;
                 }
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                boolean isNull = true;
                 alertsData = getAlertResponse.getData();
                 for(AlertData alertData : alertsData){
                     if (alertData.getPonto() != null){
                         builder.include(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude()));
                         map.addMarker(new MarkerOptions().position(new LatLng(alertData.getPonto().getLatitude(), alertData.getPonto().getLongitude())).icon(bitmapDescriptor).title(alertData.getDescricao()));
+                        isNull = false;
                     }
                 }
-                LatLngBounds bounds = builder.build();
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
-                map.animateCamera(cu);
+                if (isNull){
+                    Toast.makeText(context, "Não há dados de alagamento em sua área", Toast.LENGTH_SHORT);
+                }
+                else{
+                    LatLngBounds bounds = builder.build();
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
+                    map.animateCamera(cu);
+                }
             }
 
             @Override
@@ -840,7 +847,10 @@ public class Connection {
                         double centerLatitude = data.getPonto().getLatitude();
 
                         if(Math.pow((longitude - centerLongitude), 2) + Math.pow((latitude - centerLatitude), 2) < Math.pow(radius, 2)){
+                            //title.setText(data.getDistrito().getNome());
+                            //desc.setText("Alagamento em " + data.getDescricao());
                             saveInsideRiskArea(context,"CONTAINS",true);
+                            saveRiskAreaName(context, "NAME", data.getDescricao() + " está sujeita a alagamentos, baseado na previsão de hoje.");
                             return;
                         }
                     }
@@ -862,6 +872,15 @@ public class Connection {
 
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, value).apply();
+
+    }
+
+    public void saveRiskAreaName(Context context, String key, String value){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value).apply();
 
     }
 

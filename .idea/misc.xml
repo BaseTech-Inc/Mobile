@@ -25,6 +25,7 @@
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable-v21/ic_lock_focused.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable-v21/ic_person_focused.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/bottom_borders.xml" value="0.3314814814814815" />
+        <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/error_gradient.xml" value="0.39692307692307693" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_alt_route_black_24dp.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_arrow_back.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_campaign_black_24dp.xml" value="0.3314814814814815" />
@@ -44,11 +45,13 @@
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_notifications_grey.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_palette_black_24dp.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_person_outline_black_24dp.xml" value="0.3314814814814815" />
+        <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_warning.xml" value="0.39692307692307693" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_warning_black_24dp.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/ic_water_drop_black_24dp.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/map_buttons.xml" value="0.33055555555555555" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/map_edit_text.xml" value="0.3314814814814815" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/map_search_button.xml" value="0.3314814814814815" />
+        <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/drawable/white_gradient.xml" value="0.39692307692307693" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_bing_map.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_main.xml" value="0.18819655521783182" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/activity_route.xml" value="0.25" />
@@ -61,6 +64,8 @@
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/main_toolbar.xml" value="0.18819655521783182" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/map_toolbar.xml" value="0.33" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/marker_info.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/notification_main.xml" value="0.33" />
+        <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/notification_small.xml" value="0.33" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/notification_toolbar.xml" value="0.18819655521783182" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/search_layout.xml" value="0.33" />
         <entry key="..\:/Users/miych/Documents/GitHub/Tupa-Mobile/app/src/main/res/layout/settings_item.xml" value="0.33" />

@@ -14,6 +14,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -36,7 +40,7 @@ import static com.example.tupa_mobile.Fragments.MapFragment.PERMISSIONS_REQUEST_
 
 public class LocationService extends Service{
 
-    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private int mInterval = 10000; // 5 seconds by default, can be changed later
     private Handler mHandler;
 
     private static final int MAIN_ID = 1;
@@ -67,6 +71,8 @@ public class LocationService extends Service{
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
+    private TextView title, desc;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -76,6 +82,9 @@ public class LocationService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Do service here
+        //LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        //View layout = inflater.inflate(R.layout.notification_small, null);
+
         mHandler = new Handler();
         startForeground();
         startRepeatingTask();
@@ -151,21 +160,24 @@ public class LocationService extends Service{
         connection.getRiskPointsList(getBaseContext(), longitude, latitude);
 
         if(getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            Log.d(TAG, "Contains True");
             if(!getInsideRiskArea(getBaseContext(), "NOTIFICATION")){
+                RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
+                notificationLayout.setTextViewText(R.id.notification_title, "Área de Risco!");
+                notificationLayout.setTextViewText(R.id.notification_desc, getRiskAreaName(getBaseContext(), "NAME") );
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), RISK_CHANNEL_ID)
                         .setSmallIcon(R.drawable.nibolas)
-                        .setContentTitle("Cuidado!")
-                        .setContentText("Risco!!!")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .setCustomContentView(notificationLayout)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-                notificationManager.notify(ALERT_ID, builder.build());
+                notificationManager.notify(RISK_ID, builder.build());
                 Log.e(TAG, "Risco Cisco!");
                 saveInsideRiskArea(getBaseContext(), "NOTIFICATION", true);
             }
         }
         if (!getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            Log.d(TAG, "Contains False");
             saveInsideRiskArea(getBaseContext(), "NOTIFICATION", false);
         }
 
@@ -236,9 +248,8 @@ public class LocationService extends Service{
         startForeground(MAIN_ID, new NotificationCompat.Builder(this,
                 MAIN_CHANNEL_ID) // don't forget create a notification channel first
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText("Service is running background")
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle("Estamos verificando se há alagamentos em sua área.")
                 .setContentIntent(pendingIntent)
                 .build());
     }
@@ -303,5 +314,11 @@ public class LocationService extends Service{
         SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
 
+    }
+
+    public String getRiskAreaName(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+        return sp.getString(key, "...");
     }
 }
