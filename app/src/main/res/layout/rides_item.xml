@@ -24,33 +24,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgRideIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginHorizontal="12dp"
-
-                android:layout_marginStart="16dp"
-                android:src="@drawable/night_cloudy"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.037" />
 
             <TextView
                 android:id="@+id/txtDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="22dp"
-                android:layout_marginLeft="22dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/open_sans_regular"
                 android:text="33 Km"
                 android:textColor="?attr/OnSurfaceHighEmphasis"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/imgRideIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.095"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/txtTime"
@@ -93,6 +81,16 @@
                 app:layout_constraintStart_toEndOf="@+id/txtTime"
                 app:layout_constraintTop_toBottomOf="@+id/txtNumberEvents"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtTime"
+                app:srcCompat="@drawable/map_ilustration_dark_theme" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

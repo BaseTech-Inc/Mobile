@@ -16,6 +16,18 @@
         android:paddingHorizontal="12dp"
         android:paddingVertical="16dp">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgRideIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/night_cloudy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtCurrentTemp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.487" />
+
         <TextView
             android:id="@+id/txtLocation"
             android:layout_width="wrap_content"

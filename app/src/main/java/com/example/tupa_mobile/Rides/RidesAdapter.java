@@ -82,7 +82,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesHolder>
             String dataride = c[0].replace("-","/");
             String d = c[1];
             String[] e = d.split(":");
-            txtTime.setText(e[0] + ":" + e[1]+ "H");
+            txtTime.setText(" ("+e[0] + "h:" + e[1]+ "min)");
 
 //          
 //            String[] x = rides.getRota().split("!1d");
@@ -100,7 +100,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.RidesHolder>
             txtNumberEvents.setText( n +"");
 
             String j = rides.getRota();
-            Toast.makeText(context, rides.getRota(), Toast.LENGTH_LONG).show();
+
 //            String longitudeChegada, latitudeChegada, longitudePartida,latitudePartida;
 //            String htmlDocument = "<html><body>\"https://www.google.com/maps/embed?pb=!1m11!4m9!3e0!4m3!3m2!1d" + latitudePartida + "!2d" + longitudePartida + "!4m3!3m2!1d" + latitudeChegada + "!2d" + longitudeChegada + "!5e0\"</body></html>";
 //          webview.loadDataWithBaseURL(null, htmlDocument, "text/HTML", "UTF-8", null);

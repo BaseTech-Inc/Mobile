@@ -2,6 +2,7 @@ package com.example.tupa_mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.drawable.Drawable;
@@ -22,25 +23,22 @@ public class ForecastPopupActivity extends AppCompatActivity {
     private RecyclerView locationsRecycler;
     private LocationAdapter adapter;
     private ArrayList<Location> locations;
-    private Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast_popup);
+
         editText = findViewById(R.id.etFindCities);
+
         locationsRecycler = findViewById(R.id.findCitiesRecycler);
-        btnAdd = findViewById(R.id.button);
-        btnAdd.setOnClickListener(v -> {
+        locationsRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        locations = new ArrayList<>();
+        adapter = new LocationAdapter(getApplicationContext(), locations);
+        locationsRecycler.setAdapter(adapter);
 
-                String content = editText.getText().toString();
-                insertItem(content);
-        });
-        }
-
-
-    public void insertItem(String content){
-//        locations.add(content);
+        setWindowLayout();
+        createLocations();
     }
 
     private void setWindowLayout(){
@@ -54,6 +52,12 @@ public class ForecastPopupActivity extends AppCompatActivity {
 
         Drawable background = ContextCompat.getDrawable(this, R.drawable.cardview_borders);
         getWindow().setBackgroundDrawable(background);
+    }
+
+    private void createLocations(){
+        locations.add(new Location("São Paulo", "Nublado", 20.0));
+        locations.add(new Location("Rio de Janeiro", "Ensolarado", 32.0));
+        locations.add(new Location("São josé do Rio Pardo", "Ventando", 8.0));
     }
 
 

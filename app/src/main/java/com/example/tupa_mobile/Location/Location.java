@@ -6,31 +6,25 @@ import com.example.tupa_mobile.Weather.Weather;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location {
-    private LatLng coord;
-    private Weather weather;
-    private Mainn mainn;
 
-    public Location(LatLng coord, Weather weather, Mainn mainn) {
-        this.coord = coord;
-        this.weather = weather;
-        this.mainn = mainn;
+    private String name, currentDesc;
+    private Double temp;
+
+    public Location(String name, String currentDesc, Double temp) {
+        this.name = name;
+        this.currentDesc = currentDesc;
+        this.temp = temp;
     }
 
-    public LatLng getCoord() {
-        return coord;
+    public String getName() {
+        return name;
     }
 
-    public Weather getWeather() {
-        return weather;
+    public String getCurrentDesc() {
+        return currentDesc;
     }
 
-    public Mainn getMainn() {
-        return mainn;
+    public Double getTemp() {
+        return temp;
     }
-
-
-
-
-
-
 }
