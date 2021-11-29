@@ -1,28 +1,34 @@
 package com.example.tupa_mobile.Fragments;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -32,19 +38,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tupa_mobile.Activities.NotificationActivity;
+import com.example.tupa_mobile.Activities.BingMapActivity;
+import com.example.tupa_mobile.Activities.RouteActivity;
 import com.example.tupa_mobile.Address.Address;
 import com.example.tupa_mobile.Address.AddressAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Location.Localization;
 import com.example.tupa_mobile.Markers.CustomAdapterClickListener;
+import com.example.tupa_mobile.Markers.MarkerAdapter;
+import com.example.tupa_mobile.Markers.MarkerWindowAdapter;
 import com.example.tupa_mobile.Markers.MarkersData;
 import com.example.tupa_mobile.Markers.UserMarker;
-import com.example.tupa_mobile.Markers.MarkerAdapter;
 import com.example.tupa_mobile.R;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
@@ -52,13 +61,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
@@ -74,7 +89,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, CustomAdapterClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, CustomAdapterClickListener, LocationListener {
 
     private static final String TAG = Localization.class.getSimpleName();
     public static final int ROUTE_TOP_ZOOM_PADDING = 1000;
@@ -85,18 +100,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final int DEFAULT_ZOOM = 15;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final int ROUTE_BOTTOM_ZOOM_PADDING = 300;
+    public static final long LOCATION_REFRESH_TIME = 1000;
+    public static final float LOCATION_REFRESH_DISTANCE = 100;
     private boolean BOTTOM_SHEET_DRAGGABLE = true;
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
-    private EditText etFrom, etTo;
+    private EditText etFrom, etTo, etAddress;
+    private TextView txtAddMarkers;
+    private FrameLayout topFrame;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button confirmRouteButton;
-    private ImageButton searchBack, confirmMarkerButton, btnSearch, btnNotification, btnRiskAreas, btnAlerts;
-    private ViewGroup searchLayout, resultsLayout, mapToolbar;
+    private ImageButton searchBack, confirmMarkerButton, btnSearch, btnRiskAreas, btnAlerts, btnMenu, btnMyLocation, btnBack;
+    private ViewGroup searchLayout, resultsLayout, mapToolbar, relativeMenu, mapFrame, emptyMarkersLayout;
     private Toolbar toolbar;
     private MenuItem searchItem, notificationItem;
-    private ViewGroup mapFrame, emptyMarkersLayout;
     private ArrayList<UserMarker> userMarkers;
     private ArrayList<Address> addresses;
     private MarkerAdapter markerAdapter;
@@ -104,7 +122,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private RecyclerView bottomDrawerRecycler, searchRecycler;
     private GoogleMap map;
     private Marker marker, destinationMarker;
-    private LatLng currentLocation;
+    private Location currentLocation;
     private Calendar lastCall = Calendar.getInstance();
     private Geocoder geocoder;
     private UserMarker userMarker;
@@ -133,6 +151,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -165,8 +184,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-        adjustBottomDrawer(view);
-        setCloseSearchButton(view);
+        adjustBottomDrawer(view, this);
         setSearchETs(view);
         setToolbar(view);
         setConfirmMarkerButton(view);
@@ -182,34 +200,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setCompassEnabled(false);
-        /*
-
-        LatLng lugar = new LatLng(-100, 100);
-        LatLng lugar2 = new LatLng(-4, 4);
-
-        marker = map.addMarker(new MarkerOptions()
-                .position(lugar)
-                .title("Marcador")
-        );
-
-        map.addMarker(new MarkerOptions()
-                .position(lugar2)
-                .visible(true)
-                .zIndex(1)
-                .rotation(0)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.googleg_disabled_color_18))
-                .alpha(1)
-                .draggable(true)
-                .title("Título")
-                .snippet("Subtítulo"));
-
-         */
+        map.getUiSettings().setRotateGesturesEnabled(false);
+        map.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false);
+        map.getUiSettings().setTiltGesturesEnabled(false);
 
         map.setOnMapClickListener(this);
         map.setOnCameraIdleListener(this);
         map.setOnCameraMoveStartedListener(this);
         map.setOnCameraMoveListener(this);
         map.setOnCameraMoveCanceledListener(this);
+
+        MarkerWindowAdapter markerInfoWindowAdapter = new MarkerWindowAdapter(getContext());
+        map.setInfoWindowAdapter(markerInfoWindowAdapter);
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -231,7 +233,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener( getActivity(), new OnCompleteListener<Location>() {
+                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
 
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -253,7 +255,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
@@ -269,7 +271,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
         } else {
-            ActivityCompat.requestPermissions((Activity)getContext(),
+            ActivityCompat.requestPermissions((Activity) getContext(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
@@ -306,20 +308,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 lastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
 
-    private Marker createMarker(){
+    private Marker createMarker() {
         marker = map.addMarker(new MarkerOptions().position(defaultLocation));
         marker.setVisible(false);
         return marker;
     }
 
+    private Marker createDestinationMarker(LatLng latLng) {
+        if (destinationMarker == null) {
+            destinationMarker = map.addMarker(new MarkerOptions().position(defaultLocation));
+        } else {
+            destinationMarker.setPosition(latLng);
+        }
+        centerMarkers();
+        return destinationMarker;
+    }
+
     @Override
     public void onMapClick(LatLng latLng) {
-        //Marker marker = map.addMarker(new MarkerOptions().position(latLng).title("Criado agora"));
+        //createDestinationMarker(latLng);
     }
 
     @Override
@@ -329,7 +341,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onCameraIdle() {
-
     }
 
     @Override
@@ -339,38 +350,53 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onCameraMove() {
+
+        getLocationPermission();
+        try {
+            if (locationPermissionGranted) {
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                        if (map.getCameraPosition().target != myLocation) {
+                            btnMyLocation.setVisibility(View.VISIBLE);
+                        } else btnMyLocation.setVisibility(View.GONE);
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage(), e);
+        }
+
         LatLng midLatLng = map.getCameraPosition().target;
-        if (marker!=null) marker.setPosition(midLatLng);
-        else Log.d("TAG","UserMarker is null");
+        if (marker != null) marker.setPosition(midLatLng);
+        else Log.d("TAG", "UserMarker is null");
 
         Calendar currentCall = Calendar.getInstance();
 
-        if(marker.isVisible()){
+        if (marker.isVisible()) {
 
-            if(getLastCall("LAST_API_CALL") == 0){
+            if (getLastCall("LAST_API_CALL") == 0) {
                 geocoder = new Geocoder(getContext());
-                try{
+                try {
                     List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
                     String street = addresses.get(0).getThoroughfare();
                     String stNumber = addresses.get(0).getSubThoroughfare();
-                    etFrom.setText(String.format("%s, %s", street, stNumber));
-                }
-                catch (Exception e){
-                    etFrom.setText("Unable to get address");
+                    etAddress.setText(String.format("%s, %s", street, stNumber));
+                } catch (Exception e) {
+                    etAddress.setText("Unable to get address");
                     Log.e(TAG, e.getMessage());
                 }
                 saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
-            }
-            else if(getLastCall("LAST_API_CALL") + 4000 < currentCall.getTimeInMillis()){
+            } else if (getLastCall("LAST_API_CALL") + 4000 < currentCall.getTimeInMillis()) {
                 geocoder = new Geocoder(getContext());
-                try{
+                try {
                     List<android.location.Address> addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
                     String street = addresses.get(0).getThoroughfare();
                     String stNumber = addresses.get(0).getSubThoroughfare();
-                    etFrom.setText(String.format("%s, %s", street, stNumber));
-                }
-                catch (Exception e){
-                    etFrom.setText("Unable to get address");
+                    etAddress.setText(String.format("%s, %s", street, stNumber));
+                } catch (Exception e) {
+                    etAddress.setText("Unable to get address");
                     Log.e(TAG, e.getMessage());
                 }
                 saveLastCall("LAST_API_CALL", currentCall.getTimeInMillis());
@@ -386,13 +412,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
-    private void getCurrentAddress(EditText et){
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+        return true;
+    }
+
+    private void getCurrentAddress(EditText et) {
 
         getLocationPermission();
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener( getActivity(), new OnCompleteListener<Location>() {
+                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
 
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -401,13 +433,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
                                 geocoder = new Geocoder(getContext());
-                                try{
+                                try {
                                     List<android.location.Address> addresses = geocoder.getFromLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), 1);
                                     String street = addresses.get(0).getThoroughfare();
                                     String stNumber = addresses.get(0).getSubThoroughfare();
                                     etFrom.setText(String.format("%s, %s", street, stNumber));
-                                }
-                                catch (Exception e){
+                                } catch (Exception e) {
                                     etFrom.setText("Unable to get address");
                                     Log.e(TAG, e.getMessage());
                                 }
@@ -416,23 +447,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
 
-    private void setToolbar(View view){
+    private void setToolbar(View view) {
+        topFrame = view.findViewById(R.id.topFrame);
         mapToolbar = view.findViewById(R.id.map_toolbar);
+        relativeMenu = view.findViewById(R.id.relativeMenu);
+        btnMenu = view.findViewById(R.id.btnSandwich);
+        btnBack = view.findViewById(R.id.btnBack);
         btnSearch = view.findViewById(R.id.btnSearch);
-        btnNotification = view.findViewById(R.id.btnNotification);
         btnRiskAreas = view.findViewById(R.id.btnRiskAreas);
         btnAlerts = view.findViewById(R.id.btnAlerts);
+
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchMenuVisible();
+            }
+        });
 
         btnRiskAreas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pinBottomSheet();
                 addRiskMarkers();
+                switchMenuVisible();
+                btnBack.setVisibility(View.VISIBLE);
             }
         });
 
@@ -441,26 +484,130 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onClick(View v) {
                 pinBottomSheet();
                 addAlertMarkers();
+                switchMenuVisible();
+                btnBack.setVisibility(View.VISIBLE);
             }
         });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandSearchLayout();
+                startRouteActivity();
+                switchMenuVisible();
             }
         });
 
-        btnNotification.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startNotificationActivity();
+                map.clear();
+                LatLng myLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
+                        DEFAULT_ZOOM));
+                unpinBottomSheet();
+                btnBack.setVisibility(View.GONE);
             }
         });
     }
 
     private void setSearchETs(View view) {
+
         resultsLayout = view.findViewById(R.id.resultsLayout);
+        searchBack = view.findViewById(R.id.searchBack);
+        etAddress = view.findViewById(R.id.etAddress);
+        btnMyLocation = view.findViewById(R.id.btnMyLocation);
+
+        searchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unpinBottomSheet();
+                closeSearchLayout();
+            }
+        });
+
+        etAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                marker.setVisible(true);
+                confirmMarkerButton.setVisibility(View.VISIBLE);
+                etAddress.setFocusable(true);
+                etAddress.setFocusableInTouchMode(true);
+                pinBottomSheet();
+            }
+        });
+
+        etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String text = s.toString();
+                text.replaceAll("[|?*<\">+ \\[\\]/']", "");
+                if (marker.isVisible()) {
+                    resultsLayout.setVisibility(View.GONE);
+                } else if (etAddress.isFocused() && text.length() != 0) {
+                    resultsLayout.setVisibility(View.VISIBLE);
+                    setSearchRecycler(view);
+
+                    //User query
+                    String query = s.toString();
+
+                    // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
+                    // and once again when the user makes a selection (for example when calling fetchPlace()).
+                    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+
+                    // Create a RectangularBounds object.
+                    RectangularBounds bounds = RectangularBounds.newInstance(
+                            new LatLng(-23.892792671007193, -46.97887828581721),
+                            new LatLng(-22.52756065617645, -46.02750163888053));
+
+                    // Use the builder to create a FindAutocompletePredictionsRequest.
+                    FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                            // Call either setLocationBias() OR setLocationRestriction().
+                            .setLocationBias(bounds)
+                            //.setLocationRestriction(bounds)
+                            .setOrigin(new LatLng(-23.5666595, -46.6084084))
+                            .setCountries("BRA")
+                            .setTypeFilter(TypeFilter.ADDRESS)
+                            .setSessionToken(token)
+                            .setQuery(query)
+                            .build();
+
+                    placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                        for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+                            Log.i(TAG, prediction.getPlaceId());
+                            Log.i(TAG, prediction.getPrimaryText(null).toString());
+                        }
+                    }).addOnFailureListener((exception) -> {
+                        if (exception instanceof ApiException) {
+                            ApiException apiException = (ApiException) exception;
+                            Log.e(TAG, "Status: " + apiException.getStatusCode());
+                            Log.e(TAG, "error: " + apiException.getMessage());
+                        }
+                    });
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        btnMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LatLng myLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
+                        DEFAULT_ZOOM));
+            }
+        });
+
+        /*
         etFrom = view.findViewById(R.id.etFrom);
         etTo = view.findViewById(R.id.etTo);
 
@@ -485,10 +632,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String text = s.toString();
                 text.replaceAll("[|?*<\">+ \\[\\]/']", "");
-                if(marker.isVisible()){
+                if (marker.isVisible()) {
                     resultsLayout.setVisibility(View.GONE);
-                }
-                else if(etFrom.isFocused() && text.length() != 0){
+                } else if (etFrom.isFocused() && text.length() != 0) {
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
 
@@ -509,7 +655,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             // Call either setLocationBias() OR setLocationRestriction().
                             .setLocationBias(bounds)
                             //.setLocationRestriction(bounds)
-                            .setOrigin(new LatLng(-23.5666595,-46.6084084))
+                            .setOrigin(new LatLng(-23.5666595, -46.6084084))
                             .setCountries("BRA")
                             .setTypeFilter(TypeFilter.ADDRESS)
                             .setSessionToken(token)
@@ -553,6 +699,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
+
+
         etTo.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -578,11 +726,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String text = s.toString();
                 text.replaceAll("[|?*<\">+\\[\\]/']", "");
-                if(text.length() != 0){
+                if (text.length() != 0) {
                     resultsLayout.setVisibility(View.VISIBLE);
                     setSearchRecycler(view);
-                }
-                else
+                } else
                     resultsLayout.setVisibility(View.GONE);
 
             }
@@ -593,6 +740,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
+         */
+
     }
 
     private void setSearchRecycler(View view) {
@@ -601,17 +750,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         addresses = new ArrayList<>();
         addressAdapter = new AddressAdapter(getContext(), addresses);
         searchRecycler.setAdapter(addressAdapter);
-        fillAddresses();
     }
 
-    private void pinBottomSheet(){
+    private void pinBottomSheet() {
         BOTTOM_SHEET_DRAGGABLE = false;
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (!BOTTOM_SHEET_DRAGGABLE){
-                    if(newState == BottomSheetBehavior.STATE_DRAGGING){
+                if (!BOTTOM_SHEET_DRAGGABLE) {
+                    if (newState == BottomSheetBehavior.STATE_DRAGGING) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     }
                 }
@@ -624,47 +772,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
     }
 
-    private void unpinBottomSheet(){
+    private void unpinBottomSheet() {
         BOTTOM_SHEET_DRAGGABLE = true;
     }
 
-    private void addRiskMarkers(){
-        map.addMarker(new MarkerOptions().position(new LatLng(-23.6182683, -46.639479)));
-        map.addMarker(new MarkerOptions().position(new LatLng(-24.6182683, -47.639479)));
+    private void switchMenuVisible() {
+        if (relativeMenu.getVisibility() == View.VISIBLE) {
+            relativeMenu.setVisibility(View.GONE);
+        } else relativeMenu.setVisibility(View.VISIBLE);
+    }
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(new LatLng(-23.6182683, -46.639479));
-        builder.include(new LatLng(-24.6182683, -47.639479));
-        LatLngBounds bounds = builder.build();
-
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 200);
-        map.animateCamera(cu);
+    private void addRiskMarkers() {
+        Connection con = new Connection();
+        con.getRiskPoints(map, bitmapDescriptorFromVector(getContext(), R.drawable.ic_marker_alert));
     }
 
     private void addAlertMarkers() {
         Connection con = new Connection();
-        con.getAlerts(getContext(), map,2021,9,21);
+        con.getAlerts(getContext(), map, bitmapDescriptorFromVector(getContext(), R.drawable.ic_marker_alert), 2021, 01, 01);
     }
 
-    private void fillAddresses(){
-        addresses.add(new Address("Alameda dos Guainumbis", "Planalto Paulista - SP", R.drawable.stormy));
-        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
-        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
-        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
-        addresses.add(new Address("Avenida Tiradentes", "Bom Retiro - SP", R.drawable.day_sunny));
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0,0, vectorDrawable.getIntrinsicWidth() , vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.map_menu, menu);
-        searchItem = menu.findItem(R.id.searchItem);
-        notificationItem = menu.findItem(R.id.notificationItem);
-    }
-
-    private void adjustBottomDrawer(View view) {
+    private void adjustBottomDrawer(View view, CustomAdapterClickListener clickListener) {
         bottomNavigationContainer = view.findViewById(R.id.bottomNavigationContainer);
         emptyMarkersLayout = view.findViewById(R.id.emptyMarkersLayout);
+        txtAddMarkers = view.findViewById(R.id.txtAddMarkers);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomNavigationContainer);
         bottomSheetBehavior.setPeekHeight(120);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -684,6 +824,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 // do stuff during the actual drag event for example
                 // animating a background color change based on the offset
 
+                Connection con = new Connection();
+                con.getMarkers(getContext(), bottomDrawerRecycler, emptyMarkersLayout, clickListener);
+
                 // or for example hidding or showing a fab
 
                 /*
@@ -701,11 +844,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
+        txtAddMarkers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pinBottomSheet();
+                expandSearchLayout();
+            }
+        });
+
         bottomDrawerRecycler = view.findViewById(R.id.savedLocationsRecycler);
         bottomDrawerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         Connection con = new Connection();
-        con.getMarkers(getContext(), bottomDrawerRecycler, emptyMarkersLayout, this, "1");
+        con.getMarkers(getContext(), bottomDrawerRecycler, emptyMarkersLayout, this);
+    }
+
+    private void closeTopFrame() {
+        topFrame.setVisibility(View.GONE);
+    }
+
+    private void openTopFrame() {
+        topFrame.setVisibility(View.VISIBLE);
     }
 
     private void expandSearchLayout() {
@@ -713,33 +872,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapToolbar.setVisibility(View.GONE);
     }
 
-    private void closeSearchLayout(){
+    private void closeSearchLayout() {
         searchLayout.setVisibility(View.GONE);
-        etFrom.setFocusable(false);
+        etAddress.setFocusable(false);
         mapToolbar.setVisibility(View.VISIBLE);
         confirmMarkerButton.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.GONE);
-        map.setPadding(0,0,0,0);
+        map.setPadding(0, 0, 0, 0);
         unpinBottomSheet();
     }
 
-    private void setCloseSearchButton(View view){
-        searchBack = view.findViewById(R.id.searchBack);
-        searchBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeSearchLayout();
-                getDeviceLocation();
-                etTo.setText("");
-                if(map != null){
-                    map.clear();
-                }
-                createMarker();
-            }
-        });
-    }
-
-    private void setConfirmMarkerButton(View view){
+    private void setConfirmMarkerButton(View view) {
         confirmMarkerButton = view.findViewById(R.id.confirmMarkerButton);
         confirmMarkerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -747,12 +890,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 confirmMarkerButton.setVisibility(View.GONE);
                 unpinBottomSheet();
                 marker.setVisible(false);
-                etTo.requestFocus();
+                LatLng latLng = getCoordinatesByAddress(etAddress.getText().toString());
+                Connection con = new Connection();
+                con.postMarker(getContext(), latLng.latitude, latLng.longitude, etAddress.getText().toString());
+                unpinBottomSheet();
+                closeSearchLayout();
             }
         });
     }
 
-    private void setConfirmRouteButton(View view){
+    private void setConfirmRouteButton(View view) {
         confirmRouteButton = view.findViewById(R.id.confirmRouteButton);
         confirmRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -761,12 +908,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
     }
 
-    private void centerRoute(){
-        if(etFrom.getText().length() > 0 && etTo.getText().length() > 0){
+    private void centerRoute() {
+        if (etFrom.getText().length() > 0 && etTo.getText().length() > 0) {
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            builder.include(getCoordinates(etFrom.getText().toString()));
-            builder.include(getCoordinates(etTo.getText().toString()));
+            builder.include(getCoordinatesByAddress(etFrom.getText().toString()));
+            builder.include(getCoordinatesByAddress(etTo.getText().toString()));
             LatLngBounds bounds = builder.build();
 
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
@@ -776,45 +923,115 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-    private LatLng getCoordinates(String address) {
+    private void centerMarkers() {
+        if (destinationMarker != null) {
+            getLocationPermission();
+            try {
+                if (locationPermissionGranted) {
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()));
+                    builder.include(destinationMarker.getPosition());
+                    LatLngBounds bounds = builder.build();
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
+                    map.setPadding(0, ROUTE_TOP_ZOOM_PADDING, 0, ROUTE_BOTTOM_ZOOM_PADDING);
+                    map.animateCamera(cu);
+                }
+            } catch (SecurityException e) {
+                Log.e("Exception: %s", e.getMessage(), e);
+            }
+        }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+    }
+
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            //your code here
+            currentLocation = location;
+        }
+    };
+
+    private Location getCurrentLocation() {
+
+        getLocationPermission();
+        try {
+            if (locationPermissionGranted) {
+
+                while (currentLocation == null) {
+                    fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
+                        @Override
+                        public boolean isCancellationRequested() {
+                            return false;
+                        }
+
+                        @NonNull
+                        @Override
+                        public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                            return null;
+                        }
+                    })
+                            .addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        currentLocation = location;
+                                        Log.d(TAG, "current location is set");
+                                    }
+                                    Log.d(TAG, "current location is null");
+                                }
+                            })
+                            .addOnFailureListener((Activity) getContext(), new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "Connection Failure");
+                                }
+                            });
+                }
+            }
+        } catch (SecurityException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return currentLocation;
+    }
+
+    private LatLng getCoordinatesByAddress(String address) {
 
         LatLng latLng = null;
         geocoder = new Geocoder(getContext());
-        try{
+        try {
             List<android.location.Address> addresses = geocoder.getFromLocationName(address, 1);
-            if(addresses.size() > 0) {
+            if (addresses.size() > 0) {
                 double latitude = addresses.get(0).getLatitude();
                 double longitude = addresses.get(0).getLongitude();
                 latLng = new LatLng(latitude, longitude);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "Unable to get address");
             Log.e(TAG, e.getMessage());
         }
-        
+
         return latLng;
     }
 
-    private void startNotificationActivity() {
-        Intent intent = new Intent(getContext(), NotificationActivity.class);
+    private void startRouteActivity() {
+        Intent intent = new Intent(getContext(), BingMapActivity.class);
         startActivity(intent);
     }
 
-    private void createViews(){
-        userMarkers.add(new UserMarker(R.drawable.clock_ilustraion_white_theme, "Home", "Av. Afonso Mariano", map, -23.61601597825001, -46.64259490181567));
-        userMarkers.add(new UserMarker(R.drawable.stormy, "Work", "Av. Tiradentes, 769 - São Paulo", map, -23.530234576782785, -46.63209304604776));
-        userMarkers.add(new UserMarker(R.drawable.configuration_icon_gray_dark_theme_dimmed, "School", "Rua Alberto Albertão", map,-23.614954301071563, -46.643689243094215));
-    }
-
-    private void saveLastCall(String key, long value){
+    private void saveLastCall(String key, long value) {
         SharedPreferences sp = getContext().getSharedPreferences("LAST_API_CALL", Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(key, value).apply();
     }
 
-    public long getLastCall(String key){
+    public long getLastCall(String key) {
 
         SharedPreferences sp = getContext().getSharedPreferences("LAST_API_CALL", Context.MODE_PRIVATE);
         return sp.getLong(key, 0);
@@ -823,6 +1040,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onItemClick(View v, MarkersData markerData) {
+
+
+
+        /*
+
         destinationMarker = map.addMarker(new MarkerOptions().position(userMarker.getLatLng()).title(userMarker.getName()));
         this.markerData = markerData;
         markerData.setClicked(true);
@@ -832,5 +1054,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         resultsLayout.setVisibility(View.GONE);
         confirmRouteButton.setVisibility(View.VISIBLE);
         centerRoute();
+
+         */
     }
+
+    @Override
+    public void onItemLongClick(View v, MarkersData markerData, CustomAdapterClickListener clickListener, int position) {
+        PopupMenu popup = new PopupMenu(v.getContext(), v);
+        popup.inflate(R.menu.marker_menu);
+        popup.show();
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                v.setVisibility(View.GONE);
+                Connection con = new Connection();
+                con.deleteMarker(v.getContext(), markerData.getId());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                con.getMarkers(getContext(), bottomDrawerRecycler, emptyMarkersLayout, clickListener);
+                return true;
+            }
+        });
+    }
+
+
 }

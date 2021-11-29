@@ -13,6 +13,7 @@ import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
+import com.example.tupa_mobile.RiskPoints.RiskPointResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
@@ -101,8 +102,7 @@ public interface API {
 
     @GET("/api/v1/Marcadores")
     Call<GetMarkersResponse> getMarkers(
-            @Header("Authorization") String access_token,
-            @Query("UserId") String userId
+            @Header("Authorization") String access_token
     );
 
     @GET("/api/v1/Alertas")
@@ -126,6 +126,24 @@ public interface API {
             @Header("Authorization") String key
     );
 
+    @POST("/api/v1/Marcadores")
+    Call<GetMarkersResponse> postMarker(
+            @Header("Authorization") String key,
+            @Query("Latitude") double lat,
+            @Query("Longitude") double lng,
+            @Query("Nome") String name
+    );
+
+    @DELETE("/api/v1/Marcadores")
+    Call<GetMarkersResponse> deleteMarker(
+            @Header("Authorization") String key,
+            @Query("Id") String id
+    );
+
+    @GET("/api/v1/PontoRisco")
+    Call<RiskPointResponse> getRiskPoints(
+            @Header("Authorization") String key
+    );
     @POST("/api/Account/generate-password-reset")
     Call<ResetPasswordResponse> postPassword(
             @Query ("email") String email

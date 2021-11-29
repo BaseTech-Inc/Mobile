@@ -14,6 +14,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -36,7 +40,7 @@ import static com.example.tupa_mobile.Fragments.MapFragment.PERMISSIONS_REQUEST_
 
 public class LocationService extends Service{
 
-    private int mInterval = 5000; // 5 seconds by default, can be changed later
+    private int mInterval = 10000; // 5 seconds by default, can be changed later
     private Handler mHandler;
 
     private static final int MAIN_ID = 1;
@@ -54,6 +58,11 @@ public class LocationService extends Service{
     private static final String ALERT_CHANNEL_NAME = "ALERT_Name";
     private static final String ALERT_CHANNEL_DESC = "ALERT_Desc";
 
+    private static final int RISK_ID = 4;
+    private static final String RISK_CHANNEL_ID = "RISK_Id";
+    private static final String RISK_NAME = "RISK_Name";
+    private static final String RISK_CHANNEL_DESC = "RISK_Desc";
+
     private static final String TAG = LocationService.class.getSimpleName();
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
@@ -61,6 +70,8 @@ public class LocationService extends Service{
     private NotificationManager notificationManager;
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
+
+    private TextView title, desc;
 
     @Nullable
     @Override
@@ -71,6 +82,9 @@ public class LocationService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Do service here
+        //LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        //View layout = inflater.inflate(R.layout.notification_small, null);
+
         mHandler = new Handler();
         startForeground();
         startRepeatingTask();
@@ -116,7 +130,7 @@ public class LocationService extends Service{
         double longitude = location.getLongitude();
 
         Connection connection = new Connection();
-        connection.getAlertsList(getBaseContext(), 2021, 9, 21, longitude, latitude, ALERT_ID, ALERT_CHANNEL_ID, notificationManager);
+        connection.getAlertsList(getBaseContext(), 2021, 1, 1, longitude, latitude, ALERT_ID, ALERT_CHANNEL_ID, notificationManager);
 
         if (getInsideFlood(getBaseContext(), "CONTAINS")) {
             if (!getInsideFlood(getBaseContext(), "NOTIFICATION")){
@@ -125,7 +139,7 @@ public class LocationService extends Service{
                         .setContentTitle("Cuidado!")
                         .setContentText("Essa área está alagada!")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
+                                .bigText("A avenida pipipi popopo está alagada"))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
                 notificationManager.notify(ALERT_ID, builder.build());
@@ -142,11 +156,35 @@ public class LocationService extends Service{
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        ArrayList<LatLng> latLngs = new ArrayList<>();
-        latLngs.add(new LatLng(-23.61667113533345, -46.648964070576255));
-        latLngs.add(new LatLng(-23.613538121785556, -46.63819563711089));
-        latLngs.add(new LatLng(-23.61926633610226, -46.63926737693445));
-        latLngs.add(new LatLng(-23.620482088151544, -46.64738197845575));
+        Connection connection = new Connection();
+        connection.getRiskPointsList(getBaseContext(), longitude, latitude);
+
+        if(getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            Log.d(TAG, "Contains True");
+            if(!getInsideRiskArea(getBaseContext(), "NOTIFICATION")){
+                RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
+                notificationLayout.setTextViewText(R.id.notification_title, "Área de Risco!");
+                notificationLayout.setTextViewText(R.id.notification_desc, getRiskAreaName(getBaseContext(), "NAME") );
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), RISK_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.nibolas)
+                        .setCustomContentView(notificationLayout)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+                notificationManager.notify(RISK_ID, builder.build());
+                Log.e(TAG, "Risco Cisco!");
+                saveInsideRiskArea(getBaseContext(), "NOTIFICATION", true);
+            }
+        }
+        if (!getInsideRiskArea(getBaseContext(), "CONTAINS")){
+            Log.d(TAG, "Contains False");
+            saveInsideRiskArea(getBaseContext(), "NOTIFICATION", false);
+        }
+
+        /*
+
+        Connection con = new Connection();
+        con.getRiskPointsList(getBaseContext(), longitude, latitude);
 
         if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
                 //send notification
@@ -167,6 +205,8 @@ public class LocationService extends Service{
         else {
             isRiskNotificationActive = false;
         }
+
+         */
     }
 
 
@@ -208,9 +248,8 @@ public class LocationService extends Service{
         startForeground(MAIN_ID, new NotificationCompat.Builder(this,
                 MAIN_CHANNEL_ID) // don't forget create a notification channel first
                 .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText("Service is running background")
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle("Estamos verificando se há alagamentos em sua área.")
                 .setContentIntent(pendingIntent)
                 .build());
     }
@@ -237,6 +276,11 @@ public class LocationService extends Service{
             channel2.setDescription(ALERT_CHANNEL_DESC);
             notificationManager.createNotificationChannel(channel2);
 
+            //Risk Area channel
+            NotificationChannel channel3 = new NotificationChannel(RISK_CHANNEL_ID, RISK_NAME, NotificationManager.IMPORTANCE_HIGH);
+            channel3.setDescription(RISK_CHANNEL_DESC);
+            notificationManager.createNotificationChannel(channel3);
+
         }
     }
 
@@ -254,5 +298,27 @@ public class LocationService extends Service{
         SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
 
+    }
+
+    public void saveInsideRiskArea(Context context, String key, boolean value){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(key, value).apply();
+
+    }
+
+    public boolean getInsideRiskArea(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+        return sp.getBoolean(key, false);
+
+    }
+
+    public String getRiskAreaName(Context context, String key){
+
+        SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
+        return sp.getString(key, "...");
     }
 }

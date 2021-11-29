@@ -2,7 +2,7 @@ package com.example.tupa_mobile.Markers;
 
 import java.util.ArrayList;
 
-public class GetMarkersResponse {
+public class GetMarkersResponse{
 
     private Boolean succeeded;
     private String message;

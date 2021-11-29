@@ -42,7 +42,7 @@ public class AccountActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.notificationToolbar);
         toolbar.setTitle("Conta");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_right_icon_white_black_theme_small);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         userAccountRecycler = findViewById(R.id.userAccountRecycler);
