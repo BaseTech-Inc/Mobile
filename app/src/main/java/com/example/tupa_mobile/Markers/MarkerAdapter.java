@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,13 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,7 +55,7 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
     @Override
     public void onBindViewHolder(@NonNull MarkerHolder holder, int position) {
         MarkersData markerData = markersData.get(position);
-        holder.setDetails(markerData);
+        holder.setDetails(markerData, position);
     }
 
     @Override
@@ -61,6 +65,8 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
 
     public class MarkerHolder extends RecyclerView.ViewHolder {
 
+        private RecyclerView recyclerView;
+        private MarkerAdapter adapter;
         private ViewGroup searchLayout;
         private CardView drawerCard;
         private ImageView icoMarker;
@@ -70,19 +76,28 @@ public class MarkerAdapter extends RecyclerView.Adapter<MarkerAdapter.MarkerHold
         public MarkerHolder(@NonNull View view) {
             super(view);
             searchLayout = unwrap(context).findViewById(R.id.searchLayout);
-            etTo = unwrap(context).findViewById(R.id.etTo);
+            recyclerView = unwrap(context).findViewById(R.id.savedLocationsRecycler);
+            adapter = (MarkerAdapter) recyclerView.getAdapter();
             drawerCard = view.findViewById(R.id.drawerCard);
             icoMarker = view.findViewById(R.id.icoLocation);
             markerName = view.findViewById(R.id.txtLocationAddress);
             markerRegion = view.findViewById(R.id.txtLocationRegion);
         }
 
-        public void setDetails(MarkersData markerData) {
+        public void setDetails(MarkersData markerData, int position) {
 
             drawerCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clickListener.onItemClick(v, markerData);
+                }
+            });
+
+            drawerCard.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    clickListener.onItemLongClick(v, markerData, clickListener, position);
+                    return true;
                 }
             });
 

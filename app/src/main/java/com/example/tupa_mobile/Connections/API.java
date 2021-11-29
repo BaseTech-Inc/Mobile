@@ -9,10 +9,12 @@ import com.example.tupa_mobile.Login.LoginResponse;
 import com.example.tupa_mobile.Markers.GetMarkersResponse;
 import com.example.tupa_mobile.OpenWeather.OpenWeather;
 import com.example.tupa_mobile.Passwords.ResetPasswordResponse;
+import com.example.tupa_mobile.Profile.AccountResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
+import com.example.tupa_mobile.RiskPoints.RiskPointResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
@@ -20,6 +22,7 @@ import com.example.tupa_mobile.WeatherAPI.Weather;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -100,8 +103,7 @@ public interface API {
 
     @GET("/api/v1/Marcadores")
     Call<GetMarkersResponse> getMarkers(
-            @Header("Authorization") String access_token,
-            @Query("UserId") String userId
+            @Header("Authorization") String access_token
     );
 
     @GET("/api/v1/Alertas")
@@ -138,6 +140,24 @@ public interface API {
             @Header("Authorization") String key
     );
 
+    @POST("/api/v1/Marcadores")
+    Call<GetMarkersResponse> postMarker(
+            @Header("Authorization") String key,
+            @Query("Latitude") double lat,
+            @Query("Longitude") double lng,
+            @Query("Nome") String name
+    );
+
+    @DELETE("/api/v1/Marcadores")
+    Call<GetMarkersResponse> deleteMarker(
+            @Header("Authorization") String key,
+            @Query("Id") String id
+    );
+
+    @GET("/api/v1/PontoRisco")
+    Call<RiskPointResponse> getRiskPoints(
+            @Header("Authorization") String key
+    );
     @POST("/api/Account/generate-password-reset")
     Call<ResetPasswordResponse> postPassword(
             @Query ("email") String email
@@ -158,8 +178,8 @@ public interface API {
     @PUT("/api/Account/basic-profile")
     Call<PutProfileResponse> putProfile(
             @Header ("Authorization") String access_token,
-            @Query ("UserName") String newName,
-            @Query ("TipoUsuario") String tipo
+            @Query ("UserName") String UserName,
+            @Query ("TipoUsuario") String TipoUsuario
     );
 
     @GET("/api/Account/image-profile")
@@ -171,6 +191,11 @@ public interface API {
     Call<ImageResponse> putImageProfile(
             @Header ("Authorization") String access_token,
             @Body String body
+    );
+
+    @DELETE("/api/Account")
+    Call<AccountResponse> deleteAccount(
+            @Header ("Authorization") String access_token
     );
 
 }

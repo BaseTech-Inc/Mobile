@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.HorizontalScrollView;
 
+import com.example.tupa_mobile.Connections.Connection;
 import com.example.tupa_mobile.Graph.ForecastGraph;
 import com.example.tupa_mobile.Graph.GraphDayItem;
 import com.example.tupa_mobile.Graph.GraphDayItemAdapter;
@@ -38,7 +39,7 @@ public class GraphActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.notificationToolbar);
         toolbar.setTitle("Gráfico");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_right_icon_white_black_theme_small);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         horizontalScrollView = findViewById(R.id.graphHorizontalScroll);
@@ -51,8 +52,8 @@ public class GraphActivity extends AppCompatActivity {
 
         forecastChart = findViewById(R.id.forecastChart);
 
-        ForecastGraph forecastGraph = new ForecastGraph();
-        forecastGraph.createGraph(forecastChart, getApplicationContext());
+        Connection connection = new Connection();
+        connection.requestGraphOpenForecast(forecastChart, getApplicationContext());
     }
 
     @Override

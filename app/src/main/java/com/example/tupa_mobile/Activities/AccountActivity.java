@@ -1,11 +1,13 @@
 package com.example.tupa_mobile.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ public class AccountActivity extends AppCompatActivity {
     private RecyclerView userAccountRecycler, accountManagementRecycler;
     private TextView lblLogout, lblDeleteAccount;
     private SharedPreferences sp;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class AccountActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.notificationToolbar);
         toolbar.setTitle("Conta");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.arrow_right_icon_white_black_theme_small);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_chevron_left_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         userAccountRecycler = findViewById(R.id.userAccountRecycler);
@@ -55,19 +58,31 @@ public class AccountActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.clear();
                 editor.commit();
-                Intent it = new Intent(getBaseContext(), LoginOptionsActivity.class);
+                Intent it = new Intent(AccountActivity.this, LoginOptionsActivity.class);
                 startActivity(it);
-                finish();
+                finishAffinity();
             }
         });
 
         lblDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Excluiu a conta, kk", Toast.LENGTH_SHORT);
-                /*Intent it = new Intent(getBaseContext(), LoginOptionsActivity.class);
-                startActivity(it);
-                finish();*/
+                sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
+                name = sp.getString("name", "");
+
+                AlertDialog.Builder confDelete = new AlertDialog.Builder(AccountActivity.this);
+                confDelete.setTitle("Excluir conta");
+                confDelete.setMessage("Ao excluir a conta, todos os seus dados e configurações serão apagadas. Você tem certeza que deseja fazer isso, " + name + "?");
+                confDelete.setCancelable(false);
+                confDelete.setNegativeButton("Não", null);
+                confDelete.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Connection connection = new Connection();
+                        connection.DeleteAccount(AccountActivity.this);
+                    }
+                });
+                confDelete.create().show();
             }
         });
 

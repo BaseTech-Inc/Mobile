@@ -94,7 +94,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_circle"
+        android:background="?attr/OnSurfaceMediumEmphasis"
         android:backgroundTint="?attr/colorPrimary"
         android:text="Conectar"
         android:textAllCaps="false"

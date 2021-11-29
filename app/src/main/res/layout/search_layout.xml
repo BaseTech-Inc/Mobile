@@ -19,66 +19,39 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <ImageButton
                     android:id="@+id/searchBack"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginHorizontal="8dp"
                     android:background="@drawable/map_buttons"
-                    android:src="@drawable/ic_notifications" />
-
+                    android:src="@drawable/ic_add" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="55dp"
                 android:layout_weight="5"
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/etFrom"
+                    android:id="@+id/etAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="4dp"
                     android:background="@drawable/map_edit_text"
                     android:focusable="false"
                     android:fontFamily="@font/open_sans_regular"
-                    android:hint="Partida"
+                    android:hint="Endereço"
                     android:paddingVertical="10dp"
                     android:paddingHorizontal="20dp"
                     android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/etTo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:background="@drawable/map_edit_text"
-                    android:fontFamily="@font/open_sans_regular"
-                    android:hint="Chegada"
-                    android:paddingVertical="10dp"
-                    android:paddingHorizontal="20dp"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <ImageButton
-                    android:id="@+id/searchAdd"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginVertical="4dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@drawable/map_buttons"
-                    android:src="@drawable/ic_add" />
             </LinearLayout>
 
         </LinearLayout>

@@ -14,11 +14,11 @@
     <item
         android:id="@+id/item3"
         android:title="Forecast"
-        android:icon="@drawable/ic_bar_chart"/>
+        android:icon="@drawable/ic_filter_drama_black_24dp"/>
 
     <item
         android:id="@+id/item4"
         android:title="Configurations"
-        android:icon="@drawable/ic_settings"/>
+        android:icon="@drawable/ic_person_focused"/>
 
 </menu>
