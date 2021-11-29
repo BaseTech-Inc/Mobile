@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,24 +46,31 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
     public class LocationHolder extends RecyclerView.ViewHolder {
 
         TextView txtLocation, txtCurrentDesc, txtCurrentTemp;
-
+        private ImageView imgRideIcon;
         public LocationHolder(View view) {
             super(view);
 
             txtLocation = view.findViewById(R.id.txtLocation);
             txtCurrentDesc = view.findViewById(R.id.txtDesc);
             txtCurrentTemp = view.findViewById(R.id.txtCurrentTemp);
+            imgRideIcon = itemView.findViewById(R.id.imgRideIcon);
         }
 
         public void setDetails(Location location) {
 
-            txtLocation.setText(truncate(location.getName(), 13));
+            txtLocation.setText(location.getName().toString());
             txtCurrentDesc.setText(location.getCurrentDesc());
             txtCurrentTemp.setText(location.getTemp() + "°");
-
-
+            if (location.getCurrentDesc() == "Ensolarado") {
+                imgRideIcon.setImageResource(R.drawable.day_sunny);
+            }
+            if (location.getCurrentDesc() == "Nublado") {
+                imgRideIcon.setImageResource(R.drawable.day_cloudy);
+            }
+            if (location.getCurrentDesc() == "Ventando") {
+                imgRideIcon.setImageResource(R.drawable.day_windy);
+            }
         }
-
         private String truncate(String str, int n){
             return (str.length() > n) ? str.substring(0, n-1) + "..." : str;
         };

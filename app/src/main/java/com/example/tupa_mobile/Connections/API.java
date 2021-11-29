@@ -2,6 +2,7 @@ package com.example.tupa_mobile.Connections;
 
 import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Location.GetLocationResponse;
 import com.example.tupa_mobile.Passwords.ChangePasswordResponse;
 import com.example.tupa_mobile.GeoCoding.GeoCodingResponse;
 import com.example.tupa_mobile.Login.LoginResponse;
@@ -120,6 +121,19 @@ public interface API {
             @Query("month") int month,
             @Query("day") int day,
             @Query("districts") String districts
+    );
+    @GET("/api/v1/GooglePoints/decode-coordinates")
+    Call<GetRidesResponse> getDecoCoor(
+            @Header("Authorization") String key,
+            @Query("encodedPoints") String encodedPoints
+    );
+    @GET("/api/v1/CurrentWeather/name")
+    Call <GetLocationResponse> getLocation(
+            @Header("Authorization") String key,
+            @Query("street")    String street,
+            @Query("district") String district,
+            @Query("city") String city,
+            @Query("state") String state
     );
     @GET("api/v1/HistoricoUsuario")
     Call <GetRidesResponse> getRides(

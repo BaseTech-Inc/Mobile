@@ -1,5 +1,10 @@
 package com.example.tupa_mobile.Location;
 
+
+import com.example.tupa_mobile.Mainn.Mainn;
+import com.example.tupa_mobile.Weather.Weather;
+import com.google.android.gms.maps.model.LatLng;
+
 public class Location {
 
     private String name, currentDesc;
