@@ -17,6 +17,7 @@ import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.RiskPoints.RiskPointResponse;
 import com.example.tupa_mobile.Route.RouteResponse;
 import com.example.tupa_mobile.User.UserResponse;
+import com.example.tupa_mobile.WeatherAPI.ForecastHourResponse;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 
 import okhttp3.RequestBody;
@@ -198,4 +199,11 @@ public interface API {
             @Header ("Authorization") String access_token
     );
 
+    @GET("/data/2.5/onecall")
+    Call<ForecastHourResponse> getHourForecast(
+            @Query("lat") String lat,
+            @Query("lon") String lon,
+            @Query("appid") String appid,
+            @Query("units") String units
+    );
 }

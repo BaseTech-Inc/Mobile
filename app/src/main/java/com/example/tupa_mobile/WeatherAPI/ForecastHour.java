@@ -1,12 +1,14 @@
 package com.example.tupa_mobile.WeatherAPI;
 
+import java.util.ArrayList;
+
 public class ForecastHour {
 
     private int is_day, wind_degree, humidity, cloud, will_it_rain, chance_of_rain, will_it_snow, chance_of_snow;
     private long time_epoch;
     private String time, wind_dir;
     private double temp_c, temp_f, wind_mph, wind_kph, pressure_mb, pressure_in, precip_mm, precip_in, feelslike_c, feelslike_f, windchill_c, windchill_f, heatindex_c, heatindex_f, dewpoint_c, dewpoint_f, vis_km, vis_miles, gust_mph, gust_kph, uv;
-    private WeatherCondition weatherCondition;
+    private WeatherCondition condition;
 
     public long getTime_epoch() {
         return time_epoch*1000;
@@ -141,7 +143,7 @@ public class ForecastHour {
         return uv;
     }
 
-    public WeatherCondition getWeatherCondition() {
-        return weatherCondition;
+    public WeatherCondition getCondition() {
+        return condition;
     }
 }

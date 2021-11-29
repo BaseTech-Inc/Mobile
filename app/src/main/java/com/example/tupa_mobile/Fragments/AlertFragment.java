@@ -9,18 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.tupa_mobile.Alerts.AlerBairro;
-import com.example.tupa_mobile.Alerts.AlerBairro;
-import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Connections.Connection;
-import com.example.tupa_mobile.SettingsPage.Settings;
-import com.example.tupa_mobile.WeatherAPI.ForecastDay;
-import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 import com.example.tupa_mobile.R;
-
-import java.util.ArrayList;
 
 public class AlertFragment extends Fragment {
 
@@ -54,7 +45,7 @@ public class AlertFragment extends Fragment {
 //        pastRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection connection = new Connection();
-        connection.getAlerBairro(weekRecyclerView, view.getContext());
+        connection.getAlertBairro(weekRecyclerView, view.getContext());
 //        connection.getAlerBairroMonth(monthRecyclerView, view.getContext());
 //        connection.getAlerBairroPast(pastRecyclerView, view.getContext());
 

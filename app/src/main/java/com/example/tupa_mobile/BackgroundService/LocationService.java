@@ -134,13 +134,14 @@ public class LocationService extends Service{
 
         if (getInsideFlood(getBaseContext(), "CONTAINS")) {
             if (!getInsideFlood(getBaseContext(), "NOTIFICATION")){
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), ALERT_CHANNEL_ID)
+                RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
+                notificationLayout.setTextViewText(R.id.notification_title, "Alagamento!");
+                notificationLayout.setTextViewText(R.id.notification_desc, getRiskAreaName(getBaseContext(), "NAME") );
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(), RISK_CHANNEL_ID)
                         .setSmallIcon(R.drawable.nibolas)
-                        .setContentTitle("Cuidado!")
-                        .setContentText("Essa área está alagada!")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("A avenida pipipi popopo está alagada"))
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .setCustomContentView(notificationLayout)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
 
                 notificationManager.notify(ALERT_ID, builder.build());
                 Log.e(TAG, "Área Alagada");
@@ -182,10 +183,8 @@ public class LocationService extends Service{
         }
 
         /*
-
         Connection con = new Connection();
         con.getRiskPointsList(getBaseContext(), longitude, latitude);
-
         if(PolyUtil.containsLocation(new LatLng(latitude, longitude), latLngs, true)){
                 //send notification
             if (!isRiskNotificationActive) {
@@ -196,7 +195,6 @@ public class LocationService extends Service{
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText("A avenida pipipi popopo está na lista de áreas com risco de alagamento com base na previsão de hoje."))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
                 notificationManager.notify(DYNAMIC_ID, builder.build());
                 Log.e(TAG, "Você está dentro da área");
                 isRiskNotificationActive = true;
@@ -205,7 +203,6 @@ public class LocationService extends Service{
         else {
             isRiskNotificationActive = false;
         }
-
          */
     }
 
@@ -222,9 +219,7 @@ public class LocationService extends Service{
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
         } else {
-            ActivityCompat.requestPermissions((Activity) getApplicationContext(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            Log.e(TAG, "Location permission isn't granted.");
         }
     }
 

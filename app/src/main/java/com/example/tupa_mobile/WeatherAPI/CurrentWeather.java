@@ -19,6 +19,11 @@ public class CurrentWeather {
         return last_updated;
     }
 
+    public String getLast_updated_formatted() {
+        String time = getLast_updated().split(" ")[1];
+        return time;
+    }
+
     public String getWind_dir() {
         return wind_dir;
     }

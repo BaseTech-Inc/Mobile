@@ -25,32 +25,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/graphDayNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_regular"
-            android:text="12/06"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="@+id/graphDayLabel"
-            app:layout_constraintStart_toStartOf="@id/graphDayLabel"
-            app:layout_constraintTop_toBottomOf="@id/graphDayLabel" />
-
         <ImageView
             android:id="@+id/imgGraphItem"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/night_cloudy"
-            app:layout_constraintEnd_toEndOf="@+id/graphDayNumber"
-            app:layout_constraintStart_toStartOf="@id/graphDayNumber"
-            app:layout_constraintTop_toBottomOf="@id/graphDayNumber" />
+            app:layout_constraintEnd_toEndOf="@+id/graphDayLabel"
+            app:layout_constraintStart_toStartOf="@id/graphDayLabel"
+            app:layout_constraintTop_toBottomOf="@id/graphDayLabel" />
 
         <ImageView
             android:id="@+id/imgGraphHumidity"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/night_cloudy"
+            android:src="@drawable/ic_water_drop_black_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/graphHumidityLabel"
             app:layout_constraintEnd_toStartOf="@+id/graphHumidityLabel"
             app:layout_constraintTop_toTopOf="@+id/graphHumidityLabel" />
@@ -70,7 +59,7 @@
             android:id="@+id/imgGraphRain"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/night_cloudy"
+            android:src="@drawable/rain_night"
             app:layout_constraintBottom_toBottomOf="@+id/graphRainLabel"
             app:layout_constraintEnd_toStartOf="@+id/graphRainLabel"
             app:layout_constraintTop_toTopOf="@+id/graphRainLabel" />

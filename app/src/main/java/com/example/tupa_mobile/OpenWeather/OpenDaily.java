@@ -40,10 +40,6 @@ public class OpenDaily {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EE");
         String strDate = dateFormat.format(date);
 
-        if (DateUtils.isToday(dt)){
-            return "Today";
-        }
-
         return strDate;
     }
 

@@ -20,10 +20,6 @@
             android:name=".Activities.BingMapActivity"
             android:exported="true" />
         <activity
-            android:name=".Activities.RouteActivity"
-            android:name=".Passwords.ResetPasswordActivity"
-            android:exported="true" />
-        <activity
             android:name=".Passwords.ChangePasswordActivity"
             android:exported="true" />
         <activity

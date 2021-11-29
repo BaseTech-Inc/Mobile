@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
@@ -32,6 +33,7 @@ import com.example.tupa_mobile.Alerts.AlertAdapter;
 import com.example.tupa_mobile.Alerts.AlertData;
 import com.example.tupa_mobile.Alerts.GetAlerBairroResponse;
 import com.example.tupa_mobile.Alerts.GetAlertResponse;
+import com.example.tupa_mobile.Graph.GraphDayItemAdapter;
 import com.example.tupa_mobile.Location.GetLocationResponse;
 import com.example.tupa_mobile.Location.LocationAdapter;
 import com.example.tupa_mobile.Graph.ForecastGraph;
@@ -53,6 +55,7 @@ import com.example.tupa_mobile.Profile.AccountResponse;
 import com.example.tupa_mobile.Profile.ImageResponse;
 import com.example.tupa_mobile.Profile.ProfileResponse;
 import com.example.tupa_mobile.Profile.PutProfileResponse;
+import com.example.tupa_mobile.R;
 import com.example.tupa_mobile.Rides.GetRidesResponse;
 import com.example.tupa_mobile.Rides.Rides;
 import com.example.tupa_mobile.Rides.RidesAdapter;
@@ -68,6 +71,9 @@ import com.example.tupa_mobile.WeatherAPI.ForecastDay;
 import com.example.tupa_mobile.WeatherAPI.ForecastDayAdapter;
 import com.example.tupa_mobile.WeatherAPI.ForecastHour;
 import com.example.tupa_mobile.WeatherAPI.ForecastHourAdapter;
+import com.example.tupa_mobile.WeatherAPI.ForecastHourResponse;
+import com.example.tupa_mobile.WeatherAPI.HourForecast;
+import com.example.tupa_mobile.WeatherAPI.HourForecastAdapter;
 import com.example.tupa_mobile.WeatherAPI.Weather;
 import com.example.tupa_mobile.WeatherAPI.WeatherLocation;
 import com.github.mikephil.charting.charts.LineChart;
@@ -131,7 +137,7 @@ public class Connection {
     private boolean isRiskNotificationActive = false;
     private boolean isAlertNotificationActive = false;
 
-    public void requestCurrentWeather(TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context) {
+    public void requestCurrentWeather(ImageView currentImg, TextView currentLocation, TextView condition, TextView temperature, TextView humidity, TextView pressure, TextView wind, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weatherapi.com/v1/")
@@ -153,6 +159,7 @@ public class Connection {
                     currentWeather = weather.getCurrentWeather();
                     String temp = Math.round(currentWeather.getTemp_c()) + "°";
 
+                    currentImg.setImageResource(getImageId(currentWeather.getLast_updated_formatted(), currentWeather.getCondition().getText()));
                     currentLocation.setText(location.getName());
                     condition.setText(currentWeather.getCondition().getText());
                     temperature.setText(temp);
@@ -278,7 +285,7 @@ public class Connection {
         });
     }
 
-    public void requestGraphOpenForecast(LineChart forecastChart, Context context) {
+    public void requestGraphOpenForecast(RecyclerView recyclerView, LineChart forecastChart, Context context) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.openweathermap.org/")
@@ -298,6 +305,9 @@ public class Connection {
 
                     openWeather = response.body();
                     openDaily = new ArrayList<>(openWeather.getDaily());
+                    GraphDayItemAdapter adapter =  new GraphDayItemAdapter(context, openDaily);
+                    recyclerView.setAdapter(adapter);
+
 
                     ArrayList<Entry> MaxTemps = new ArrayList<>();
                     ArrayList<Entry> MinTemps = new ArrayList<>();
@@ -759,14 +769,7 @@ public class Connection {
 
     }
 
-    public boolean getInsideFlood(Context context, String key) {
-
-        SharedPreferences sp = context.getSharedPreferences("INSIDE_FLOOD", Context.MODE_PRIVATE);
-        return sp.getBoolean(key, false);
-
-    }
-
-    public void getAlerBairro(RecyclerView weekRecyclerView, Context context){
+    public void getAlertBairro(RecyclerView weekRecyclerView, Context context){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -805,7 +808,7 @@ public class Connection {
             @Override
             public void onFailure(Call<GetAlerBairroResponse> call, Throwable t) {
                 Log.e(TAG, "fudeu");
-              Log.e(TAG, t.getMessage());
+                Log.e(TAG, t.getMessage());
                 Log.e(TAG, t.toString());
             }
         });
@@ -1085,7 +1088,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetMarkersResponse> call = api.postMarker("Bearer " + access_token, lat, lng, name);
+        Call<GetMarkersResponse> call = api.postMarker("Bearer " + getToken(context), lat, lng, name);
 
         call.enqueue(new Callback<GetMarkersResponse>() {
             @Override
@@ -1114,7 +1117,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<GetMarkersResponse> call = api.deleteMarker("Bearer " + access_token, id);
+        Call<GetMarkersResponse> call = api.deleteMarker("Bearer " + getToken(context), id);
 
         call.enqueue(new Callback<GetMarkersResponse>() {
             @Override
@@ -1136,7 +1139,7 @@ public class Connection {
 
     }
 
-    public void getRiskPoints(GoogleMap map, BitmapDescriptor bitmapDescriptor){
+    public void getRiskPoints(Context context, GoogleMap map, BitmapDescriptor bitmapDescriptor){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -1150,7 +1153,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<RiskPointResponse> call = api.getRiskPoints("Bearer " + access_token);
+        Call<RiskPointResponse> call = api.getRiskPoints("Bearer " + getToken(context));
 
         call.enqueue(new Callback<RiskPointResponse>() {
             @Override
@@ -1200,7 +1203,7 @@ public class Connection {
 
         API api = retrofit.create(API.class);
 
-        Call<RiskPointResponse> call = api.getRiskPoints("Bearer " + access_token);
+        Call<RiskPointResponse> call = api.getRiskPoints("Bearer " + getToken(context));
 
         call.enqueue(new Callback<RiskPointResponse>() {
             @Override
@@ -1243,6 +1246,33 @@ public class Connection {
         });
     }
 
+    public void getHourForecast(Context context, RecyclerView recyclerView){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://tupaserver.azurewebsites.net/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        API api = retrofit.create(API.class);
+
+        Call<ForecastHourResponse> call = api.getHourForecast(lat, lon, weatherApiKey, "metric");
+
+        call.enqueue(new Callback<ForecastHourResponse>() {
+            @Override
+            public void onResponse(Call<ForecastHourResponse> call, Response<ForecastHourResponse> response) {
+
+                ForecastHourResponse hourResponse = response.body();
+                ArrayList<HourForecast> hourly = hourResponse.getHourly();
+                HourForecastAdapter adapter = new HourForecastAdapter(context, hourly);
+                recyclerView.setAdapter(adapter);
+                adapter.getFilter().filter(null);
+            }
+
+            @Override
+            public void onFailure(Call<ForecastHourResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void saveInsideRiskArea(Context context, String key, boolean value){
 
         SharedPreferences sp = context.getSharedPreferences("INSIDE_RISK", Context.MODE_PRIVATE);
@@ -1259,6 +1289,32 @@ public class Connection {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(key, value).apply();
 
+    }
+
+    private int getImageId(String time, String text)
+    {
+        int hours = Integer.parseInt(time.split(":")[0]);
+        if (hours < 7 || hours > 19){
+            if (text.contains("y")){
+                return R.drawable.night_cloudy;
+            }
+            else if (text.contains("rain")){
+                return R.drawable.rain_night;
+            }else if (text.contains("Clear")){
+                return R.drawable.clear_sky_night;
+            }
+            else return R.drawable.clear_sky_night;
+        }
+        else {
+            if (text.contains("loudy")){
+                return R.drawable.day_cloudy;
+            }
+            else if (text.contains("rain")){
+                return R.drawable.rain_day;
+            }else {
+                return R.drawable.clear_sky_day;
+            }
+        }
     }
 
 }

@@ -25,11 +25,11 @@
                     android:id="@+id/searchBack"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="top"
                     android:layout_marginVertical="4dp"
                     android:layout_marginHorizontal="8dp"
                     android:background="@drawable/map_buttons"
-                    android:src="@drawable/ic_add" />
+                    android:src="@drawable/ic_arrow_back" />
             </LinearLayout>
 
             <LinearLayout
@@ -38,6 +38,18 @@
                 android:layout_marginEnd="55dp"
                 android:layout_weight="5"
                 android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/etMarkerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:background="@drawable/map_edit_text"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:hint="Nome do Marcador"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/etAddress"

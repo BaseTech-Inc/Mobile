@@ -1,6 +1,7 @@
 package com.example.tupa_mobile.Graph;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tupa_mobile.OpenWeather.OpenDaily;
 import com.example.tupa_mobile.OpenWeather.OpenDailyAdapter;
 import com.example.tupa_mobile.R;
 
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 public class GraphDayItemAdapter extends RecyclerView.Adapter<GraphDayItemAdapter.GraphDayHolder>{
 
     private Context context;
-    private ArrayList<GraphDayItem> dayItems;
+    private ArrayList<OpenDaily> dayItems;
 
-    public GraphDayItemAdapter(Context context, ArrayList<GraphDayItem> dayItems) {
+    public GraphDayItemAdapter(Context context, ArrayList<OpenDaily> dayItems) {
         this.context = context;
         this.dayItems = dayItems;
     }
@@ -34,7 +36,7 @@ public class GraphDayItemAdapter extends RecyclerView.Adapter<GraphDayItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull GraphDayHolder holder, int position) {
-        GraphDayItem graphDayItem = dayItems.get(position);
+        OpenDaily graphDayItem = dayItems.get(position);
         holder.setDetails(graphDayItem);
     }
 
@@ -52,19 +54,49 @@ public class GraphDayItemAdapter extends RecyclerView.Adapter<GraphDayItemAdapte
             super(itemView);
 
             txtWeekDay = itemView.findViewById(R.id.graphDayLabel);
-            txtDate = itemView.findViewById(R.id.graphDayNumber);
             txtHumidity = itemView.findViewById(R.id.graphHumidityLabel);
             txtChanceOfRain = itemView.findViewById(R.id.graphRainLabel);
             imgGraph = itemView.findViewById(R.id.imgGraphItem);
         }
 
-        public void setDetails(GraphDayItem graphDayItem) {
+        public void setDetails(OpenDaily graphDayItem) {
 
-            txtWeekDay.setText(graphDayItem.getWeekDay());
-            txtDate.setText(graphDayItem.getDate());
-            txtHumidity.setText(graphDayItem.getHumidity());
-            txtChanceOfRain.setText(graphDayItem.getChanceOfRain());
-            imgGraph.setImageResource(R.drawable.night_clear);
+            String icon = graphDayItem.getWeather().get(0).getIcon();
+            String name = "";
+
+            if(icon.contains("d")){
+                name = getImageName(icon.split("d")[0]);
+                name += "_day";
+            }else if (icon.contains("n")){
+                name = getImageName(icon.split("n")[0]);
+                name += "_night";
+            }
+
+            Resources resources = context.getResources();
+            int resID = resources.getIdentifier(name , "drawable", context.getPackageName());
+
+            txtWeekDay.setText(graphDayItem.getDtFormatted());
+            txtHumidity.setText(String.valueOf(graphDayItem.getHumidity()));
+            txtChanceOfRain.setText(String.valueOf(graphDayItem.getRain()));
+            imgGraph.setImageResource(resID);
+        }
+
+        private String getImageName(String iconNumber)
+        {
+            switch (iconNumber)
+            {
+                case "01": return "clear_sky";
+                case "02": return "few_clouds";
+                case "03":
+                case "04":
+                    return "scattered_clouds";
+                case "09":
+                case "10":
+                    return "rain";
+                case "11": return "thunderstorm";
+                case "13": return "snow";
+                default: return "clear_sky";
+            }
         }
     }
 

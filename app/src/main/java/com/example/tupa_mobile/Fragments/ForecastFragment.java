@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tupa_mobile.Activities.ForecastPopupActivity;
@@ -33,6 +34,7 @@ import eightbitlab.com.blurview.RenderScriptBlur;
 
 public class ForecastFragment extends Fragment {
 
+    private ImageView currentImg;
     private RecyclerView cardRecyclerView, hourRecyclerView;
     private TextView location, condition, temp, humidity, pressure, wind;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -63,6 +65,7 @@ public class ForecastFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Previsão");
 
+        currentImg = view.findViewById(R.id.icoMainForecast);
         location = view.findViewById(R.id.weatherPlace);
         condition = view.findViewById(R.id.weatherCondition);
         temp = view.findViewById(R.id.weatherTemp);
@@ -85,7 +88,7 @@ public class ForecastFragment extends Fragment {
         cardRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         Connection con = new Connection();
-        con.requestCurrentWeather(location, condition, temp, humidity, pressure, wind, view.getContext());
+        con.requestCurrentWeather(currentImg, location, condition, temp, humidity, pressure, wind, view.getContext());
         con.requestHourForecast(hourRecyclerView, view.getContext());
         con.requestOpenForecast(cardRecyclerView, view.getContext());
 
@@ -94,7 +97,6 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // TODO Add your menu entries here
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.forecast_menu, menu);
         addItem = menu.findItem(R.id.addItem);

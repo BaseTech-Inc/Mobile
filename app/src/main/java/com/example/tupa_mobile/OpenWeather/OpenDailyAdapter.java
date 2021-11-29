@@ -1,10 +1,13 @@
 package com.example.tupa_mobile.OpenWeather;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -78,6 +81,7 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
 
     public class OpenDailyHolder extends RecyclerView.ViewHolder {
 
+        ImageView imgMiniForecast;
         TextView txtUpdateTime, txtMaxTemperature, txtMinTemperature, txtHumidity;
         CardView clickableLayout;
 
@@ -89,11 +93,25 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
             txtMaxTemperature = itemView.findViewById(R.id.txtMaxTemperature);
             txtMinTemperature = itemView.findViewById(R.id.txtMinTemperature);
             txtHumidity = itemView.findViewById(R.id.txtHumidity);
-
+            imgMiniForecast = itemView.findViewById(R.id.imgMiniForecast);
             clickableLayout = itemView.findViewById(R.id.clickableLayout);
         }
 
         void setDetails(OpenDaily openDaily){
+
+            String icon = openDaily.getWeather().get(0).getIcon();
+            String name = "";
+
+            if(icon.contains("d")){
+                name = getImageName(icon.split("d")[0]);
+                name += "_day";
+            }else if (icon.contains("n")){
+                name = getImageName(icon.split("n")[0]);
+                name += "_night";
+            }
+
+            Resources resources = context.getResources();
+            int resID = resources.getIdentifier(name , "drawable", context.getPackageName());
 
             //assign textViews' values
             Temperature temp = openDaily.getTemp();
@@ -105,6 +123,28 @@ public class OpenDailyAdapter extends RecyclerView.Adapter<OpenDailyAdapter.Open
             txtMaxTemperature.setText(Math.round(temp.getMax()) + "°");
             txtMinTemperature.setText(Math.round(temp.getMin()) + "°");
             txtHumidity.setText(Math.round(openDaily.getHumidity()) + "%");
+            imgMiniForecast.setImageResource(resID);
+            Log.d("tag", name);
+            Log.d("tag", String.valueOf(resID));
         }
+
+        private String getImageName(String iconNumber)
+        {
+            switch (iconNumber)
+            {
+                case "01": return "clear_sky";
+                case "02": return "few_clouds";
+                case "03":
+                case "04":
+                    return "scattered_clouds";
+                case "09":
+                case "10":
+                    return "rain";
+                case "11": return "thunderstorm";
+                case "13": return "snow";
+                default: return "clear_sky";
+            }
+        }
+
     }
 }

@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -106,7 +107,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private LinearLayout bottomNavigationContainer;
     private BottomSheetBehavior bottomSheetBehavior;
-    private EditText etFrom, etTo, etAddress;
+    private EditText etFrom, etTo, etAddress, etMarkerName;
     private TextView txtAddMarkers;
     private FrameLayout topFrame;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -130,6 +131,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private Location lastKnownLocation;
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private Handler mHandler;
     private PlacesClient placesClient;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
     private boolean locationPermissionGranted;
@@ -184,6 +186,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        mHandler = new Handler();
+
         adjustBottomDrawer(view, this);
         setSearchETs(view);
         setToolbar(view);
@@ -223,6 +227,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         getDeviceLocation();
 
         createMarker();
+
+        startMapRefresh();
     }
 
     private void getDeviceLocation() {
@@ -514,6 +520,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         resultsLayout = view.findViewById(R.id.resultsLayout);
         searchBack = view.findViewById(R.id.searchBack);
+        etMarkerName = view.findViewById(R.id.etMarkerName);
         etAddress = view.findViewById(R.id.etAddress);
         btnMyLocation = view.findViewById(R.id.btnMyLocation);
 
@@ -601,9 +608,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         btnMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng myLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
-                        DEFAULT_ZOOM));
+                getLocationPermission();
+                try {
+                    if (locationPermissionGranted){
+                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
+                                        DEFAULT_ZOOM));
+                            }
+                        });
+                    }
+                }catch (SecurityException e) {
+                    Log.e("Exception: %s", e.getMessage(), e);
+                }
             }
         });
 
@@ -784,7 +803,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void addRiskMarkers() {
         Connection con = new Connection();
-        con.getRiskPoints(map, bitmapDescriptorFromVector(getContext(), R.drawable.ic_marker_alert));
+        con.getRiskPoints(getContext(), map, bitmapDescriptorFromVector(getContext(), R.drawable.ic_marker_alert));
     }
 
     private void addAlertMarkers() {
@@ -892,7 +911,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 marker.setVisible(false);
                 LatLng latLng = getCoordinatesByAddress(etAddress.getText().toString());
                 Connection con = new Connection();
-                con.postMarker(getContext(), latLng.latitude, latLng.longitude, etAddress.getText().toString());
+                con.postMarker(getContext(), latLng.latitude, latLng.longitude, etMarkerName.getText().toString());
                 unpinBottomSheet();
                 closeSearchLayout();
             }
@@ -960,7 +979,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         getLocationPermission();
         try {
             if (locationPermissionGranted) {
-
                 while (currentLocation == null) {
                     fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, new CancellationToken() {
                         @Override
@@ -1080,5 +1098,92 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         });
     }
 
+    public void setTimeout(int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                LatLng myLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation,
+                        DEFAULT_ZOOM));
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
+    }
+
+    final Runnable refreshMap = new Runnable(){
+        @Override
+        public void run() {
+            try {
+                //compare location
+                getLocationPermission();
+                try {
+                    if (locationPermissionGranted) {
+                        Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                        locationResult.addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location == null) {
+                                    return;
+                                }
+                                getDeviceLocation();
+                                updateLocationUI();
+                                stopMapRefresh();
+                                //refreshLocation.run();
+                            }
+                        });
+                    } else {
+                        mHandler.postDelayed(refreshMap, 1000);
+                    }
+                } catch (SecurityException e) {
+                    Log.e("Exception: %s", e.getMessage(), e);
+                }
+
+                //this function can change value of mInterval.
+            } finally {
+
+            }
+        }
+    };
+
+    private void startMapRefresh(){
+        refreshMap.run();
+    }
+
+    private void stopMapRefresh(){
+        mHandler.removeCallbacks(refreshMap);
+    }
+
+    final Runnable refreshLocation = new Runnable(){
+        @Override
+        public void run() {
+            try {
+                //compare location
+                getLocationPermission();
+                try {
+                    if (locationPermissionGranted) {
+                        Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                        locationResult.addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location == null) {
+                                    return;
+                                }
+                                updateLocationUI();
+                                map.setMyLocationEnabled(true);
+                            }
+                        });
+                    }
+                } catch (SecurityException e) {
+                    Log.e("Exception: %s", e.getMessage(), e);
+                }
+
+                //this function can change value of mInterval.
+            } finally {
+                mHandler.postDelayed(refreshLocation, 1000);
+            }
+        }
+    };
 
 }

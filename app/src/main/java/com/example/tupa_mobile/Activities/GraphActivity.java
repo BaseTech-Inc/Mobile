@@ -47,13 +47,10 @@ public class GraphActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.graphRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        createItems(getApplicationContext(), recyclerView);
-
         forecastChart = findViewById(R.id.forecastChart);
 
         Connection connection = new Connection();
-        connection.requestGraphOpenForecast(forecastChart, getApplicationContext());
+        connection.requestGraphOpenForecast(recyclerView, forecastChart, getApplicationContext());
     }
 
     @Override
@@ -76,12 +73,6 @@ public class GraphActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    public void createItems(Context context, RecyclerView recyclerView){
-        GraphDayItemAdapter adapter = new GraphDayItemAdapter(context, generateItemsList());
-        recyclerView.setAdapter(adapter);
     }
 
     private ArrayList<GraphDayItem> generateItemsList() {

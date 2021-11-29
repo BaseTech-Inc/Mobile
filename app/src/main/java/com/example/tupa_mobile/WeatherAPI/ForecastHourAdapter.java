@@ -1,6 +1,11 @@
 package com.example.tupa_mobile.WeatherAPI;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tupa_mobile.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapter.ForecastHourHolder> implements Filterable {
@@ -94,7 +105,62 @@ public class ForecastHourAdapter extends RecyclerView.Adapter<ForecastHourAdapte
 
             txtHour.setText(forecastHour.getTimeFormatted());
             txtTempHour.setText(String.valueOf(Math.round(forecastHour.getTemp_c())) + "°");
-            imgHour.setImageResource(R.drawable.night_clear);
+            imgHour.setImageResource(getImageId(forecastHour.getTimeFormatted(), forecastHour.getCondition().getText()));
+            Log.d("niv", forecastHour.getCondition().getText());
+            Log.d("oi", forecastHour.getTimeFormatted());
         }
+
+
+
+
+        private int getImageId(String time, String text)
+        {
+            int hours = Integer.parseInt(time.split(":")[0]);
+            if (hours < 7 || hours > 19){
+                if (text.contains("y")){
+                    return R.drawable.night_cloudy;
+                }
+                else if (text.contains("rain")){
+                    return R.drawable.rain_night;
+                }else if (text.contains("Clear")){
+                    return R.drawable.clear_sky_night;
+                }
+                else return R.drawable.clear_sky_night;
+            }
+            else {
+                if (text.contains("loudy")){
+                    return R.drawable.day_cloudy;
+                }
+                else if (text.contains("rain")){
+                    return R.drawable.rain_day;
+                }else {
+                    return R.drawable.clear_sky_day;
+                }
+            }
+
+            /*
+            switch (iconNumber)
+            {
+                case 1000: return "Sunny or Clear";
+                case 1003: return "Partly cloudy";
+                case 1006: return "cloudy";
+                case 1009: return "cloudy";
+                case 1030: return "mist";
+                case 1063: return "Patchy rain possible";
+                case 1069: return "Patchy sleet possible";
+                case 1072: return "Patchy freezing drizzle possible";
+                case 1087: return "Thundery outbreaks possible";
+                case 1135: return "Fog";
+                case 1150: return "Patchy light drizzle";
+                case 1153: return "Light drizzle";
+                case 1180: return "Patchy light rain";
+                case 1183: return "Light rain";
+                case 1186: return
+                default: return "clear_sky";
+            }
+
+             */
+        }
+
     }
 }
