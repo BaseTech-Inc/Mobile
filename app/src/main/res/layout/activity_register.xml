@@ -9,16 +9,16 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
-        android:src="@drawable/nibolas"
+        android:src="@drawable/logo_2_white_theme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/textView"
@@ -29,10 +29,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.118" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <EditText
         android:id="@+id/nome_et_cad"
@@ -46,11 +46,12 @@
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:textColorHint="?attr/OnSurfaceMediumEmphasis"
+        android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <EditText
         android:id="@+id/email_et_cad"
@@ -60,14 +61,16 @@
         android:drawableStart="@drawable/ic_email_focused"
         android:drawablePadding="5dp"
         android:hint="Email"
-        android:inputType="textEmailAddress"
         android:paddingStart="5dp"
         android:textColorHint="?attr/OnSurfaceMediumEmphasis"
+        android:textCursorDrawable="@null"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@-_.+"
+        android:inputType="textFilter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.260" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <EditText
         android:id="@+id/senha_et_cad"
@@ -80,42 +83,39 @@
         android:inputType="textPassword"
         android:paddingStart="5dp"
         android:textColorHint="?attr/OnSurfaceMediumEmphasis"
+        android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.345" />
+        app:layout_constraintVertical_bias="0.55" />
 
 
     <Button
         android:id="@+id/cont_btn_cad"
         android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_circle"
+        android:layout_height="60dp"
         android:backgroundTint="?attr/colorPrimary"
         android:text="Conectar"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.675" />
 
     <Button
         android:id="@+id/volt_btn_cad"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_circle"
+        android:layout_height="60dp"
         android:backgroundTint="?attr/colorPrimary"
         android:rotationY="-180"
         android:text="➜"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="17sp"
-        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"

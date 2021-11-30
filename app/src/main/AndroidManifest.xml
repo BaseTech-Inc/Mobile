@@ -23,6 +23,9 @@
             android:name=".Passwords.ChangePasswordActivity"
             android:exported="true" />
         <activity
+            android:name=".Passwords.ResetPasswordActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activities.RegisterActivity"
             android:exported="true" />
         <activity

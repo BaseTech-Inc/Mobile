@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLayout, new MapFragment()).commit();
     }
 
+
     private void startNotificationActivity() {
         int selectedFragment = bottomNav.getSelectedItemId();
 

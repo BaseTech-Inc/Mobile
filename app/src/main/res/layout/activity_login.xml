@@ -9,16 +9,16 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
-        android:src="@drawable/nibolas"
+        android:src="@drawable/logo_2_white_theme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+        app:layout_constraintVertical_bias="0" />
 
     <TextView
         android:id="@+id/textView"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.12" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <EditText
         android:id="@+id/email_et_log"
@@ -43,9 +43,11 @@
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_email_focused"
         android:drawablePadding="5dp"
+        android:textCursorDrawable="@null"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textPersonName"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@-_.+"
+        android:inputType="textFilter"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:textColorHint="?attr/OnSurfaceMediumEmphasis"
@@ -53,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <EditText
         android:id="@+id/senha_et_log"
@@ -63,6 +65,7 @@
         android:drawableStart="@drawable/ic_lock_focused"
         android:drawablePadding="5dp"
         android:hint="Senha"
+        android:textCursorDrawable="@null"
         android:inputType="textPassword"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
@@ -71,7 +74,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.260" />
+        app:layout_constraintVertical_bias="0.5" />
 
 
     <TextView
@@ -86,41 +89,37 @@
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32" />
+        app:layout_constraintVertical_bias="0.57" />
 
     <Button
         android:id="@+id/cont_btn_log"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="?attr/OnSurfaceMediumEmphasis"
-        android:backgroundTint="?attr/colorPrimary"
         android:text="Conectar"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:backgroundTint="@null"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.375" />
+        app:layout_constraintVertical_bias="0.65" />
 
     <Button
         android:id="@+id/volt_btn_log"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/button_circle"
         android:backgroundTint="?attr/colorPrimary"
         android:rotationY="-180"
         android:text="➜"
         android:textAllCaps="false"
-        android:textSize="18sp"
-        app:backgroundTint="@null"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.100"

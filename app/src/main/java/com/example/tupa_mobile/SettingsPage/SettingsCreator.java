@@ -8,13 +8,11 @@ import android.net.Uri;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tupa_mobile.Activities.AboutUsActivity;
 import com.example.tupa_mobile.Activities.AccountActivity;
 import com.example.tupa_mobile.Activities.ChangeUsernameActivity;
 import com.example.tupa_mobile.Activities.ConnectionsActivity;
 import com.example.tupa_mobile.Activities.HelpActivity;
 import com.example.tupa_mobile.Activities.LoginOptionsActivity;
-import com.example.tupa_mobile.Activities.NotificationSettingsActivity;
 import com.example.tupa_mobile.Activities.ThemeSettingsActivity;
 import com.example.tupa_mobile.Passwords.ChangePasswordActivity;
 import com.example.tupa_mobile.R;
@@ -35,8 +33,8 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Conta", R.drawable.day_sunny, sp.getString("name", ""), new Intent(context, AccountActivity.class), 0));
-        settingsList.add( new Settings("Conexões", R.drawable.night_clear, "Em breve", new Intent(context, ConnectionsActivity.class), 0));
+        settingsList.add( new Settings("Conta", R.drawable.ic_person, sp.getString("name", ""), new Intent(context, AccountActivity.class), 0));
+        settingsList.add( new Settings("Conexões", R.drawable.ic_link, "Em breve", new Intent(context, ConnectionsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -49,7 +47,7 @@ public class SettingsCreator {
 
         settingsList = new ArrayList<>();
 
-        settingsList.add( new Settings("Tema", R.drawable.clock_ilustraion_white_theme, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), 0));
+        settingsList.add( new Settings("Tema", R.drawable.ic_dark, "Tema Claro", new Intent(context, ThemeSettingsActivity.class), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 
@@ -68,10 +66,10 @@ public class SettingsCreator {
         Uri uriTerms = Uri.parse("https://tupaweb.azurewebsites.net/Terms");
         Uri uriPriv = Uri.parse("https://tupaweb.azurewebsites.net/Privacy");
 
-        settingsList.add( new Settings("Sobre", R.drawable.day_sunny, "", new Intent(Intent.ACTION_VIEW, uriAbout), 0));
-        settingsList.add( new Settings("Ajuda", R.drawable.clock_ilustraion_white_theme, "", new Intent(Intent.ACTION_VIEW, uriHelp), 0));
-        settingsList.add( new Settings("Termos de Uso", R.drawable.day_sunny,"", new Intent(Intent.ACTION_VIEW, uriTerms), 0));
-        settingsList.add( new Settings("Políticas de Privacidade", R.drawable.day_sunny, "", new Intent(Intent.ACTION_VIEW, uriPriv), 0));
+        settingsList.add( new Settings("Sobre", R.drawable.ic_info, "", new Intent(Intent.ACTION_VIEW, uriAbout), 0));
+        settingsList.add( new Settings("Ajuda", R.drawable.ic_help, "", new Intent(Intent.ACTION_VIEW, uriHelp), 0));
+        settingsList.add( new Settings("Termos de Uso", R.drawable.ic_gavel,"", new Intent(Intent.ACTION_VIEW, uriTerms), 0));
+        settingsList.add( new Settings("Políticas de Privacidade", R.drawable.ic_menu_book, "", new Intent(Intent.ACTION_VIEW, uriPriv), 0));
 
         adapter = new SettingsAdapter(context, settingsList);
 

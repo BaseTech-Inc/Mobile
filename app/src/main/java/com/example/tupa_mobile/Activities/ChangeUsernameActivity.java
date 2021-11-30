@@ -48,8 +48,6 @@ public class ChangeUsernameActivity extends AppCompatActivity {
         voltBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getBaseContext(), AccountActivity.class);
-                startActivity(it);
                 finish();
             }
         });

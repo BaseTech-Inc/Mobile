@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         lblPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(getBaseContext(), ResetPasswordActivity.class);
+                Intent it = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 startActivity(it);
                 finish();
             }
